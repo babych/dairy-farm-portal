@@ -236,7 +236,13 @@ export const uk = {
     thDiffCurrent: "Поточне в системі",
     thDiffNew: "Нове в бекапі",
 
-    // Vet Checklist Modal Tables
+    // Vet Checklist Modal Tables & Sections
+    vcSec1Title: "1. Бракераж молока (Активна каренція антибіотиків)",
+    vcSec2Title: "2. Перевірка на тільність (УЗД / Ректально 35-70 днів)",
+    vcSec3Title: "3. Кандидати на запуск (Сухостій за 60 днів до отелу)",
+    vcPrintBtn: "Друк",
+    vcSubPrefix: "Формування на ",
+    vcSubTotalTasks: " • Всього завдань: ",
     thVcDiagnosis: "Діагноз / Причина",
     thVcMedication: "Препарат",
     thVcWithholdUntil: "Каренція до",
@@ -247,6 +253,49 @@ export const uk = {
     thVcGestationDays: "Днів тільності",
     thVcDryOffMed: "Консервація вимені (Препарат)",
     thVcConfirm: "Підтвердження",
+    vcResultBox: "[ ] Тільна   [ ] Холоста",
+    vcPreservativeBox: "[ ] Введено консервант",
+
+    // Users Management Tab
+    usersTitle: "Керування користувачами & Доступами",
+    usersSubtitle: "Додавайте операторів, ветеринарів та прив'язуйте Google OAuth акаунти",
+    addUserBtn: "Додати користувача",
+    noUsersFound: "Користувачів не знайдено або завантаження...",
+    userNotLoggedIn: "Не заходив",
+    yesLabel: "Так",
+    noLabel: "Ні",
+    statusActive: "Активний",
+    statusDeactivated: "Деактивовано",
+
+    // Pharmacy Expiry & Units
+    medBatchPrefix: "Партія: ",
+    medNotSpecified: "Не вказано",
+    medZeroDaysFree: "0 дн. (вільно)",
+    medDaysSuffix: " дн.",
+    medExpired: "ПРОСТРОЧЕНО",
+    medExpiringSoon: "Спливає",
+    medEmptyCatalog: "Аптечка порожня або завантаження...",
+
+    // Platform Metrics Tab
+    metricTotalVisitsLabel: "Візитів (Всього)",
+    metricTotalVisitsSub: "Переглядів сторінок & API",
+    metricVisits24hLabel: "За 24 години",
+    metricVisits24hSub: "Активність за добу",
+    metricUniqueIpsLabel: "Унікальні IP",
+    metricUniqueIpsSub: "Окремих пристроїв / мереж",
+    metricTotalFarmsLabel: "Бази ферм",
+    metricTotalFarmsSub: "Зареєстровано в системі",
+    metricUserDistTitle: "Розподіл користувачів",
+    metricUsersSuffix: " юзерів",
+    metricSuperadminsLabel: "Суперадміністратори:",
+    metricGuestsLabel: "Демо-гості (Google / Guest):",
+    metricGoogleUsersLabel: "Прив'язані через Google OAuth:",
+    metricRegisteredFarmsTitle: "Зареєстровані бази ферм",
+    metricCodePrefix: "Код: ",
+    metricCowsSuffix: " голів",
+    metricRecentLogTitle: "Журнал останніх візитів та запитів (Real-Time)",
+    metricRecentLogSub: "Фіксація IP адрес, сторінок та авторизованих користувачів",
+    metricNoVisitsYet: "Візитів поки не зафіксовано",
 
     // Fertility ECI Modal Table
     thFertIndicator: "Показник",

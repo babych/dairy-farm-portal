@@ -1015,7 +1015,11 @@
 
                 const subEl = document.getElementById('vetChecklistSubtitle');
                 if (subEl) {
-                    subEl.textContent = `Формування на ${new Date().toLocaleDateString('uk-UA')} • Всього завдань: ${totalTasks}`;
+                    const currentLang = localStorage.getItem("dairy_lang") || "uk";
+                    const localeTag = currentLang === "en" ? "en-US" : "uk-UA";
+                    const prefix = window.t ? window.t('vcSubPrefix') : 'Формування на ';
+                    const taskSuffix = window.t ? window.t('vcSubTotalTasks') : ' • Всього завдань: ';
+                    subEl.textContent = `${prefix}${new Date().toLocaleDateString(localeTag)}${taskSuffix}${totalTasks}`;
                 }
 
                 document.getElementById('vetChecklistModal').classList.remove('hidden');
@@ -1292,7 +1296,8 @@
                 document.getElementById('metricTotalFarms').textContent = (m.farms?.total_farms || 0).toLocaleString();
 
                 // Users breakdown
-                document.getElementById('metricTotalUsersBadge').textContent = `${m.users?.total || 0} юзерів`;
+                const userSuffix = window.t ? window.t('metricUsersSuffix') : ' юзерів';
+                document.getElementById('metricTotalUsersBadge').textContent = `${m.users?.total || 0}${userSuffix}`;
                 document.getElementById('metricSuperadmins').textContent = m.users?.superadmins || 0;
                 document.getElementById('metricGuests').textContent = m.users?.guests || 0;
                 document.getElementById('metricGoogleUsers').textContent = m.users?.with_google || 0;
@@ -1300,14 +1305,16 @@
                 // Farms list
                 const farmsEl = document.getElementById('metricsFarmsList');
                 if (m.farms?.list) {
+                    const codePrefix = window.t ? window.t('metricCodePrefix') : 'Код: ';
+                    const cowsSuffix = window.t ? window.t('metricCowsSuffix') : ' голів';
                     farmsEl.innerHTML = m.farms.list.map(f => `
                         <div class="flex justify-between items-center p-2 rounded-xl bg-slate-50 border border-slate-100">
                             <div>
                                 <span class="font-bold text-slate-800">${f.name}</span>
-                                <span class="text-[10px] text-slate-400 block font-mono">Код: ${f.code}</span>
+                                <span class="text-[10px] text-slate-400 block font-mono">${codePrefix}${f.code}</span>
                             </div>
                             <div class="text-right">
-                                <span class="font-black text-emerald-600 text-xs">${f.cow_count} голів</span>
+                                <span class="font-black text-emerald-600 text-xs">${f.cow_count}${cowsSuffix}</span>
                                 <span class="text-[10px] text-slate-400 block">${f.created_at}</span>
                             </div>
                         </div>
@@ -1327,7 +1334,8 @@
                         </tr>
                     `).join('');
                 } else {
-                    tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400">Візитів поки не зафіксовано</td></tr>`;
+                    const noVisits = window.t ? window.t('metricNoVisitsYet') : 'Візитів поки не зафіксовано';
+                    tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400">${noVisits}</td></tr>`;
                 }
             } catch (err) {
                 console.warn("Failed to load admin metrics", err);

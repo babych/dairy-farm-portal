@@ -236,7 +236,13 @@ export const en = {
     thDiffCurrent: "Current in DB",
     thDiffNew: "New in Backup",
 
-    // Vet Checklist Modal Tables
+    // Vet Checklist Modal Tables & Sections
+    vcSec1Title: "1. Milk Withholding (Active Antibiotic Quarantine)",
+    vcSec2Title: "2. Pregnancy Check (Ultrasound / Rectal 35-70 Days)",
+    vcSec3Title: "3. Dry-Off Candidates (60 Days Prior to Calving)",
+    vcPrintBtn: "Print",
+    vcSubPrefix: "Generated for ",
+    vcSubTotalTasks: " • Total tasks: ",
     thVcDiagnosis: "Diagnosis / Reason",
     thVcMedication: "Medication",
     thVcWithholdUntil: "Withhold Until",
@@ -247,6 +253,49 @@ export const en = {
     thVcGestationDays: "Gestation Days",
     thVcDryOffMed: "Dry-Cow Therapy (Tube)",
     thVcConfirm: "Confirmation",
+    vcResultBox: "[ ] Pregnant   [ ] Open",
+    vcPreservativeBox: "[ ] Infused dry-cow tube",
+
+    // Users Management Tab
+    usersTitle: "User Management & Access Control",
+    usersSubtitle: "Add operators, veterinarians and link Google OAuth accounts",
+    addUserBtn: "Add User",
+    noUsersFound: "No users found or loading...",
+    userNotLoggedIn: "Never logged in",
+    yesLabel: "Yes",
+    noLabel: "No",
+    statusActive: "Active",
+    statusDeactivated: "Deactivated",
+
+    // Pharmacy Expiry & Units
+    medBatchPrefix: "Batch: ",
+    medNotSpecified: "Not specified",
+    medZeroDaysFree: "0 days (clear)",
+    medDaysSuffix: " days",
+    medExpired: "EXPIRED",
+    medExpiringSoon: "Expiring soon",
+    medEmptyCatalog: "Pharmacy inventory is empty or loading...",
+
+    // Platform Metrics Tab
+    metricTotalVisitsLabel: "Total Visits",
+    metricTotalVisitsSub: "Page & API views",
+    metricVisits24hLabel: "Last 24 Hours",
+    metricVisits24hSub: "Daily traffic",
+    metricUniqueIpsLabel: "Unique IPs",
+    metricUniqueIpsSub: "Distinct devices / networks",
+    metricTotalFarmsLabel: "Farm Databases",
+    metricTotalFarmsSub: "Registered in system",
+    metricUserDistTitle: "User Distribution",
+    metricUsersSuffix: " users",
+    metricSuperadminsLabel: "Superadministrators:",
+    metricGuestsLabel: "Demo Guests (Google / Guest):",
+    metricGoogleUsersLabel: "Linked via Google OAuth:",
+    metricRegisteredFarmsTitle: "Registered Farm Databases",
+    metricCodePrefix: "Code: ",
+    metricCowsSuffix: " cows",
+    metricRecentLogTitle: "Real-Time Traffic & Request Log",
+    metricRecentLogSub: "Recording IP addresses, paths and authenticated users",
+    metricNoVisitsYet: "No visits logged yet",
 
     // Fertility ECI Modal Table
     thFertIndicator: "KPI Indicator",
