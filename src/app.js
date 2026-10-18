@@ -627,6 +627,11 @@
                 const res = await fetch(`${API_BASE}/api/farms${queryParam}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
+                if (res.status === 401) {
+                    console.warn("[Auth] Session expired or invalid on /api/farms, logging out");
+                    logout();
+                    return;
+                }
                 if (!res.ok) return;
                 farmsList = await res.json();
                 if (window.store) {
@@ -872,6 +877,11 @@
                 const res = await fetch(`${API_BASE}/api/dashboard/stats${query}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
+                if (res.status === 401) {
+                    console.warn("[Auth] Session expired or invalid on /api/dashboard/stats, logging out");
+                    logout();
+                    return;
+                }
                 const d = await res.json();
                 document.getElementById('statQuarantine').textContent = d.in_quarantine.toLocaleString();
 
@@ -1139,6 +1149,11 @@
                 if (status && status !== 'ALL') url += `&status=${encodeURIComponent(status)}`;
 
                 const res = await fetch(url, { headers: { 'Authorization': `Bearer ${token}` } });
+                if (res.status === 401) {
+                    console.warn("[Auth] Session expired or invalid on /api/animals, logging out");
+                    logout();
+                    return;
+                }
                 const data = await res.json();
                 
                 if (!data.items || data.items.length === 0) {
