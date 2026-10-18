@@ -33,7 +33,9 @@ export class DashboardRepository {
                 SUM(CASE WHEN current_status != 'Culled' AND current_status = 'Fresh' THEN 1 ELSE 0 END) as fresh,
                 SUM(CASE WHEN current_status != 'Culled' AND current_status = 'Inseminated' THEN 1 ELSE 0 END) as inseminated,
                 SUM(CASE WHEN current_status != 'Culled' AND lactation_number > 0 AND (current_status = 'Open' OR (current_status = 'Active' AND (last_insemination_date IS NULL OR current_status NOT IN ('Pregnant', 'Inseminated')))) THEN 1 ELSE 0 END) as open,
-                SUM(CASE WHEN current_status != 'Culled' AND (current_status = 'Heifer' OR (lactation_number = 0 AND current_status NOT IN ('Pregnant', 'Inseminated', 'Dry'))) THEN 1 ELSE 0 END) as heifers
+                SUM(CASE WHEN current_status != 'Culled' AND (current_status = 'Heifer' OR (lactation_number = 0 AND current_status NOT IN ('Pregnant', 'Inseminated', 'Dry'))) THEN 1 ELSE 0 END) as heifers,
+                SUM(CASE WHEN current_status != 'Culled' THEN 1 ELSE 0 END) as active_herd,
+                SUM(CASE WHEN current_status = 'Culled' THEN 1 ELSE 0 END) as culled
             FROM animals ${fFilter}
         `;
         const agg = (await this.db.prepare(aggQuery).bind(...fParams).first()) || {};
@@ -46,6 +48,8 @@ export class DashboardRepository {
         const inseminated = Number(agg.inseminated) || 0;
         const open = Number(agg.open) || 0;
         const heifers = Number(agg.heifers) || 0;
+        const activeHerd = Number(agg.active_herd) || 0;
+        const culled = Number(agg.culled) || 0;
 
         let qQuery = `
             SELECT count(DISTINCT animal_id) as c 
@@ -71,6 +75,8 @@ export class DashboardRepository {
             in_quarantine: Number(inQuarantine) || 0,
             herd_tiles: {
                 total,
+                active_herd: activeHerd,
+                culled,
                 open,
                 inseminated,
                 pregnant,

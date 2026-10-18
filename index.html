@@ -739,7 +739,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-2 sm:gap-2.5">
+            <div class="grid grid-cols-2 sm:grid-cols-5 md:grid-cols-10 gap-2 sm:gap-2.5">
                 <button @click="filterByStatus('ALL')" id="tileBtnTotal" class="herd-tile-btn text-left bg-slate-100/90 hover:bg-slate-200/90 border border-slate-300 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500">
                     <div class="flex justify-between items-center w-full">
                         <span class="text-[9.5px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-800 truncate pr-1" data-i18n="tileTotalTitle">Все стадо</span>
@@ -748,7 +748,23 @@
                     <h4 id="tileTotal" v-text="dashboard.formatTileMain(dashboard.stats.total_cows, dashboard.pctTotal)" class="text-xl sm:text-2xl font-black text-slate-900 my-0.5 group-hover:scale-105 transition-transform origin-left">0</h4>
                     <p class="text-[9.5px] text-slate-600 truncate" data-i18n="tileTotalSub">Всі тварини (скинути)</p>
                 </button>
-                <button @click="filterByStatus('Active')" id="tileBtnOpen" class="herd-tile-btn text-left bg-blue-50/70 hover:bg-blue-100/70 border border-blue-200 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
+                <button @click="filterByStatus('Active')" id="tileBtnActive" class="herd-tile-btn text-left bg-emerald-50/80 hover:bg-emerald-100/80 border border-emerald-300 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500">
+                    <div class="flex justify-between items-center w-full">
+                        <span class="text-[9.5px] sm:text-[10px] font-bold uppercase tracking-wider text-emerald-800 truncate pr-1" data-i18n="tileActiveTitle">Активне стадо</span>
+                        <span id="tileActivePct" v-text="dashboard.formatTileSub(dashboard.stats.herd_tiles?.active_herd, dashboard.pctActive)" class="text-[9.5px] sm:text-[10px] font-semibold text-emerald-800 bg-emerald-200/80 px-1.5 py-0.2 rounded-full">0%</span>
+                    </div>
+                    <h4 id="tileActive" v-text="dashboard.formatTileMain(dashboard.stats.herd_tiles?.active_herd, dashboard.pctActive)" class="text-xl sm:text-2xl font-black text-emerald-950 my-0.5 group-hover:scale-105 transition-transform origin-left">0</h4>
+                    <p class="text-[9.5px] text-emerald-700 truncate" data-i18n="tileActiveSub">Живі на фермі</p>
+                </button>
+                <button @click="filterByStatus('Culled')" id="tileBtnCulled" class="herd-tile-btn text-left bg-zinc-100/90 hover:bg-zinc-200/90 border border-zinc-300 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500">
+                    <div class="flex justify-between items-center w-full">
+                        <span class="text-[9.5px] sm:text-[10px] font-bold uppercase tracking-wider text-zinc-700 truncate pr-1" data-i18n="tileCulledTitle">Списані / Вибулі</span>
+                        <span id="tileCulledPct" v-text="dashboard.formatTileSub(dashboard.stats.herd_tiles?.culled, dashboard.pctCulled)" class="text-[9.5px] sm:text-[10px] font-semibold text-zinc-700 bg-zinc-200/80 px-1.5 py-0.2 rounded-full">0%</span>
+                    </div>
+                    <h4 id="tileCulled" v-text="dashboard.formatTileMain(dashboard.stats.herd_tiles?.culled, dashboard.pctCulled)" class="text-xl sm:text-2xl font-black text-zinc-800 my-0.5 group-hover:scale-105 transition-transform origin-left">0</h4>
+                    <p class="text-[9.5px] text-zinc-500 truncate" data-i18n="tileCulledSub">Архів вибуття</p>
+                </button>
+                <button @click="filterByStatus('Open')" id="tileBtnOpen" class="herd-tile-btn text-left bg-blue-50/70 hover:bg-blue-100/70 border border-blue-200 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
                     <div class="flex justify-between items-center w-full">
                         <span class="text-[9.5px] sm:text-[10px] font-bold uppercase tracking-wider text-blue-700 truncate pr-1" data-i18n="tileOpenTitle">Готові до осіменіння</span>
                         <span id="tileOpenPct" v-text="dashboard.formatTileSub(dashboard.stats.herd_tiles?.open, dashboard.pctOpen)" class="text-[9.5px] sm:text-[10px] font-semibold text-blue-600 bg-blue-100/80 px-1.5 py-0.2 rounded-full">0%</span>

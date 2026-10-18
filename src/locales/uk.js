@@ -67,6 +67,10 @@ export const uk = {
 
     tileTotalTitle: "Все стадо",
     tileTotalSub: "Всі тварини (скинути)",
+    tileActiveTitle: "Активне стадо",
+    tileActiveSub: "Живі на фермі",
+    tileCulledTitle: "Списані / Вибулі",
+    tileCulledSub: "Архів вибуття",
     tileOpenTitle: "Готові до осіменіння",
     tileOpenSub: "Охота / Сервіс-період",
     tileInsTitle: "Осіменені",

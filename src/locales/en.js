@@ -67,6 +67,10 @@ export const en = {
 
     tileTotalTitle: "Total Herd",
     tileTotalSub: "All Animals (Reset)",
+    tileActiveTitle: "Active Herd",
+    tileActiveSub: "Live on Farm",
+    tileCulledTitle: "Culled / Disposed",
+    tileCulledSub: "Archive History",
     tileOpenTitle: "Open (Eligible to Breed)",
     tileOpenSub: "Heat / Ready",
     tileInsTitle: "Inseminated (Bred)",

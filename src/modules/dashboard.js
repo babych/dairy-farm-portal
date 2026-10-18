@@ -57,6 +57,14 @@ export const dashboardModule = {
         return 100;
     },
 
+    get pctActive() {
+        return this.getPct(this.stats.herd_tiles?.active_herd || 0);
+    },
+
+    get pctCulled() {
+        return this.getPct(this.stats.herd_tiles?.culled || 0);
+    },
+
     get pctHeifers() {
         return this.getPct(this.stats.herd_tiles?.heifers || 0);
     },
