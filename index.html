@@ -1196,7 +1196,33 @@
                             </tr>
                         </thead>
                         <tbody id="usersTableBody" class="divide-y divide-slate-100 text-slate-700">
-                            <!-- Injected dynamically -->
+                            <tr v-if="!store.usersList || store.usersList.length === 0">
+                                <td colspan="9" class="p-6 text-center text-slate-400">Користувачів не знайдено або завантаження...</td>
+                            </tr>
+                            <tr v-for="u in store.usersList" :key="u.id" class="hover:bg-slate-50 transition border-b border-slate-100">
+                                <td class="p-3 font-bold text-slate-900" v-text="u.full_name"></td>
+                                <td class="p-3 text-slate-600 font-mono text-[11px]" v-text="u.email"></td>
+                                <td class="p-3">
+                                    <span :class="u.role === 'superadmin' ? 'bg-purple-100 text-purple-700' : (u.role === 'guest' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-700')" class="px-2 py-0.5 rounded-full text-[10px] font-semibold" v-text="u.role"></span>
+                                </td>
+                                <td class="p-3 text-slate-700 text-xs">
+                                    <span v-if="u.last_login_at" class="text-emerald-700 font-semibold"><i class="fa-regular fa-clock text-[10px] mr-1"></i><span v-text="u.last_login_at"></span></span>
+                                    <span v-else class="text-slate-400">Не заходив</span>
+                                </td>
+                                <td class="p-3 font-bold text-slate-800" v-text="u.login_count || 0"></td>
+                                <td class="p-3 text-slate-600">
+                                    <span v-if="u.google_sub" class="text-emerald-600"><i class="fa-brands fa-google mr-1"></i> Так</span>
+                                    <span v-else class="text-slate-400">Ні</span>
+                                </td>
+                                <td class="p-3">
+                                    <span v-if="u.is_active" class="text-emerald-600 font-semibold">Активний</span>
+                                    <span v-else class="text-rose-600 font-semibold">Деактивовано</span>
+                                </td>
+                                <td class="p-3 text-slate-400" v-text="u.created_at || '-'"></td>
+                                <td class="p-3 text-right">
+                                    <button :onclick="'deleteUser(\'' + u.id + '\')'" class="text-rose-500 hover:text-rose-700 px-2 py-1"><i class="fa-regular fa-trash-can"></i></button>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -1526,8 +1552,30 @@
                             </tr>
                         </thead>
                         <tbody id="medsCatalogTableBody" class="divide-y divide-slate-100 text-slate-700">
-                            <tr>
-                                <td colspan="7" class="p-8 text-center text-slate-400">Завантаження медикаментів...</td>
+                            <tr v-if="!store.medsList || store.medsList.length === 0">
+                                <td colspan="7" class="p-8 text-center text-slate-400">Аптечка порожня або завантаження...</td>
+                            </tr>
+                            <tr v-for="m in store.medsList" :key="m.id" class="hover:bg-slate-50 transition border-b border-slate-100">
+                                <td class="p-3">
+                                    <span class="font-bold text-slate-900" v-text="m.name"></span>
+                                    <p v-if="m.instructions" class="text-[10px] text-slate-400 mt-0.5" v-text="m.instructions"></p>
+                                </td>
+                                <td class="p-3 text-slate-600">
+                                    <div v-text="m.active_substance || '-'"></div>
+                                    <div class="text-[10px] text-slate-400 font-mono" v-text="'Партія: ' + (m.batch_number || '-')"></div>
+                                </td>
+                                <td class="p-3">
+                                    <span v-if="!m.expiration_date" class="text-slate-500">Не вказано</span>
+                                    <span v-else-if="m.status_expiry === 'EXPIRED'" class="bg-rose-100 text-rose-800 font-bold px-2 py-0.5 rounded text-[10px]" v-text="'ПРОСТРОЧЕНО (' + m.expiration_date + ')'"></span>
+                                    <span v-else-if="m.status_expiry === 'EXPIRING_SOON'" class="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded text-[10px]" v-text="'Спливає (' + m.days_to_expire + ' дн. / ' + m.expiration_date + ')'"></span>
+                                    <span v-else class="text-emerald-700 font-medium" v-text="m.expiration_date"></span>
+                                </td>
+                                <td class="p-3 font-bold text-slate-800" v-text="m.stock_quantity + ' ' + (m.unit || '')"></td>
+                                <td class="p-3 text-rose-600 font-bold" v-text="(m.milk_days != null && !isNaN(m.milk_days)) ? (m.milk_days > 0 ? m.milk_days + ' дн.' : '0 дн. (вільно)') : 'Не вказано'"></td>
+                                <td class="p-3 text-slate-600 font-medium" v-text="(m.meat_days != null && !isNaN(m.meat_days)) ? (m.meat_days > 0 ? m.meat_days + ' дн.' : '0 дн. (вільно)') : 'Не вказано'"></td>
+                                <td class="p-3 text-right">
+                                    <button :onclick="'deleteMedication(\'' + m.id + '\')'" class="text-rose-500 hover:text-rose-700 px-2 py-1"><i class="fa-regular fa-trash-can"></i></button>
+                                </td>
                             </tr>
                         </tbody>
                     </table>

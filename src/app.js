@@ -1285,31 +1285,17 @@
 
         // 11. User Management
         async function loadUsers() {
-            const tb = document.getElementById('usersTableBody');
-            tb.innerHTML = `<tr><td colspan="9" class="p-6 text-center text-slate-400">Завантаження...</td></tr>`;
-
             try {
                 const res = await fetch(`${API_BASE}/api/users`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const users = await res.json();
-
-                tb.innerHTML = users.map(u => `
-                    <tr class="hover:bg-slate-50 transition border-b border-slate-100">
-                        <td class="p-3 font-bold text-slate-900">${u.full_name}</td>
-                        <td class="p-3 text-slate-600 font-mono text-[11px]">${u.email}</td>
-                        <td class="p-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${u.role === 'superadmin' ? 'bg-purple-100 text-purple-700' : (u.role === 'guest' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-700')}">${u.role}</span></td>
-                        <td class="p-3 text-slate-700 text-xs">${u.last_login_at ? `<span class="text-emerald-700 font-semibold"><i class="fa-regular fa-clock text-[10px] mr-1"></i>${u.last_login_at}</span>` : '<span class="text-slate-400">Не заходив</span>'}</td>
-                        <td class="p-3 font-bold text-slate-800">${u.login_count || 0}</td>
-                        <td class="p-3 text-slate-600">${u.google_sub ? '<i class="fa-brands fa-google text-emerald-600 mr-1"></i> Так' : '<span class="text-slate-400">Ні</span>'}</td>
-                        <td class="p-3">${u.is_active ? '<span class="text-emerald-600 font-semibold">Активний</span>' : '<span class="text-rose-600 font-semibold">Деактивовано</span>'}</td>
-                        <td class="p-3 text-slate-400">${u.created_at || '-'}</td>
-                        <td class="p-3 text-right">
-                            <button onclick="deleteUser('${u.id}')" class="text-rose-500 hover:text-rose-700 px-2 py-1"><i class="fa-regular fa-trash-can"></i></button>
-                        </td>
-                    </tr>
-                `).join('');
-            } catch (e) { console.error(e); }
+                if (window.store) {
+                    window.store.usersList = Array.isArray(users) ? users : [];
+                }
+            } catch (e) { 
+                console.error('loadUsers error:', e); 
+            }
         }
 
         // 11.1 Superadmin Platform Metrics & Traffic
@@ -1754,50 +1740,14 @@
 
         // 14. Medications Catalog Loader
         async function loadMedsCatalog() {
-            const tbody = document.getElementById('medsCatalogTableBody');
-            tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-slate-400">Завантаження медикаментів...</td></tr>`;
             try {
                 const res = await fetch(`${API_BASE}/api/medications`);
                 const meds = await res.json();
-                if (meds.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-slate-400">Аптечка порожня. Додайте перший препарат.</td></tr>`;
-                    return;
+                if (window.store) {
+                    window.store.medsList = Array.isArray(meds) ? meds : [];
                 }
-
-                tbody.innerHTML = meds.map(m => {
-                    let expiryBadge = '<span class="text-slate-500">Не вказано</span>';
-                    if (m.expiration_date) {
-                        if (m.status_expiry === 'EXPIRED') {
-                            expiryBadge = `<span class="bg-rose-100 text-rose-800 font-bold px-2 py-0.5 rounded text-[10px]">ПРОСТРОЧЕНО (${m.expiration_date})</span>`;
-                        } else if (m.status_expiry === 'EXPIRING_SOON') {
-                            expiryBadge = `<span class="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded text-[10px]">Спливає (${m.days_to_expire} дн. / ${m.expiration_date})</span>`;
-                        } else {
-                            expiryBadge = `<span class="text-emerald-700 font-medium">${m.expiration_date}</span>`;
-                        }
-                    }
-
-                    return `
-                        <tr class="hover:bg-slate-50 transition border-b border-slate-100">
-                            <td class="p-3">
-                                <span class="font-bold text-slate-900">${m.name}</span>
-                                ${m.instructions ? `<p class="text-[10px] text-slate-400 mt-0.5">${m.instructions}</p>` : ''}
-                            </td>
-                            <td class="p-3 text-slate-600">
-                                <div>${m.active_substance || '-'}</div>
-                                <div class="text-[10px] text-slate-400 font-mono">Партія: ${m.batch_number || '-'}</div>
-                            </td>
-                            <td class="p-3">${expiryBadge}</td>
-                            <td class="p-3 font-bold text-slate-800">${m.stock_quantity} ${m.unit}</td>
-                            <td class="p-3 text-rose-600 font-bold">${(m.milk_days != null && !isNaN(m.milk_days)) ? (m.milk_days > 0 ? m.milk_days + ' дн.' : '0 дн. (вільно)') : 'Не вказано'}</td>
-                            <td class="p-3 text-slate-600 font-medium">${(m.meat_days != null && !isNaN(m.meat_days)) ? (m.meat_days > 0 ? m.meat_days + ' дн.' : '0 дн. (вільно)') : 'Не вказано'}</td>
-                            <td class="p-3 text-right">
-                                <button onclick="deleteMedication('${m.id}')" class="text-rose-500 hover:text-rose-700 px-2 py-1"><i class="fa-regular fa-trash-can"></i></button>
-                            </td>
-                        </tr>
-                    `;
-                }).join('');
             } catch (err) {
-                tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-rose-500">Помилка завантаження: ${err.message}</td></tr>`;
+                console.error('loadMedsCatalog error:', err);
             }
         }
 

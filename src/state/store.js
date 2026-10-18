@@ -20,6 +20,8 @@ export const store = reactive({
     })(),
     currentFarmId: localStorage.getItem("dairy_selected_farm") || null,
     farmsList: [],
+    usersList: [],
+    medsList: [],
     currentCowId: null,
     
     // UI Navigation State
