@@ -43,11 +43,20 @@ export const store = reactive({
 
     // Technical Settings & Tools dropdown menu state
     techMenuOpen: false,
-    toggleTechMenu() {
+    toggleTechMenu(e) {
+        if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
         this.techMenuOpen = !this.techMenuOpen;
+        const desktopMenu = document.getElementById('techMenuDropdownDesktop');
+        const mobileMenu = document.getElementById('techMenuDropdown');
+        if (desktopMenu) desktopMenu.classList.toggle('hidden', !this.techMenuOpen);
+        if (mobileMenu) mobileMenu.classList.toggle('hidden', !this.techMenuOpen);
     },
     closeTechMenu() {
         this.techMenuOpen = false;
+        const desktopMenu = document.getElementById('techMenuDropdownDesktop');
+        const mobileMenu = document.getElementById('techMenuDropdown');
+        if (desktopMenu) desktopMenu.classList.add('hidden');
+        if (mobileMenu) mobileMenu.classList.add('hidden');
     },
 
     // Toasts

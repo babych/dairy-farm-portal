@@ -388,12 +388,12 @@
 
                 <!-- ⚙️ Шестерня на десктопі -->
                 <div class="relative techMenuContainerClass" id="techMenuDropdownContainerDesktop">
-                    <button type="button" @click.stop="store.toggleTechMenu()" onclick="window.toggleTechMenu(event)" title="Сервісні налаштування & Інструменти" class="relative bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 border border-slate-200 w-9 h-9 rounded-xl flex items-center justify-center transition shadow-2xs cursor-pointer touch-manipulation before:absolute before:-inset-1.5 before:content-['']">
+                    <button id="techMenuGearBtnDesktop" type="button" onclick="window.toggleTechMenu(event)" title="Сервісні налаштування & Інструменти" class="relative bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 border border-slate-200 w-9 h-9 rounded-xl flex items-center justify-center transition shadow-2xs cursor-pointer touch-manipulation before:absolute before:-inset-1.5 before:content-['']">
                         <i class="fa-solid fa-gear text-slate-600 text-sm pointer-events-none"></i>
                     </button>
 
                     <!-- Dropdown Menu Desktop -->
-                    <div id="techMenuDropdownDesktop" :class="{ hidden: !store.techMenuOpen }" class="techMenuDropdownClass absolute right-0 mt-1.5 w-60 bg-white border border-slate-200 rounded-2xl shadow-xl py-1.5 z-50 text-xs divide-y divide-slate-100">
+                    <div id="techMenuDropdownDesktop" class="hidden techMenuDropdownClass absolute right-0 mt-1.5 w-60 bg-white border border-slate-200 rounded-2xl shadow-xl py-1.5 z-50 text-xs divide-y divide-slate-100">
                         <!-- 1. Профіль користувача -->
                         <div class="px-3.5 py-2.5 bg-slate-50/70">
                             <div class="flex items-center gap-2.5">
@@ -661,12 +661,12 @@
 
                     <!-- ⚙️ Шестерня (Мобільна) -->
                     <div class="relative techMenuContainerClass" id="techMenuDropdownContainer">
-                        <button id="techMenuGearBtn" type="button" @click.stop="store.toggleTechMenu()" onclick="window.toggleTechMenu(event)" title="Сервісні налаштування & Інструменти" class="relative bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 border border-slate-200 w-9 h-9 rounded-xl flex items-center justify-center transition shadow-2xs cursor-pointer touch-manipulation before:absolute before:-inset-1.5 before:content-['']">
+                        <button id="techMenuGearBtn" type="button" onclick="window.toggleTechMenu(event)" title="Сервісні налаштування & Інструменти" class="relative bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 border border-slate-200 w-9 h-9 rounded-xl flex items-center justify-center transition shadow-2xs cursor-pointer touch-manipulation before:absolute before:-inset-1.5 before:content-['']">
                             <i class="fa-solid fa-gear text-slate-600 text-sm pointer-events-none"></i>
                         </button>
 
                         <!-- Dropdown Menu Mobile -->
-                        <div id="techMenuDropdown" :class="{ hidden: !store.techMenuOpen }" class="techMenuDropdownClass absolute right-0 mt-1.5 w-60 bg-white border border-slate-200 rounded-2xl shadow-xl py-1.5 z-50 text-xs divide-y divide-slate-100">
+                        <div id="techMenuDropdown" class="hidden techMenuDropdownClass absolute right-0 mt-1.5 w-60 bg-white border border-slate-200 rounded-2xl shadow-xl py-1.5 z-50 text-xs divide-y divide-slate-100">
                             <!-- 1. Профіль користувача -->
                             <div class="px-3.5 py-2.5 bg-slate-50/70">
                                 <div class="flex items-center gap-2.5">
@@ -2477,7 +2477,7 @@
     </script>
 
     <!-- MAIN JAVASCRIPT LOGIC (Extracted to src/app.js) -->
-    <script src="/src/app.js?v=20261018_diff_fix"></script>
+    <script src="/src/app.js?v=20261018_gear_direct_fix"></script>
 
     <!-- FOOTER WITH DISCREET ABOUT / CONTACT MODAL TRIGGER -->
     <footer class="mt-auto border-t border-slate-200 bg-white py-4 px-6 text-center text-xs text-slate-400 flex flex-col sm:flex-row justify-between items-center gap-2">

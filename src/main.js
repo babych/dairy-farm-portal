@@ -22,20 +22,11 @@ window.setLanguage = applyLanguage;
 window.t = t;
 export function toggleTechMenu(e) {
     if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
-    const willOpen = !store.techMenuOpen;
-    store.techMenuOpen = willOpen;
-    const desktopMenu = document.getElementById('techMenuDropdownDesktop');
-    const mobileMenu = document.getElementById('techMenuDropdown');
-    if (desktopMenu) desktopMenu.classList.toggle('hidden', !willOpen);
-    if (mobileMenu) mobileMenu.classList.toggle('hidden', !willOpen);
+    store.toggleTechMenu(e);
 }
 
 export function closeTechMenu() {
-    store.techMenuOpen = false;
-    const desktopMenu = document.getElementById('techMenuDropdownDesktop');
-    const mobileMenu = document.getElementById('techMenuDropdown');
-    if (desktopMenu) desktopMenu.classList.add('hidden');
-    if (mobileMenu) mobileMenu.classList.add('hidden');
+    store.closeTechMenu();
 }
 
 /** @type {any} */ (window).closeTechMenu = closeTechMenu;
