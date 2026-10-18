@@ -38,12 +38,34 @@ export const farmsModule = {
 
             if (res.access_token) {
                 store.setToken(res.access_token);
+                const win = /** @type {any} */ (typeof window !== 'undefined' ? window : {});
+                if ('token' in win) {
+                    win.token = res.access_token;
+                }
             }
             if (showToastMsg && res.message) {
                 store.addToast(res.message);
             }
 
             await this.loadFarms();
+
+            // Refresh all dashboard, animal, alert, and event views for the new farm
+            const win = /** @type {any} */ (typeof window !== 'undefined' ? window : {});
+            if (win.dashboardModule && win.dashboardModule.loadStats) {
+                await win.dashboardModule.loadStats();
+            }
+            if (win.herdModule && win.herdModule.loadAnimals) {
+                win.herdModule.curOffset = 0;
+                await win.herdModule.loadAnimals();
+            }
+            if (typeof win.loadStats === 'function') win.loadStats();
+            if (typeof win.loadAnimals === 'function') {
+                win.curOffset = 0;
+                win.loadAnimals();
+            }
+            if (typeof win.loadActionLists === 'function') win.loadActionLists();
+            if (typeof win.loadEventGrid === 'function') win.loadEventGrid();
+
             if (onSwitchedCallback) {
                 await onSwitchedCallback();
             }

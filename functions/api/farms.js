@@ -53,6 +53,9 @@ export async function handleFarms({ path, method, request, url, env, db, jsonRes
             try {
                 const dbUser = await db.prepare("SELECT role FROM users WHERE email = ?").bind(userEmail).first();
                 if (dbUser?.role) userRole = dbUser.role;
+                if (userEmail !== "demo.farmer@dairy-erp.farm") {
+                    await db.prepare("UPDATE users SET farm_id = ? WHERE email = ?").bind(farm.id, userEmail).run();
+                }
             } catch (e) {}
         }
 

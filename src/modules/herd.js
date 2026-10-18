@@ -14,6 +14,9 @@ export const herdModule = {
         this.isLoading = true;
         try {
             let url = `/api/animals?limit=${this.pageLimit}&offset=${this.curOffset}`;
+            if (store.currentFarmId) {
+                url += `&farm_id=${encodeURIComponent(store.currentFarmId)}`;
+            }
             if (this.searchQuery) {
                 url += `&q=${encodeURIComponent(this.searchQuery)}`;
             }

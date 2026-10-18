@@ -604,8 +604,9 @@
                 });
                 if (!res.ok) return;
                 farmsList = await res.json();
-                const sel = document.getElementById('farmSelectDropdown');
-                if (!sel) return;
+                if (window.store) {
+                    window.store.farmsList = farmsList;
+                }
 
                 const currentFarm = (savedFarmId && farmsList.find(f => f.id === savedFarmId)) 
                     ? farmsList.find(f => f.id === savedFarmId) 
@@ -613,45 +614,16 @@
 
                 if (currentFarm && (!savedFarmId || savedFarmId !== currentFarm.id)) {
                     localStorage.setItem("dairy_selected_farm", currentFarm.id);
+                    if (window.store) {
+                        window.store.setSelectedFarm(currentFarm.id);
+                    }
                 }
-
-                sel.innerHTML = farmsList.map(f => {
-                    const farmName = (f.name || "Моя ферма").trim();
-                    return `
-                        <option value="${f.id}" title="${farmName}" ${(currentFarm && f.id === currentFarm.id) ? 'selected' : ''}>
-                            ${farmName} (${f.cow_count || 0})
-                        </option>
-                    `;
-                }).join('');
             } catch (err) { console.warn("Failed to load farms", err); }
         }
 
         async function onFarmDropdownChange(farmId, showToastMsg = true) {
-            if (!farmId || isSwitchingFarm) return;
-            isSwitchingFarm = true;
-            localStorage.setItem("dairy_selected_farm", farmId);
-            try {
-                const res = await fetch(`${API_BASE}/api/farms/switch/${farmId}`, {
-                    method: 'POST',
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                const d = await res.json();
-                if (!res.ok) throw new Error(d.detail || "Помилка перемикання бази");
-                
-                if (d.access_token) {
-                    token = d.access_token;
-                    localStorage.setItem("dairy_token", token);
-                }
-                if (showToastMsg) showToast(d.message);
-                await loadFarms();
-                loadStats();
-                loadAnimals();
-                loadActionLists();
-                loadEventGrid();
-            } catch (err) { 
-                showToast(err.message, "error"); 
-            } finally {
-                isSwitchingFarm = false;
+            if (window.farmsModule && window.farmsModule.switchFarm) {
+                return window.farmsModule.switchFarm(farmId, showToastMsg);
             }
         }
 
@@ -846,7 +818,9 @@
         // 6. Data Fetchers
         async function loadStats() {
             try {
-                const res = await fetch(`${API_BASE}/api/dashboard/stats`, {
+                const activeFarm = (window.store && window.store.currentFarmId) || localStorage.getItem("dairy_selected_farm");
+                const query = activeFarm ? `?farm_id=${encodeURIComponent(activeFarm)}` : '';
+                const res = await fetch(`${API_BASE}/api/dashboard/stats${query}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const d = await res.json();
@@ -1092,7 +1066,9 @@
             tb.innerHTML = `<tr><td colspan="9" class="p-8 text-center text-slate-400"><i class="fa-solid fa-spinner fa-spin"></i> Завантаження...</td></tr>`;
 
             try {
+                const activeFarm = (window.store && window.store.currentFarmId) || localStorage.getItem("dairy_selected_farm");
                 let url = `${API_BASE}/api/animals?limit=${PAGE_LIMIT}&offset=${curOffset}`;
+                if (activeFarm) url += `&farm_id=${encodeURIComponent(activeFarm)}`;
                 if (q) url += `&q=${encodeURIComponent(q)}`;
                 if (status && status !== 'ALL') url += `&status=${encodeURIComponent(status)}`;
 

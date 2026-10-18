@@ -17,7 +17,8 @@ export const dashboardModule = {
 
     async loadStats() {
         try {
-            const data = await apiRequest('/api/dashboard/stats', { method: 'GET' });
+            const query = store.currentFarmId ? `?farm_id=${encodeURIComponent(store.currentFarmId)}` : '';
+            const data = await apiRequest(`/api/dashboard/stats${query}`, { method: 'GET' });
             if (data) {
                 this.stats = {
                     total_cows: data.total_cows || 0,
@@ -33,7 +34,8 @@ export const dashboardModule = {
 
     async loadActionLists() {
         try {
-            const data = await apiRequest('/api/dashboard/action-lists', { method: 'GET' });
+            const query = store.currentFarmId ? `?farm_id=${encodeURIComponent(store.currentFarmId)}` : '';
+            const data = await apiRequest(`/api/dashboard/action-lists${query}`, { method: 'GET' });
             if (data) {
                 this.actionLists = {
                     quarantine_milk: data.quarantine_milk || data.milk_quarantine || [],
