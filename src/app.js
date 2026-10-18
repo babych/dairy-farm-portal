@@ -1832,6 +1832,24 @@
                 window.addEventListener('load', () => {
                     navigator.serviceWorker.register('/sw.js').then((registration) => {
                         console.log('[PWA] Service Worker registered successfully:', registration.scope);
+
+                        // If there is already a waiting worker, show update pill immediately
+                        if (registration.waiting) {
+                            showAppUpdateAvailable(registration.waiting);
+                        }
+
+                        // Listen for updates found while app is running
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            if (newWorker) {
+                                newWorker.addEventListener('statechange', () => {
+                                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                        showAppUpdateAvailable(newWorker);
+                                    }
+                                });
+                            }
+                        });
+
                         // Trigger immediate check for new version on server
                         registration.update();
                     }).catch((error) => {
@@ -1839,6 +1857,27 @@
                     });
                 });
             }
+
+            let pendingWorker = null;
+            function showAppUpdateAvailable(worker) {
+                pendingWorker = worker;
+                const banner = document.getElementById('appUpdateBanner');
+                if (banner) {
+                    banner.classList.remove('hidden');
+                    banner.classList.add('flex');
+                }
+            }
+
+            window.triggerAppUpdate = function() {
+                if (pendingWorker) {
+                    pendingWorker.postMessage({ type: 'SKIP_WAITING' });
+                } else if (navigator.serviceWorker.controller) {
+                    navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
+                    setTimeout(() => window.location.reload(), 300);
+                } else {
+                    window.location.reload();
+                }
+            };
 
             // Hide Install App button if already running as installed standalone PWA
             const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;

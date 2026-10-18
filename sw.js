@@ -1,5 +1,5 @@
 // DairyERP Service Worker (PWA Offline & Instant Cache)
-const CACHE_VERSION = 'dairy-erp-vcf2cb70-mvdxjeuj';
+const CACHE_VERSION = 'dairy-erp-v4fdcb11-mvdyuvn3';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -199,3 +199,11 @@ self.addEventListener('notificationclick', (event) => {
     })
   );
 });
+
+// Skip Waiting on explicit message from client app
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+

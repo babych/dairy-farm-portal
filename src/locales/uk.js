@@ -16,6 +16,8 @@ export const uk = {
     navLogs: "Логи подій",
     navImport: "Імпорт Uniform",
     headerSubtitle: "Управління молочною фермою та облік стада",
+    appUpdateAvailable: "Доступна нова версія",
+    appUpdateBtn: "Оновити",
     footerText: "DairyERP Enterprise Platform • Інтеграція та сумісність з базами Uniform-Agri (ВРХ)",
     footerAboutBtn: "Про систему & Контакти",
 

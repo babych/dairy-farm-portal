@@ -16,6 +16,8 @@ export const en = {
     navLogs: "Event Logs",
     navImport: "Import Uniform",
     headerSubtitle: "Dairy Herd Management & Livestock Intelligence",
+    appUpdateAvailable: "New version available",
+    appUpdateBtn: "Update",
     footerText: "DairyERP Enterprise Platform • Integrated with Uniform-Agri Herd Databases",
     footerAboutBtn: "About System & Contacts",
 
