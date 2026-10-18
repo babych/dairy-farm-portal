@@ -250,10 +250,10 @@
                 <i class="fa-brands fa-google text-xs"></i> <span class="hidden sm:inline">Увійти через Google</span><span class="sm:hidden text-xs">Вхід</span>
             </button>
             <!-- User Profile Chip in Header -->
-            <div id="headerUserChip" class="hidden items-center gap-1.5 sm:gap-2 bg-slate-100 border border-slate-200 px-2 sm:px-3 py-1.5 sm:py-1 rounded-xl text-xs font-semibold text-slate-800" title="Мій акаунт">
+            <button id="headerUserChip" onclick="openProfileModal()" class="hidden items-center gap-1.5 sm:gap-2 bg-slate-100 hover:bg-slate-200 border border-slate-200 px-2 sm:px-3 py-1.5 sm:py-1 rounded-xl text-xs font-semibold text-slate-800 transition cursor-pointer" title="Мій акаунт">
                 <i class="fa-solid fa-circle-user text-emerald-600 text-sm sm:text-xs"></i>
                 <span id="headerUserEmail" class="hidden sm:inline truncate max-w-[160px]"></span>
-            </div>
+            </button>
             <!-- Network Connection Status Pill (clickable to view and manage offline outbox items) -->
             <button id="headerNetworkStatus" onclick="openOutboxModal()" class="hidden items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-semibold transition cursor-pointer hover:opacity-90">
                 <span id="networkStatusDot" class="w-2 h-2 rounded-full"></span>
@@ -262,7 +262,7 @@
             </button>
             <!-- PWA Install / Offline Info Button -->
             <button id="headerInstallBtn" onclick="openInstallModal()" title="Встановити додаток на смартфон / Офлайн доступ" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shadow-sm">
-                <i class="fa-solid fa-mobile-screen-button text-emerald-600"></i> <span class="hidden sm:inline" data-i18n="installAppBtn">Встановити апп</span><span class="sm:hidden text-[11px]">Апп</span>
+                <i class="fa-solid fa-mobile-screen-button text-emerald-600"></i> <span data-i18n="installAppBtn">Встановити</span>
             </button>
             <!-- Backup download button (shown only when authenticated) -->
             <button id="headerBackupBtn" onclick="downloadBackup()" title="Завантажити резервну копію бази даних" class="hidden bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-xl text-xs font-semibold transition items-center gap-1.5 border border-slate-200">
@@ -4434,6 +4434,21 @@
             }
         }
 
+        function openProfileModal() {
+            if (currentUser) {
+                const nameEl = document.getElementById('profileUserName');
+                const roleEl = document.getElementById('profileUserRole');
+                const emailEl = document.getElementById('profileUserEmail');
+                const emailSubEl = document.getElementById('profileUserEmailSubtitle');
+
+                if (nameEl) nameEl.textContent = currentUser.full_name || 'Оператор ферми';
+                if (roleEl) roleEl.textContent = currentUser.role || 'farmer';
+                if (emailEl) emailEl.textContent = currentUser.email || '—';
+                if (emailSubEl) emailSubEl.textContent = currentUser.email || '';
+            }
+            document.getElementById('profileModal')?.classList.remove('hidden');
+        }
+
         function openInstallModal() {
             const currentUrl = window.location.origin || window.location.href;
             const qrImg = document.getElementById('installModalQrImg');
@@ -4576,16 +4591,16 @@
     </footer>
 
     <!-- MODAL: PWA INSTALLATION & OFFLINE CACHE GUIDE -->
-    <div id="installModal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4 text-left">
+    <div id="installModal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-4 sm:p-6 shadow-2xl space-y-3.5 text-left max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl font-bold shadow-sm">
+                <div class="flex items-center gap-2.5 sm:gap-3">
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg sm:text-xl font-bold shadow-sm">
                         📱
                     </div>
                     <div>
-                        <h3 class="font-bold text-slate-900 text-base leading-tight" data-i18n="installModalTitle">Встановлення додатку & Офлайн-робота</h3>
-                        <p class="text-xs text-slate-500 font-medium" data-i18n="installModalSubtitle">Швидкий доступ без інтернету прямо в корівнику</p>
+                        <h3 class="font-bold text-slate-900 text-sm sm:text-base leading-tight" data-i18n="installModalTitle">Встановлення & Офлайн-робота</h3>
+                        <p class="text-[11px] sm:text-xs text-slate-500 font-medium" data-i18n="installModalSubtitle">Швидкий доступ без інтернету прямо в корівнику</p>
                     </div>
                 </div>
                 <button onclick="closeModal('installModal')" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg text-lg">
@@ -4597,12 +4612,12 @@
                 DairyERP підтримує роботу як автономний PWA-додаток. Всі сторінки та довідники кешуються на вашому телефоні, тому відкриваються миттєво навіть при слабкому зв'язку 3G/Edge у приміщеннях ферми.
             </p>
 
-            <!-- QR-код для миттєвого відкриття з камери смартфона -->
-            <div class="bg-gradient-to-br from-emerald-50 to-teal-50/60 border border-emerald-200/80 rounded-2xl p-4 flex items-center gap-4 shadow-sm">
+            <!-- QR-код для переходу з іншого пристрою (показуємо на десктопі або планшеті, ховаємо на смартфоні) -->
+            <div class="hidden sm:flex bg-gradient-to-br from-emerald-50 to-teal-50/60 border border-emerald-200/80 rounded-2xl p-3 sm:p-4 items-center gap-4 shadow-sm">
                 <div class="bg-white p-2 rounded-xl border border-emerald-100 shadow-sm flex-shrink-0 flex items-center justify-center">
-                    <img id="installModalQrImg" src="" alt="QR-код порталу" class="w-24 h-24 rounded-lg object-contain" />
+                    <img id="installModalQrImg" src="" alt="QR-код порталу" class="w-20 h-20 sm:w-24 sm:h-24 rounded-lg object-contain" />
                 </div>
-                <div class="space-y-1">
+                <div class="space-y-1 min-w-0">
                     <div class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800">
                         <i class="fa-solid fa-qrcode text-emerald-600"></i>
                         <span data-i18n="installQrTitle">Швидкий перехід з телефону</span>
@@ -4610,34 +4625,78 @@
                     <p class="text-[11px] text-slate-600 leading-snug" data-i18n="installQrSubtitle">
                         Наведіть камеру смартфона на цей QR-код, щоб відкрити портал і встановити ярлик на свій екран за 5 секунд.
                     </p>
-                    <p id="installModalUrlText" class="text-[10px] font-mono text-emerald-700 font-semibold truncate max-w-[210px]"></p>
+                    <p id="installModalUrlText" class="text-[10px] font-mono text-emerald-700 font-semibold truncate"></p>
                 </div>
             </div>
 
             <div class="space-y-2">
                 <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider" data-i18n="installModalHowTo">Як встановити ярлик на телефон чи ПК:</h4>
                 <div class="text-xs text-slate-600 space-y-2">
-                    <div class="flex items-start gap-2 bg-emerald-50/50 border border-emerald-100 rounded-xl p-2.5">
-                        <i class="fa-brands fa-android text-emerald-600 mt-0.5 text-sm"></i>
+                    <div class="flex items-start gap-2.5 bg-emerald-50/50 border border-emerald-100 rounded-xl p-2.5">
+                        <i class="fa-brands fa-android text-emerald-600 mt-0.5 text-base flex-shrink-0"></i>
                         <span data-i18n="installModalStepAndroid"><b>Android / Chrome:</b> Натисніть кнопку "Встановити" нижче або меню браузера (3 крапки) → "Додати на головний екран".</span>
                     </div>
-                    <div class="flex items-start gap-2 bg-blue-50/50 border border-blue-100 rounded-xl p-2.5">
-                        <i class="fa-brands fa-apple text-blue-600 mt-0.5 text-sm"></i>
+                    <div class="flex items-start gap-2.5 bg-blue-50/50 border border-blue-100 rounded-xl p-2.5">
+                        <i class="fa-brands fa-apple text-blue-600 mt-0.5 text-base flex-shrink-0"></i>
                         <span data-i18n="installModalStepIos"><b>iPhone / Safari:</b> Натисніть кнопку "Поділитися" (іконка квадрата зі стрілкою внизу) → "На екран «Додому»".</span>
                     </div>
-                    <div class="flex items-start gap-2 bg-slate-50 border border-slate-200 rounded-xl p-2.5">
-                        <i class="fa-solid fa-desktop text-slate-600 mt-0.5 text-sm"></i>
+                    <div class="flex items-start gap-2.5 bg-slate-50 border border-slate-200 rounded-xl p-2.5">
+                        <i class="fa-solid fa-desktop text-slate-600 mt-0.5 text-base flex-shrink-0"></i>
                         <span data-i18n="installModalStepDesktop"><b>ПК / Ноутбук:</b> Натисніть іконку встановлення в адресному рядку браузера (Chrome / Edge).</span>
                     </div>
                 </div>
             </div>
 
-            <div class="flex items-center gap-2 pt-2">
+            <div class="flex items-center gap-2 pt-1">
                 <button id="modalInstallActionBtn" onclick="triggerPwaInstall()" class="hidden flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl text-xs font-semibold shadow-sm transition flex items-center justify-center gap-2">
                     <i class="fa-solid fa-download"></i> <span data-i18n="installModalBtnInstall">Встановити зараз</span>
                 </button>
                 <button onclick="closeModal('installModal')" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2.5 rounded-xl text-xs font-semibold transition" data-i18n="aboutModalClose">
                     Зрозуміло
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: USER PROFILE & SESSION -->
+    <div id="profileModal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white border border-slate-200 rounded-3xl max-w-sm w-full p-5 sm:p-6 shadow-2xl space-y-4 text-left">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl shadow-sm">
+                        <i class="fa-solid fa-circle-user"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 text-base leading-tight" data-i18n="profileModalTitle">Профіль користувача</h3>
+                        <p id="profileUserEmailSubtitle" class="text-xs text-slate-500 font-medium truncate max-w-[200px]"></p>
+                    </div>
+                </div>
+                <button onclick="closeModal('profileModal')" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 space-y-2.5 text-xs">
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-500" data-i18n="profileNameLabel">Ім'я оператора</span>
+                    <span id="profileUserName" class="font-bold text-slate-900"></span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-500" data-i18n="profileRoleLabel">Роль у системі</span>
+                    <span id="profileUserRole" class="font-semibold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md text-[11px] uppercase tracking-wider"></span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-500" data-i18n="profileEmailLabel">Електронна пошта</span>
+                    <span id="profileUserEmail" class="font-mono text-slate-700 truncate max-w-[170px]"></span>
+                </div>
+            </div>
+
+            <div class="space-y-2 pt-1">
+                <button onclick="closeModal('profileModal'); logout()" class="w-full bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 py-2.5 rounded-xl text-xs font-semibold transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> <span data-i18n="logoutBtn">Вийти з акаунту</span>
+                </button>
+                <button onclick="closeModal('profileModal')" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 rounded-xl text-xs font-semibold transition" data-i18n="aboutModalClose">
+                    Закрити
                 </button>
             </div>
         </div>

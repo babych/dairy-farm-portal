@@ -170,9 +170,8 @@ export const uk = {
     fertilityModalSubtitle: "Динаміка міжотельного періоду, коефіцієнтів CR / PR та показників заплідненості",
     chartEciTrendTitle: "Expected Calving Interval (ECI) Trend",
     vetModalTitle: "Ветеринарний чекліст • Ранковий обхід стада",
-    vetModalSubtitle: "Операційний лист огляду стада",
-    installAppBtn: "Встановити додаток",
-    installModalTitle: "Встановлення додатку & Офлайн-робота",
+    installAppBtn: "Встановити",
+    installModalTitle: "Встановлення & Офлайн-робота",
     installModalSubtitle: "Швидкий доступ без інтернету прямо в корівнику",
     installModalDesc: "DairyERP підтримує роботу як автономний PWA-додаток. Всі сторінки та довідники кешуються на вашому телефоні, тому відкриваються миттєво навіть при слабкому зв'язку 3G/Edge у приміщеннях ферми.",
     installModalHowTo: "Як встановити ярлик на телефон чи ПК:",
@@ -180,6 +179,12 @@ export const uk = {
     installModalStepIos: "iPhone / Safari: Натисніть кнопку 'Поділитися' (іконка квадрата зі стрілкою) -> 'На екран «Додому»'.",
     installModalStepDesktop: "ПК / Ноутбук: Натисніть іконку встановлення в адресному рядку браузера (Chrome / Edge).",
     installModalBtnInstall: "Встановити зараз",
+
+    // Profile Modal
+    profileModalTitle: "Профіль користувача",
+    profileRoleLabel: "Роль у системі",
+    profileEmailLabel: "Електронна пошта",
+    profileNameLabel: "Ім'я оператора",
 
     // Error messages & Explanations
     errD1Quota: "⚠️ Хмарна база тимчасово досягла безкоштовного ліміту запитів Cloudflare D1. Режим читання відновиться автоматично опівночі UTC або після переходу на платний план.",

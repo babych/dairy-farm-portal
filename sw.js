@@ -1,5 +1,5 @@
 // DairyERP Service Worker (PWA Offline & Instant Cache)
-const CACHE_VERSION = 'dairy-erp-vfix-esmodule-herd-import';
+const CACHE_VERSION = 'dairy-erp-vprofile-modal-and-install-ux';
 
 const PRECACHE_ASSETS = [
   '/',

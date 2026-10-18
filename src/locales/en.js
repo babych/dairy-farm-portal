@@ -170,9 +170,8 @@ export const en = {
     fertilityModalSubtitle: "Calving interval dynamics, CR / PR rates and breeding efficiency",
     chartEciTrendTitle: "Expected Calving Interval (ECI) Trend",
     vetModalTitle: "VET Checklist • Morning Herd Round",
-    vetModalSubtitle: "Operational herd inspection sheet",
-    installAppBtn: "Install App",
-    installModalTitle: "App Installation & Offline Usage",
+    installAppBtn: "Install",
+    installModalTitle: "Installation & Offline Usage",
     installModalSubtitle: "Fast offline access directly in the cattle barn",
     installModalDesc: "DairyERP runs as a Progressive Web App (PWA). All pages and livestock catalogs are cached locally on your device, ensuring instant loads even under weak 3G/Edge barn coverage.",
     installModalHowTo: "How to add an app shortcut:",
@@ -180,6 +179,12 @@ export const en = {
     installModalStepIos: "iPhone / Safari: Tap the 'Share' icon (square with arrow) -> 'Add to Home Screen'.",
     installModalStepDesktop: "Desktop / PC: Click the install icon in your browser address bar (Chrome / Edge).",
     installModalBtnInstall: "Install Now",
+
+    // Profile Modal
+    profileModalTitle: "User Profile",
+    profileRoleLabel: "System Role",
+    profileEmailLabel: "Email Address",
+    profileNameLabel: "Operator Name",
 
     // Error messages & Explanations
     errD1Quota: "⚠️ Cloud database temporarily exceeded daily free tier row read quota. Read operations will restore automatically at midnight UTC or on paid plan upgrade.",
