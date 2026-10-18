@@ -18,6 +18,7 @@ export const en = {
     headerSubtitle: "Dairy Herd Management & Livestock Intelligence",
     appUpdateAvailable: "New version available",
     appUpdateBtn: "Update",
+    appUpdateTooltip: "Update application to the latest version",
     footerText: "DairyERP Enterprise Platform • Integrated with Uniform-Agri Herd Databases",
     footerAboutBtn: "About System & Contacts",
 

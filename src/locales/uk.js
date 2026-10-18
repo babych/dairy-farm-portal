@@ -18,6 +18,7 @@ export const uk = {
     headerSubtitle: "Управління молочною фермою та облік стада",
     appUpdateAvailable: "Доступна нова версія",
     appUpdateBtn: "Оновити",
+    appUpdateTooltip: "Оновити застосунок до останньої версії",
     footerText: "DairyERP Enterprise Platform • Інтеграція та сумісність з базами Uniform-Agri (ВРХ)",
     footerAboutBtn: "Про систему & Контакти",
 

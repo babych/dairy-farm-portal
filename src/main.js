@@ -31,6 +31,25 @@ export function closeTechMenu() {
 
 /** @type {any} */ (window).closeTechMenu = closeTechMenu;
 /** @type {any} */ (window).toggleTechMenu = toggleTechMenu;
+
+// Close tech menu when clicking outside or pressing Escape
+if (typeof document !== 'undefined') {
+    document.addEventListener('click', (event) => {
+        if (!store.techMenuOpen) return;
+        const target = /** @type {HTMLElement | null} */ (event.target);
+        if (target && target.closest('.techMenuContainerClass')) {
+            return;
+        }
+        closeTechMenu();
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && store.techMenuOpen) {
+            closeTechMenu();
+        }
+    });
+}
+
 /** @type {any} */ (window).switchFarmDirect = async (farmId) => {
     if (!farmId) return;
     if (farmsModule && typeof farmsModule.switchFarm === 'function') {
@@ -87,6 +106,7 @@ export function initApp() {
 
 
         async mounted() {
+            closeTechMenu();
             applyLanguage(getCurrentLang());
             flushOfflineOutbox();
 

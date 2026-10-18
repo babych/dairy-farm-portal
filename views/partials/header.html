@@ -17,10 +17,9 @@
                 <i class="fa-brands fa-google text-xs"></i> <span class="hidden sm:inline">Увійти через Google</span><span class="sm:hidden text-xs">Вхід</span>
             </button>
             <!-- App Code Update Available Pill (Shown only when SW finds new version) -->
-            <button id="appUpdateBanner" onclick="triggerAppUpdate()" title="Оновити застосунок до останньої версії" class="hidden items-center gap-1.5 bg-gradient-to-r from-amber-500 to-emerald-600 hover:from-amber-600 hover:to-emerald-700 text-white px-2.5 sm:px-3 py-1.5 sm:py-1 rounded-xl text-xs font-bold transition shadow-md animate-pulse cursor-pointer">
+            <button id="appUpdateBanner" onclick="triggerAppUpdate()" title="Оновити застосунок до останньої версії" data-i18n-title="appUpdateTooltip" class="hidden items-center gap-1.5 bg-gradient-to-r from-amber-500 to-emerald-600 hover:from-amber-600 hover:to-emerald-700 text-white px-2.5 sm:px-3 py-1.5 sm:py-1 rounded-xl text-xs font-bold transition shadow-md animate-pulse cursor-pointer">
                 <i class="fa-solid fa-cloud-arrow-down text-xs"></i>
-                <span class="hidden sm:inline" data-i18n="appUpdateAvailable">Доступна нова версія</span>
-                <span class="bg-white/20 hover:bg-white/30 text-white text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-md ml-0.5" data-i18n="appUpdateBtn">Оновити</span>
+                <span data-i18n="appUpdateBtn">Оновити</span>
             </button>
             <!-- Network Connection Status Pill (clickable to view and manage offline outbox items) -->
             <button id="headerNetworkStatus" onclick="openOutboxModal()" class="hidden items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-semibold transition cursor-pointer hover:opacity-90">

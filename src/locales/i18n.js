@@ -63,6 +63,10 @@ export function applyLanguage(lang) {
         const k = el.getAttribute('data-i18n-ph');
         if (dict[k]) el.setAttribute('placeholder', dict[k]);
     });
+    document.querySelectorAll('[data-i18n-title]').forEach(el => {
+        const k = el.getAttribute('data-i18n-title');
+        if (dict[k]) el.setAttribute('title', dict[k]);
+    });
 
     // Update optgroup labels if any
     const gridWindowFilter = /** @type {HTMLSelectElement | null} */ (document.getElementById('gridWindowFilter'));
