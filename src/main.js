@@ -31,8 +31,9 @@ export function initApp() {
         // Top Navigation
         switchTab(tabName) {
             store.currentTab = tabName;
-            if (typeof window.switchTab === 'function') {
-                window.switchTab(tabName);
+            const win = /** @type {any} */ (window);
+            if (typeof win.switchTab === 'function') {
+                win.switchTab(tabName);
             }
         },
 
