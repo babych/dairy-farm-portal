@@ -2148,22 +2148,9 @@
                 showToast('Дотримуйтесь інструкцій для вашого браузера нижче', 'info');
             }
         }
-        // SMART AUTO-REFRESH & MOBILE PULL-TO-REFRESH
+        // MOBILE PULL-TO-REFRESH & MANUAL REFRESH (Auto-polling disabled to conserve D1 quota)
         (function initAutoRefreshAndPullToRefresh() {
-            // 1. Smart Focus Revalidate (коли повертаються у вкладку або розблоковують телефон)
-            const REVALIDATE_INTERVAL_MS = 60 * 1000; // 60 секунд
-            function handleWindowFocusOrVisible() {
-                if (document.visibilityState === 'visible' && token) {
-                    const elapsed = Date.now() - lastAutoRefreshTime;
-                    if (elapsed >= REVALIDATE_INTERVAL_MS) {
-                        refreshDashboardData(false);
-                    }
-                }
-            }
-            window.addEventListener('focus', handleWindowFocusOrVisible);
-            document.addEventListener('visibilitychange', handleWindowFocusOrVisible);
-
-            // 2. Mobile Touch Pull-to-Refresh Implementation
+            // 1. Mobile Touch Pull-to-Refresh Implementation
             let touchStartY = 0;
             let touchCurrentY = 0;
             let isPulling = false;

@@ -18,7 +18,9 @@ export async function handleAnimals({ path, method, request, url, db, jsonRespon
             limit,
             offset
         });
-        return jsonResponse(result);
+        return jsonResponse(result, 200, {
+            "Cache-Control": "public, max-age=30, s-maxage=180, stale-while-revalidate=300"
+        });
     }
 
     // 2. POST /api/animals (Insert single animal or batch list)
@@ -252,7 +254,9 @@ export async function handleAnimals({ path, method, request, url, db, jsonRespon
         const animalData = await AnimalRepository.getAnimal360(db, animalId);
         if (!animalData) return jsonResponse({ detail: "Animal not found" }, 404);
 
-        return jsonResponse(animalData);
+        return jsonResponse(animalData, 200, {
+            "Cache-Control": "public, max-age=30, s-maxage=300, stale-while-revalidate=600"
+        });
     }
 
     return null;

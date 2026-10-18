@@ -9,7 +9,9 @@ export async function handleDashboard({ path, method, request, url, db, jsonResp
         const farmId = getActiveFarmId();
         const dashboardRepo = new DashboardRepository(db);
         const stats = await dashboardRepo.getHerdStats(farmId);
-        return jsonResponse(stats);
+        return jsonResponse(stats, 200, {
+            "Cache-Control": "public, max-age=30, s-maxage=300, stale-while-revalidate=600"
+        });
     }
 
     // 2. GET /api/dashboard/event-grid
@@ -66,6 +68,8 @@ export async function handleDashboard({ path, method, request, url, db, jsonResp
             today: new Date().toISOString().split("T")[0],
             total_events: events.length,
             events
+        }, 200, {
+            "Cache-Control": "public, max-age=60, s-maxage=600, stale-while-revalidate=1200"
         });
     }
 
@@ -74,13 +78,17 @@ export async function handleDashboard({ path, method, request, url, db, jsonResp
         const farmId = getActiveFarmId();
         const dashboardRepo = new DashboardRepository(db);
         const actionLists = await dashboardRepo.getActionLists(farmId);
-        return jsonResponse(actionLists);
+        return jsonResponse(actionLists, 200, {
+            "Cache-Control": "public, max-age=30, s-maxage=300, stale-while-revalidate=600"
+        });
     }
 
     // 4. GET /api/medications
     if (path === "/api/medications" && method === "GET") {
         const meds = await MedicationRepository.getAll(db);
-        return jsonResponse(meds);
+        return jsonResponse(meds, 200, {
+            "Cache-Control": "public, max-age=300, s-maxage=1800, stale-while-revalidate=3600"
+        });
     }
 
     // 4.1 POST /api/medications (Add medication to inventory)

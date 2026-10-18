@@ -18,6 +18,16 @@ export const dashboardModule = reactive({
     },
 
     async loadStats() {
+        const cacheKey = `dairy_stats_${store.currentFarmId || 'default'}`;
+        // 1. Instant hydration from local cache
+        try {
+            const cached = localStorage.getItem(cacheKey);
+            if (cached) {
+                const parsed = JSON.parse(cached);
+                this.stats = parsed;
+            }
+        } catch (e) {}
+
         try {
             const query = store.currentFarmId ? `?farm_id=${encodeURIComponent(store.currentFarmId)}` : '';
             const data = await apiRequest(`/api/dashboard/stats${query}`, { method: 'GET' });
@@ -28,6 +38,9 @@ export const dashboardModule = reactive({
                     herd_tiles: data.herd_tiles || { open: 0, inseminated: 0, pregnant: 0, dry: 0, fresh: 0, active_herd: 0, culled: 0, heifers: 0 },
                     kpis: data.kpis || { avg_dim: 0, conception_rate: 0, pregnancy_rate: 0, insemination_rate: 0, calving_interval_days: 0 }
                 };
+                try {
+                    localStorage.setItem(cacheKey, JSON.stringify(this.stats));
+                } catch (e) {}
             }
         } catch (e) {
             console.error("Load stats error", e);
@@ -35,6 +48,14 @@ export const dashboardModule = reactive({
     },
 
     async loadActionLists() {
+        const cacheKey = `dairy_action_lists_${store.currentFarmId || 'default'}`;
+        try {
+            const cached = localStorage.getItem(cacheKey);
+            if (cached) {
+                this.actionLists = JSON.parse(cached);
+            }
+        } catch (e) {}
+
         try {
             const query = store.currentFarmId ? `?farm_id=${encodeURIComponent(store.currentFarmId)}` : '';
             const data = await apiRequest(`/api/dashboard/action-lists${query}`, { method: 'GET' });
@@ -45,6 +66,9 @@ export const dashboardModule = reactive({
                     dry_off_candidates: data.dry_off_candidates || [],
                     calving_watch: data.calving_watch || data.expected_calving || []
                 };
+                try {
+                    localStorage.setItem(cacheKey, JSON.stringify(this.actionLists));
+                } catch (e) {}
             }
         } catch (e) {
             console.error("Load action lists error", e);

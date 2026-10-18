@@ -34,25 +34,27 @@ export async function onRequest(context) {
         return jsonResponse({ error: "Cloudflare D1 Database binding 'DB' not configured" }, 500);
     }
 
-    // Background track visit
-    context.waitUntil((async () => {
-        try {
-            const clientIp = request.headers.get("CF-Connecting-IP") || request.headers.get("x-forwarded-for") || "unknown";
-            const ua = request.headers.get("user-agent") || "";
-            const auth = request.headers.get("authorization") || "";
-            let userEmail = null;
-            if (auth.startsWith("Bearer ")) {
-                try {
-                    const tokenPart = auth.split(" ")[1];
-                    const decoded = JSON.parse(atob(tokenPart.split(".")[1]));
-                    userEmail = decoded.sub || null;
-                } catch (e) {}
-            }
-            await db.prepare("INSERT INTO site_visits (id, path, ip, user_agent, user_email, created_at) VALUES (?, ?, ?, ?, ?, datetime('now'))")
-                .bind(crypto.randomUUID(), path, clientIp, ua.substring(0, 300), userEmail)
-                .run();
-        } catch (e) {}
-    })());
+    // Background track visit (Only track major user actions, skip micro-polling to conserve D1 write limits)
+    if (path === "/api/auth/me" || path === "/api/auth/login" || path.startsWith("/api/import")) {
+        context.waitUntil((async () => {
+            try {
+                const clientIp = request.headers.get("CF-Connecting-IP") || request.headers.get("x-forwarded-for") || "unknown";
+                const ua = request.headers.get("user-agent") || "";
+                const auth = request.headers.get("authorization") || "";
+                let userEmail = null;
+                if (auth.startsWith("Bearer ")) {
+                    try {
+                        const tokenPart = auth.split(" ")[1];
+                        const decoded = JSON.parse(atob(tokenPart.split(".")[1]));
+                        userEmail = decoded.sub || null;
+                    } catch (e) {}
+                }
+                await db.prepare("INSERT INTO site_visits (id, path, ip, user_agent, user_email, created_at) VALUES (?, ?, ?, ?, ?, datetime('now'))")
+                    .bind(crypto.randomUUID(), path, clientIp, ua.substring(0, 300), userEmail)
+                    .run();
+            } catch (e) {}
+        })());
+    }
 
     // Helper to get active farm_id from request params or bearer token
     const getActiveFarmId = () => {
