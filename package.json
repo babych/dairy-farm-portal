@@ -1,6 +1,6 @@
 {
   "name": "dairy-farm-portal",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "description": "DairyERP Portal - Cloud Herd Management and Uniform-Agri Import",
   "type": "module",
   "scripts": {
