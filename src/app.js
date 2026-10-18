@@ -435,8 +435,11 @@
             if (refreshIcon) refreshIcon.classList.add('fa-spin');
 
             try {
+                // First ensure fresh farm list and resolved active farm ID
+                await loadFarms();
+
+                // Then fetch stats and herd for the resolved active farm
                 await Promise.allSettled([
-                    loadFarms(),
                     loadStats(),
                     loadAnimals(),
                     loadActionLists(),
@@ -634,7 +637,7 @@
                     ? farmsList.find(f => f.id === savedFarmId) 
                     : (farmsList.find(f => f.is_current) || farmsList[0]);
 
-                if (currentFarm && (!savedFarmId || savedFarmId !== currentFarm.id)) {
+                if (currentFarm && savedFarmId !== currentFarm.id) {
                     localStorage.setItem("dairy_selected_farm", currentFarm.id);
                     if (window.store) {
                         window.store.setSelectedFarm(currentFarm.id);

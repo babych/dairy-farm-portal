@@ -17,7 +17,7 @@ export const farmsModule = {
                 ? store.farmsList.find(f => f.id === savedFarmId)
                 : (store.farmsList.find(f => f.is_current) || store.farmsList[0]);
 
-            if (currentFarm && (!savedFarmId || savedFarmId !== currentFarm.id)) {
+            if (currentFarm && savedFarmId !== currentFarm.id) {
                 store.setSelectedFarm(currentFarm.id);
             }
             return store.farmsList;
