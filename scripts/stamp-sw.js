@@ -20,8 +20,8 @@ try {
 }
 
 let content = fs.readFileSync(swPath, 'utf8');
-// Replace const CACHE_VERSION = '...'; cleanly
-content = content.replace(/const CACHE_VERSION = ['"][^'"]+['"];/, `const CACHE_VERSION = 'dairy-erp-v${versionTag}';`);
+// Replace const CACHE_VERSION = ... cleanly
+content = content.replace(/const CACHE_VERSION = [^\n;]+;/, `const CACHE_VERSION = 'dairy-erp-v${versionTag}';`);
 
 fs.writeFileSync(swPath, content, 'utf8');
 console.log(`[PWA Build] Updated sw.js CACHE_VERSION to: dairy-erp-v${versionTag}`);

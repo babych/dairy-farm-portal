@@ -1818,8 +1818,17 @@
                 }
             }
 
-            // Register PWA Service Worker (with automatic update check)
+            // Register PWA Service Worker (with automatic update check & seamless reload)
             if ('serviceWorker' in navigator) {
+                let refreshing = false;
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    if (!refreshing) {
+                        refreshing = true;
+                        console.log('[PWA] Service Worker updated, refreshing page for latest version');
+                        window.location.reload();
+                    }
+                });
+
                 window.addEventListener('load', () => {
                     navigator.serviceWorker.register('/sw.js').then((registration) => {
                         console.log('[PWA] Service Worker registered successfully:', registration.scope);
