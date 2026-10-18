@@ -8,12 +8,24 @@ export class AnimalRepository {
     static async searchAnimals(db, { farmId = null, search = "", status = "ALL", limit = 50, offset = 0 } = {}) {
         const safeLimit = Math.max(1, Math.min(Number(limit) || 50, 100));
         const safeOffset = Math.max(0, Number(offset) || 0);
+        let activeFarmId = farmId;
+        if (activeFarmId) {
+            const currentFarmCount = await db.prepare("SELECT count(*) as c FROM animals WHERE farm_id = ?").bind(activeFarmId).first();
+            if (!currentFarmCount || currentFarmCount.c === 0) {
+                const populatedFarm = await db.prepare("SELECT id FROM farms WHERE (SELECT count(*) FROM animals WHERE farm_id = farms.id) > 0 ORDER BY imported_at DESC, created_at DESC LIMIT 1").first();
+                if (populatedFarm) activeFarmId = populatedFarm.id;
+            }
+        } else {
+            const firstFarm = await db.prepare("SELECT id FROM farms WHERE (SELECT count(*) FROM animals WHERE farm_id = farms.id) > 0 ORDER BY imported_at DESC, created_at DESC LIMIT 1").first();
+            if (firstFarm) activeFarmId = firstFarm.id;
+        }
+
         let query = "SELECT * FROM animals WHERE 1=1";
         const params = [];
 
-        if (farmId) {
+        if (activeFarmId) {
             query += " AND farm_id = ?";
-            params.push(farmId);
+            params.push(activeFarmId);
         }
         if (search) {
             query += " AND (farm_number LIKE ? OR official_tag LIKE ? OR name LIKE ?)";
@@ -21,6 +33,8 @@ export class AnimalRepository {
         }
         if (status === "Quarantine") {
             query += " AND id IN (SELECT animal_id FROM health_events WHERE is_active_withholding = 1 OR milk_withholding_until >= date('now'))";
+        } else if (status === "Active") {
+            query += " AND current_status != 'Culled'";
         } else if (status === "Open") {
             query += " AND current_status != 'Culled' AND lactation_number > 0 AND (current_status = 'Open' OR (current_status = 'Active' AND (last_insemination_date IS NULL OR current_status NOT IN ('Pregnant', 'Inseminated'))))";
         } else if (status === "Heifer") {

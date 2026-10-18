@@ -1,10 +1,11 @@
 // Farms Management & Database Switching Module
+import { reactive } from '../../lib/petite-vue.es.js';
 import { store } from '../state/store.js';
 import { apiRequest } from '../api/client.js';
 
 let isSwitchingFarm = false;
 
-export const farmsModule = {
+export const farmsModule = reactive({
     async loadFarms() {
         try {
             const savedFarmId = localStorage.getItem("dairy_selected_farm");
@@ -90,4 +91,5 @@ export const farmsModule = {
                store.farmsList.find(f => f.is_current) ||
                store.farmsList[0];
     }
-};
+});
+

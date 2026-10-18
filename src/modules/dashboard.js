@@ -1,8 +1,9 @@
 // Dashboard, KPIs & Veterinary Action Lists Module
+import { reactive } from '../../lib/petite-vue.es.js';
 import { store } from '../state/store.js';
 import { apiRequest } from '../api/client.js';
 
-export const dashboardModule = {
+export const dashboardModule = reactive({
     stats: {
         total_cows: 0,
         in_quarantine: 0,
@@ -138,4 +139,5 @@ export const dashboardModule = {
         { key: 'Heifer', id: 'tileBtnHeifers', titleKey: 'tileHeifersTitle', subKey: 'tileHeifersSub', bg: 'bg-purple-50/70 hover:bg-purple-100/70 border-purple-200 text-purple-700' },
         { key: 'Quarantine', id: 'tileBtnQuar', titleKey: 'tileQuarTitle', subKey: 'tileQuarSub', bg: 'bg-rose-50/70 hover:bg-rose-100/70 border-rose-200 text-rose-700' }
     ]
-};
+});
+

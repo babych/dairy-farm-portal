@@ -1,7 +1,8 @@
+import { reactive } from '../../lib/petite-vue.es.js';
 import { store } from '../state/store.js';
 import { apiRequest, cacheFarmAnimals } from '../api/client.js';
 
-export const herdModule = {
+export const herdModule = reactive({
     animals: [],
     currentCow: null,
     totalCount: 0,
@@ -197,5 +198,6 @@ export const herdModule = {
             default: return 'bg-slate-50 text-slate-600 border border-slate-200';
         }
     }
-};
+});
+
 
