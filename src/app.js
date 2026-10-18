@@ -2071,22 +2071,49 @@
             } catch (err) { showToast(err.message, "error"); }
         }
 
-        // 15. Backup Downloader
+        // 15. Backup Downloader (Cross-Platform iOS Safari, Android & Desktop)
         async function downloadBackup() {
             try {
                 showToast("Генерується резервна копія бази...");
-                const res = await fetch(`${API_BASE}/api/system/backup`, {
+                const farmId = (window.store && window.store.currentFarmId) || localStorage.getItem("dairy_farm_id") || "";
+                const query = farmId ? `?farm_id=${encodeURIComponent(farmId)}` : "";
+                const res = await fetch(`${API_BASE}/api/system/backup${query}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (!res.ok) throw new Error("Помилка вивантаження бекапу");
                 const blob = await res.blob();
+                const filename = `dairy_farm_backup_${new Date().toISOString().split('T')[0]}.json`;
+
+                // Mobile iOS / Android: Native Share Sheet (Save to Files, Telegram, AirDrop)
+                if (typeof navigator !== 'undefined' && navigator.canShare) {
+                    try {
+                        const file = new File([blob], filename, { type: 'application/json' });
+                        if (navigator.canShare({ files: [file] })) {
+                            await navigator.share({
+                                files: [file],
+                                title: 'Резервна копія DairyERP',
+                                text: `Резервна копія бази даних ферми (${new Date().toLocaleDateString()})`
+                            });
+                            showToast("Резервну копію збережено!");
+                            return;
+                        }
+                    } catch (shareErr) {
+                        if (shareErr.name === 'AbortError') return; // User simply closed the share sheet
+                        console.warn("[Backup Share Fallback]", shareErr);
+                    }
+                }
+
+                // Desktop / Browser Standard Download
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `dairy_farm_backup_${new Date().toISOString().split('T')[0]}.json`;
+                a.download = filename;
                 document.body.appendChild(a);
                 a.click();
-                a.remove();
+                setTimeout(() => {
+                    a.remove();
+                    window.URL.revokeObjectURL(url);
+                }, 1000);
                 showToast("Резервну копію успішно завантажено!");
             } catch (err) {
                 showToast(err.message, "error");
