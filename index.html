@@ -765,7 +765,7 @@
                         </thead>
                         <tbody id="animalsTableBody" class="divide-y divide-slate-100 text-slate-700">
                             <tr v-if="!herd.isLoading && (!herd.animals || herd.animals.length === 0)">
-                                <td colspan="9" class="p-8 text-center text-slate-400">Корів не знайдено</td>
+                                <td colspan="9" class="p-8 text-center text-slate-400" data-i18n="noAnimalsFound">Корів не знайдено</td>
                             </tr>
                             <tr v-for="a in herd.animals" :key="a.id" class="hover:bg-slate-50 transition border-b border-slate-100">
                                 <td class="p-3 font-bold text-slate-900" v-text="a.farm_number"></td>
@@ -780,7 +780,7 @@
                                 <td class="p-3 text-slate-500" v-text="a.group_name || 'Група 1'"></td>
                                 <td class="p-3 text-right">
                                     <button @click="herd.openCow360(a.id)" :onclick="'openCow360(\'' + a.id + '\')'" class="bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 px-2.5 py-1.5 rounded-lg font-semibold transition">
-                                        <i class="fa-regular fa-folder-open"></i> Картка 360°
+                                        <i class="fa-regular fa-folder-open"></i> <span data-i18n="btnCard360">Картка 360°</span>
                                     </button>
                                 </td>
                             </tr>
@@ -881,15 +881,15 @@
                     <table class="w-full text-left border-collapse text-xs">
                         <thead>
                             <tr class="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
-                                <th class="p-3">ПІБ</th>
-                                <th class="p-3">Email</th>
-                                <th class="p-3">Роль</th>
-                                <th class="p-3">Останній вхід</th>
-                                <th class="p-3">К-сть входів</th>
-                                <th class="p-3">Google Account</th>
-                                <th class="p-3">Статус</th>
-                                <th class="p-3">Створено</th>
-                                <th class="p-3 text-right">Дії</th>
+                                <th class="p-3" data-i18n="thUserName">ПІБ</th>
+                                <th class="p-3" data-i18n="thUserEmail">Email</th>
+                                <th class="p-3" data-i18n="thUserRole">Роль</th>
+                                <th class="p-3" data-i18n="thUserLastLogin">Останній вхід</th>
+                                <th class="p-3" data-i18n="thUserLoginCount">К-сть входів</th>
+                                <th class="p-3" data-i18n="thUserGoogleAccount">Google Account</th>
+                                <th class="p-3" data-i18n="thUserStatus">Статус</th>
+                                <th class="p-3" data-i18n="thUserCreated">Створено</th>
+                                <th class="p-3 text-right" data-i18n="thUserActions">Дії</th>
                             </tr>
                         </thead>
                         <tbody id="usersTableBody" class="divide-y divide-slate-100 text-slate-700">
@@ -997,11 +997,11 @@
                     <table class="w-full text-left border-collapse text-xs">
                         <thead>
                             <tr class="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
-                                <th class="p-2.5 w-36">Час</th>
-                                <th class="p-2.5 w-28">IP Адреса</th>
-                                <th class="p-2.5 w-36">Користувач</th>
-                                <th class="p-2.5 w-40">Шлях (Path)</th>
-                                <th class="p-2.5">User Agent (Браузер / ОС)</th>
+                                <th class="p-2.5 w-36" data-i18n="thMetricTime">Час</th>
+                                <th class="p-2.5 w-28" data-i18n="thMetricIp">IP Адреса</th>
+                                <th class="p-2.5 w-36" data-i18n="thMetricUser">Користувач</th>
+                                <th class="p-2.5 w-40" data-i18n="thMetricPath">Шлях (Path)</th>
+                                <th class="p-2.5" data-i18n="thMetricUserAgent">User Agent (Браузер / ОС)</th>
                             </tr>
                         </thead>
                         <tbody id="metricsVisitsTableBody" class="divide-y divide-slate-100 font-mono text-[11px] text-slate-700">

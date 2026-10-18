@@ -155,6 +155,54 @@ export const en = {
     thAuditSummary: "Operation Summary",
     thAuditDiff: "Changed Fields (Diff)",
 
+    // Users Table
+    thUserName: "Full Name",
+    thUserEmail: "Email",
+    thUserRole: "Role",
+    thUserLastLogin: "Last Login",
+    thUserLoginCount: "Logins",
+    thUserGoogleAccount: "Google Account",
+    thUserStatus: "Status",
+    thUserCreated: "Created At",
+    thUserActions: "Actions",
+
+    // Metrics Table
+    thMetricTime: "Timestamp",
+    thMetricIp: "IP Address",
+    thMetricUser: "User",
+    thMetricPath: "Request Path",
+    thMetricUserAgent: "User Agent (Browser / OS)",
+
+    // Smart Diff Modal Table
+    thDiffCow: "Cow #",
+    thDiffField: "Field",
+    thDiffCurrent: "Current in DB",
+    thDiffNew: "New in Backup",
+
+    // Vet Checklist Modal Tables
+    thVcDiagnosis: "Diagnosis / Reason",
+    thVcMedication: "Medication",
+    thVcWithholdUntil: "Withhold Until",
+    thVcSignature: "VET Signature",
+    thVcInsemDate: "Insemination Date",
+    thVcDaysPostInsem: "Days Post-Bred",
+    thVcResult: "Result (Pregnant / Open)",
+    thVcGestationDays: "Gestation Days",
+    thVcDryOffMed: "Dry-Cow Therapy (Tube)",
+    thVcConfirm: "Confirmation",
+
+    // Fertility ECI Modal Table
+    thFertIndicator: "KPI Indicator",
+    thFertCurrentVal: "Current Value",
+    thFertTarget: "Target Benchmark",
+    thFertStatus: "Status",
+
+    // Action button labels in table rows
+    btnCard360: "360° Card",
+    noAnimalsFound: "No animals found",
+    pageLabel: "Page",
+    ofLabel: "of",
+
     // Login & Onboarding
     loginTitle: "Log In to DairyERP",
     loginSubtitle: "Secure access to your farm dashboard via Google account",

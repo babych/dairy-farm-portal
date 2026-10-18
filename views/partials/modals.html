@@ -508,10 +508,10 @@
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
-                                    <th class="p-2.5">Корова №</th>
-                                    <th class="p-2.5">Поле</th>
-                                    <th class="p-2.5 text-rose-600">Поточне в системі</th>
-                                    <th class="p-2.5 text-emerald-600">Нове в бекапі</th>
+                                    <th class="p-2.5" data-i18n="thDiffCow">Корова №</th>
+                                    <th class="p-2.5" data-i18n="thDiffField">Поле</th>
+                                    <th class="p-2.5 text-rose-600" data-i18n="thDiffCurrent">Поточне в системі</th>
+                                    <th class="p-2.5 text-emerald-600" data-i18n="thDiffNew">Нове в бекапі</th>
                                 </tr>
                             </thead>
                             <tbody id="diffModifiedTableBody" class="divide-y divide-slate-100 font-mono text-[11px]">
@@ -658,12 +658,12 @@
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
-                                    <th class="p-2.5">Корова №</th>
-                                    <th class="p-2.5">Офіційна бирка</th>
-                                    <th class="p-2.5">Діагноз / Причина</th>
-                                    <th class="p-2.5">Препарат</th>
-                                    <th class="p-2.5 text-rose-600">Каренція до</th>
-                                    <th class="p-2.5 text-right">Підпис ветлікаря</th>
+                                    <th class="p-2.5" data-i18n="thDiffCow">Корова №</th>
+                                    <th class="p-2.5" data-i18n="thTag">Офіційна бирка</th>
+                                    <th class="p-2.5" data-i18n="thVcDiagnosis">Діагноз / Причина</th>
+                                    <th class="p-2.5" data-i18n="thVcMedication">Препарат</th>
+                                    <th class="p-2.5 text-rose-600" data-i18n="thVcWithholdUntil">Каренція до</th>
+                                    <th class="p-2.5 text-right" data-i18n="thVcSignature">Підпис ветлікаря</th>
                                 </tr>
                             </thead>
                             <tbody id="vcQuarTable" class="divide-y divide-slate-100">
@@ -685,12 +685,12 @@
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
-                                    <th class="p-2.5">Корова №</th>
-                                    <th class="p-2.5">Офіційна бирка</th>
-                                    <th class="p-2.5">Дата осіменіння</th>
-                                    <th class="p-2.5">Днів після осім.</th>
-                                    <th class="p-2.5">Результат (Тільна / Холоста)</th>
-                                    <th class="p-2.5 text-right">Дія</th>
+                                    <th class="p-2.5" data-i18n="thDiffCow">Корова №</th>
+                                    <th class="p-2.5" data-i18n="thTag">Офіційна бирка</th>
+                                    <th class="p-2.5" data-i18n="thVcInsemDate">Дата осіменіння</th>
+                                    <th class="p-2.5" data-i18n="thVcDaysPostInsem">Днів після осім.</th>
+                                    <th class="p-2.5" data-i18n="thVcResult">Результат (Тільна / Холоста)</th>
+                                    <th class="p-2.5 text-right" data-i18n="thActions">Дія</th>
                                 </tr>
                             </thead>
                             <tbody id="vcPregTable" class="divide-y divide-slate-100">
@@ -712,12 +712,12 @@
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
-                                    <th class="p-2.5">Корова №</th>
-                                    <th class="p-2.5">Бирка</th>
-                                    <th class="p-2.5">Днів тільності</th>
-                                    <th class="p-2.5 text-emerald-700">Очікуваний отел</th>
-                                    <th class="p-2.5">Консервація вимені (Препарат)</th>
-                                    <th class="p-2.5 text-right">Підтвердження</th>
+                                    <th class="p-2.5" data-i18n="thDiffCow">Корова №</th>
+                                    <th class="p-2.5" data-i18n="thTag">Бирка</th>
+                                    <th class="p-2.5" data-i18n="thVcGestationDays">Днів тільності</th>
+                                    <th class="p-2.5 text-emerald-700" data-i18n="thExpCalv">Очікуваний отел</th>
+                                    <th class="p-2.5" data-i18n="thVcDryOffMed">Консервація вимені (Препарат)</th>
+                                    <th class="p-2.5 text-right" data-i18n="thVcConfirm">Підтвердження</th>
                                 </tr>
                             </thead>
                             <tbody id="vcDryTable" class="divide-y divide-slate-100">
@@ -801,10 +801,10 @@
                         <table class="w-full text-left border-collapse text-xs">
                             <thead>
                                 <tr class="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
-                                    <th class="p-2.5">Показник</th>
-                                    <th class="p-2.5">Поточне значення</th>
-                                    <th class="p-2.5">Цільовий орієнтир</th>
-                                    <th class="p-2.5">Статус</th>
+                                    <th class="p-2.5" data-i18n="thFertIndicator">Показник</th>
+                                    <th class="p-2.5" data-i18n="thFertCurrentVal">Поточне значення</th>
+                                    <th class="p-2.5" data-i18n="thFertTarget">Цільовий орієнтир</th>
+                                    <th class="p-2.5" data-i18n="thFertStatus">Статус</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-100 text-slate-700">

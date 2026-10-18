@@ -155,6 +155,54 @@ export const uk = {
     thAuditSummary: "Опис операції",
     thAuditDiff: "Змінені поля (Diff)",
 
+    // Users Table
+    thUserName: "ПІБ",
+    thUserEmail: "Email",
+    thUserRole: "Роль",
+    thUserLastLogin: "Останній вхід",
+    thUserLoginCount: "К-сть входів",
+    thUserGoogleAccount: "Google Account",
+    thUserStatus: "Статус",
+    thUserCreated: "Створено",
+    thUserActions: "Дії",
+
+    // Metrics Table
+    thMetricTime: "Час",
+    thMetricIp: "IP Адреса",
+    thMetricUser: "Користувач",
+    thMetricPath: "Шлях (Path)",
+    thMetricUserAgent: "User Agent (Браузер / ОС)",
+
+    // Smart Diff Modal Table
+    thDiffCow: "Корова №",
+    thDiffField: "Поле",
+    thDiffCurrent: "Поточне в системі",
+    thDiffNew: "Нове в бекапі",
+
+    // Vet Checklist Modal Tables
+    thVcDiagnosis: "Діагноз / Причина",
+    thVcMedication: "Препарат",
+    thVcWithholdUntil: "Каренція до",
+    thVcSignature: "Підпис ветлікаря",
+    thVcInsemDate: "Дата осіменіння",
+    thVcDaysPostInsem: "Днів після осім.",
+    thVcResult: "Результат (Тільна / Холоста)",
+    thVcGestationDays: "Днів тільності",
+    thVcDryOffMed: "Консервація вимені (Препарат)",
+    thVcConfirm: "Підтвердження",
+
+    // Fertility ECI Modal Table
+    thFertIndicator: "Показник",
+    thFertCurrentVal: "Поточне значення",
+    thFertTarget: "Цільовий орієнтир",
+    thFertStatus: "Статус",
+
+    // Action button labels in table rows
+    btnCard360: "Картка 360°",
+    noAnimalsFound: "Корів не знайдено",
+    pageLabel: "Сторінка",
+    ofLabel: "з",
+
     // Login & Onboarding
     loginTitle: "Вхід у DairyERP",
     loginSubtitle: "Безпечний доступ до кабінету ферми за допомогою Google облікового запису",
