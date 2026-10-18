@@ -1,5 +1,5 @@
 // DairyERP Service Worker (PWA Offline & Instant Cache)
-const CACHE_VERSION = 'dairy-erp-v4baee2f-' + Date.now().toString(36);
+const CACHE_VERSION = 'dairy-erp-v' + Date.now().toString(36);
 
 const PRECACHE_ASSETS = [
   '/',
@@ -89,10 +89,11 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Auth endpoints: always Network-Only
-  if (url.pathname.startsWith('/api/auth/')) {
+  // All other API endpoints (/api/*): Network-Only (never serve stale/deleted farms or metadata from cache)
+  if (url.pathname.startsWith('/api/')) {
     return;
   }
+
 
   // Static Assets & App Shell
   // For HTML documents (navigation): use Network-First so users instantly see new deployments, with Cache Fallback for offline!
