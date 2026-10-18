@@ -622,6 +622,14 @@
         let isSwitchingFarm = false;
         async function loadFarms() {
             try {
+                if (window.farmsModule && typeof window.farmsModule.loadFarms === 'function') {
+                    const list = await window.farmsModule.loadFarms();
+                    if (list) {
+                        farmsList = list;
+                        return list;
+                    }
+                }
+
                 const savedFarmId = localStorage.getItem("dairy_selected_farm");
                 const queryParam = savedFarmId ? `?active_farm_id=${encodeURIComponent(savedFarmId)}` : "";
                 const res = await fetch(`${API_BASE}/api/farms${queryParam}`, {
@@ -872,6 +880,11 @@
         // 6. Data Fetchers
         async function loadStats() {
             try {
+                if (window.dashboardModule && typeof window.dashboardModule.loadStats === 'function') {
+                    await window.dashboardModule.loadStats();
+                    return;
+                }
+
                 const activeFarm = (window.store && window.store.currentFarmId) || localStorage.getItem("dairy_selected_farm");
                 const query = activeFarm ? `?farm_id=${encodeURIComponent(activeFarm)}` : '';
                 const res = await fetch(`${API_BASE}/api/dashboard/stats${query}`, {
@@ -892,94 +905,7 @@
                         kpis: d.kpis || { avg_dim: 0, conception_rate: 0, pregnancy_rate: 0, insemination_rate: 0, calving_interval_days: 0 }
                     };
                 }
-
-                const elStatQuar = document.getElementById('statQuarantine');
-                if (elStatQuar) elStatQuar.textContent = (d.in_quarantine || 0).toLocaleString();
-
-                // Herd Tiles
-                if (d.herd_tiles) {
-                    const elTotal = document.getElementById('tileTotal');
-                    if (elTotal) elTotal.textContent = (d.total_cows || 0).toLocaleString();
-                    document.getElementById('tileOpen').textContent = (d.herd_tiles.open || 0).toLocaleString();
-                    document.getElementById('tileIns').textContent = (d.herd_tiles.inseminated || 0).toLocaleString();
-                    document.getElementById('tilePreg').textContent = (d.herd_tiles.pregnant || 0).toLocaleString();
-                    document.getElementById('tileDry').textContent = (d.herd_tiles.dry || 0).toLocaleString();
-                    document.getElementById('tileFresh').textContent = (d.herd_tiles.fresh || 0).toLocaleString();
-                    const elHeifers = document.getElementById('tileHeifers');
-                    if (elHeifers) elHeifers.textContent = (d.herd_tiles.heifers || 0).toLocaleString();
-                }
-
-                // KPIs
-                if (d.kpis) {
-                    document.getElementById('kpiAvgDim').textContent = `${d.kpis.avg_dim} дн.`;
-                    document.getElementById('kpiCR').textContent = `${d.kpis.conception_rate}%`;
-                    document.getElementById('kpiPR').textContent = `${d.kpis.pregnancy_rate}%`;
-                    document.getElementById('kpiIR').textContent = `${d.kpis.insemination_rate}%`;
-                    document.getElementById('kpiECI').textContent = `${d.kpis.calving_interval_days} дн.`;
-                }
-
-                // Dynamic Herd Reproduction Structure Chart
-                const total = d.total_cows || 0;
-                const preg = d.herd_tiles?.pregnant || 0;
-                const ins = d.herd_tiles?.inseminated || 0;
-                const open = d.herd_tiles?.open || 0;
-                const dry = d.herd_tiles?.dry || 0;
-                const fresh = d.herd_tiles?.fresh || 0;
-                const heifers = d.herd_tiles?.heifers || 0;
-                const quar = d.in_quarantine || 0;
-
-                const calcPct = val => total > 0 ? Math.round((val / total) * 100) : 0;
-                const pctPreg = calcPct(preg);
-                const pctIns = calcPct(ins);
-                const pctOpen = calcPct(open);
-                const pctDry = calcPct(dry);
-                const pctFresh = calcPct(fresh);
-                const pctHeifers = calcPct(heifers);
-                const pctQuar = calcPct(quar);
-
-                // Update Badges on Top Herd Tiles
-                const bTotal = document.getElementById('tileTotalPct');
-                if (bTotal) bTotal.textContent = `100%`;
-                const bOpen = document.getElementById('tileOpenPct');
-                if (bOpen) bOpen.textContent = `${pctOpen}%`;
-                const bIns = document.getElementById('tileInsPct');
-                if (bIns) bIns.textContent = `${pctIns}%`;
-                const bPreg = document.getElementById('tilePregPct');
-                if (bPreg) bPreg.textContent = `${pctPreg}%`;
-                const bDry = document.getElementById('tileDryPct');
-                if (bDry) bDry.textContent = `${pctDry}%`;
-                const bFresh = document.getElementById('tileFreshPct');
-                if (bFresh) bFresh.textContent = `${pctFresh}%`;
-                const bHeifers = document.getElementById('tileHeifersPct');
-                if (bHeifers) bHeifers.textContent = `${pctHeifers}%`;
-                const bQuar = document.getElementById('tileQuarPct');
-                if (bQuar) bQuar.textContent = `${pctQuar}%`;
-
-                const totalBadge = document.getElementById('chartReproTotalBadge');
-                if (totalBadge) totalBadge.textContent = `${total.toLocaleString()} голів`;
-
-                const barPreg = document.getElementById('chartBarPreg');
-                if (barPreg) barPreg.style.width = `${pctPreg}%`;
-                const barIns = document.getElementById('chartBarIns');
-                if (barIns) barIns.style.width = `${pctIns}%`;
-                const barOpen = document.getElementById('chartBarOpen');
-                if (barOpen) barOpen.style.width = `${pctOpen}%`;
-                const barDry = document.getElementById('chartBarDry');
-                if (barDry) barDry.style.width = `${pctDry}%`;
-                const barQuar = document.getElementById('chartBarQuar');
-                if (barQuar) barQuar.style.width = `${pctQuar}%`;
-
-                const legPreg = document.getElementById('chartLegendPreg');
-                if (legPreg) legPreg.textContent = `${preg} (${pctPreg}%)`;
-                const legIns = document.getElementById('chartLegendIns');
-                if (legIns) legIns.textContent = `${ins} (${pctIns}%)`;
-                const legOpen = document.getElementById('chartLegendOpen');
-                if (legOpen) legOpen.textContent = `${open} (${pctOpen}%)`;
-                const legDry = document.getElementById('chartLegendDry');
-                if (legDry) legDry.textContent = `${dry} (${pctDry}%)`;
-                const legQuar = document.getElementById('chartLegendQuar');
-                if (legQuar) legQuar.textContent = `${quar} (${pctQuar}%)`;
-            } catch (e) { console.error(e); }
+            } catch (e) { console.error("Error loading stats:", e); }
         }
 
         function updateTileHighlight(currentFilter) {
