@@ -1639,8 +1639,8 @@
                         <i class="fa-solid fa-timeline"></i> Історія відтворення
                     </h4>
                     <div id="mReproTimeline" class="space-y-2 text-xs">
-                        <p v-if="!herd.currentCow.reproduction_history || herd.currentCow.reproduction_history.length === 0" class="text-slate-400 p-2">Подій відтворення не зареєстровано</p>
-                        <div v-for="r in (herd.currentCow.reproduction_history || [])" :key="r.id" class="p-3 bg-amber-50/60 rounded-xl border border-amber-200/60 flex justify-between items-center">
+                        <p v-if="!herd.currentCow?.reproduction_history || herd.currentCow?.reproduction_history.length === 0" class="text-slate-400 p-2">Подій відтворення не зареєстровано</p>
+                        <div v-for="r in (herd.currentCow?.reproduction_history || [])" :key="r.id" class="p-3 bg-amber-50/60 rounded-xl border border-amber-200/60 flex justify-between items-center">
                             <div>
                                 <span class="font-bold text-amber-900" v-text="r.event_type"></span> • <span class="text-slate-500" v-text="r.event_date"></span>
                                 <div class="text-slate-600 mt-0.5" v-text="(r.bull_code ? 'Бугай: ' + r.bull_code : '') + (r.result ? ' | Результат: ' + r.result : '')"></div>
@@ -1656,8 +1656,8 @@
                         <i class="fa-solid fa-notes-medical"></i> Ветеринарна історія та каренція
                     </h4>
                     <div id="mHealthTimeline" class="space-y-2 text-xs">
-                        <p v-if="!herd.currentCow.health_history || herd.currentCow.health_history.length === 0" class="text-slate-400 p-2">Записів лікування не знайдено</p>
-                        <div v-for="h in (herd.currentCow.health_history || [])" :key="h.id" class="p-3 bg-rose-50/60 rounded-xl border border-rose-200/60 flex justify-between items-center">
+                        <p v-if="!herd.currentCow?.health_history || herd.currentCow?.health_history.length === 0" class="text-slate-400 p-2">Записів лікування не знайдено</p>
+                        <div v-for="h in (herd.currentCow?.health_history || [])" :key="h.id" class="p-3 bg-rose-50/60 rounded-xl border border-rose-200/60 flex justify-between items-center">
                             <div>
                                 <span class="font-bold text-rose-900" v-text="h.diagnosis || 'Терапія'"></span> • <span class="text-slate-500" v-text="h.event_date"></span>
                                 <div class="text-slate-600 mt-0.5">

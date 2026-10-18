@@ -1130,11 +1130,10 @@
         }
 
         function closeCowModal() {
-            document.getElementById('cowModal').classList.add('hidden');
-            if (window.herdModule) {
-                window.herdModule.currentCow = null;
-            }
+            const m = document.getElementById('cowModal');
+            if (m) m.classList.add('hidden');
         }
+        window.closeCowModal = closeCowModal;
 
         // 9. Repro & Health Modals
         function openAddReproModal() {
