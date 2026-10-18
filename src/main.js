@@ -87,21 +87,21 @@ export function initApp() {
                 }
             }
 
-            // Auto-load data if session exists
-            if (store.token) {
-                try {
-                    await farmsModule.loadFarms();
-                    const win = /** @type {any} */ (typeof window !== 'undefined' ? window : {});
-                    const medPromise = typeof win.loadMedsCatalog === 'function' ? win.loadMedsCatalog() : Promise.resolve();
-                    await Promise.allSettled([
-                        dashboardModule.loadStats(),
-                        herdModule.loadAnimals(),
-                        dashboardModule.loadActionLists(),
-                        medPromise
-                    ]);
-                } catch (e) {
-                    console.warn("[Petite-Vue] Initial load error:", e);
-                }
+            // Auto-load data (farms, stats, animals) for both authenticated users and guests
+            try {
+                await farmsModule.loadFarms();
+                const win = /** @type {any} */ (typeof window !== 'undefined' ? window : {});
+                const medPromise = typeof win.loadMedsCatalog === 'function' ? win.loadMedsCatalog() : Promise.resolve();
+                await Promise.allSettled([
+                    dashboardModule.loadStats(),
+                    herdModule.loadAnimals(),
+                    dashboardModule.loadActionLists(),
+                    medPromise
+                ]);
+            } catch (e) {
+                console.warn("[Petite-Vue] Initial load error:", e);
+            } finally {
+                herdModule.isLoading = false;
             }
         }
     }).mount('#petiteAppRoot');

@@ -20,8 +20,8 @@ export class FarmRepository {
             query += " WHERE (f.owner_email = ? OR f.owner_email IS NULL)";
             params.push(userEmail);
         } else {
-            // Unauthenticated guest sees default/unassigned or public farms
-            query += " WHERE f.owner_email IS NULL";
+            // Unauthenticated guest sees default/unassigned farms, or all farms in read-only demo mode
+            // (prevents UI freeze when all farms have owners)
         }
         query += " GROUP BY f.id ORDER BY f.created_at ASC";
 
