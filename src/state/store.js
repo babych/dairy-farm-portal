@@ -22,6 +22,7 @@ export const store = reactive({
     farmsList: [],
     usersList: [],
     medsList: [],
+    eventsList: [],
     currentCowId: null,
     
     // UI Navigation State

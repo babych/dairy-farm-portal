@@ -740,7 +740,7 @@
             </div>
 
             <div class="grid grid-cols-2 sm:grid-cols-5 md:grid-cols-10 gap-2 sm:gap-2.5">
-                <button @click="filterByStatus('ALL')" id="tileBtnTotal" class="herd-tile-btn text-left bg-slate-100/90 hover:bg-slate-200/90 border border-slate-300 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500">
+                <button @click="filterByStatus('ALL')" id="tileBtnTotal" :class="{ 'active-filter': herd.statusFilter === 'ALL' }" class="herd-tile-btn text-left bg-slate-100/90 hover:bg-slate-200/90 border border-slate-300 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500">
                     <div class="flex justify-between items-center w-full">
                         <span class="text-[9.5px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-800 truncate pr-1" data-i18n="tileTotalTitle">Все стадо</span>
                         <span id="tileTotalPct" v-text="dashboard.formatTileSub(dashboard.stats.total_cows, dashboard.pctTotal)" class="text-[9.5px] sm:text-[10px] font-semibold text-slate-700 bg-slate-200/80 px-1.5 py-0.2 rounded-full">100%</span>
@@ -748,7 +748,7 @@
                     <h4 id="tileTotal" v-text="dashboard.formatTileMain(dashboard.stats.total_cows, dashboard.pctTotal)" class="text-xl sm:text-2xl font-black text-slate-900 my-0.5 group-hover:scale-105 transition-transform origin-left">0</h4>
                     <p class="text-[9.5px] text-slate-600 truncate" data-i18n="tileTotalSub">Всі тварини (скинути)</p>
                 </button>
-                <button @click="filterByStatus('Active')" id="tileBtnActive" class="herd-tile-btn text-left bg-emerald-50/80 hover:bg-emerald-100/80 border border-emerald-300 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500">
+                <button @click="filterByStatus('Active')" id="tileBtnActive" :class="{ 'active-filter': herd.statusFilter === 'Active' }" class="herd-tile-btn text-left bg-emerald-50/80 hover:bg-emerald-100/80 border border-emerald-300 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500">
                     <div class="flex justify-between items-center w-full">
                         <span class="text-[9.5px] sm:text-[10px] font-bold uppercase tracking-wider text-emerald-800 truncate pr-1" data-i18n="tileActiveTitle">Активне стадо</span>
                         <span id="tileActivePct" v-text="dashboard.formatTileSub(dashboard.stats.herd_tiles?.active_herd, dashboard.pctActive)" class="text-[9.5px] sm:text-[10px] font-semibold text-emerald-800 bg-emerald-200/80 px-1.5 py-0.2 rounded-full">0%</span>
@@ -756,7 +756,7 @@
                     <h4 id="tileActive" v-text="dashboard.formatTileMain(dashboard.stats.herd_tiles?.active_herd, dashboard.pctActive)" class="text-xl sm:text-2xl font-black text-emerald-950 my-0.5 group-hover:scale-105 transition-transform origin-left">0</h4>
                     <p class="text-[9.5px] text-emerald-700 truncate" data-i18n="tileActiveSub">Живі на фермі</p>
                 </button>
-                <button @click="filterByStatus('Culled')" id="tileBtnCulled" class="herd-tile-btn text-left bg-zinc-100/90 hover:bg-zinc-200/90 border border-zinc-300 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500">
+                <button @click="filterByStatus('Culled')" id="tileBtnCulled" :class="{ 'active-filter': herd.statusFilter === 'Culled' }" class="herd-tile-btn text-left bg-zinc-100/90 hover:bg-zinc-200/90 border border-zinc-300 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500">
                     <div class="flex justify-between items-center w-full">
                         <span class="text-[9.5px] sm:text-[10px] font-bold uppercase tracking-wider text-zinc-700 truncate pr-1" data-i18n="tileCulledTitle">Списані / Вибулі</span>
                         <span id="tileCulledPct" v-text="dashboard.formatTileSub(dashboard.stats.herd_tiles?.culled, dashboard.pctCulled)" class="text-[9.5px] sm:text-[10px] font-semibold text-zinc-700 bg-zinc-200/80 px-1.5 py-0.2 rounded-full">0%</span>
@@ -764,7 +764,7 @@
                     <h4 id="tileCulled" v-text="dashboard.formatTileMain(dashboard.stats.herd_tiles?.culled, dashboard.pctCulled)" class="text-xl sm:text-2xl font-black text-zinc-800 my-0.5 group-hover:scale-105 transition-transform origin-left">0</h4>
                     <p class="text-[9.5px] text-zinc-500 truncate" data-i18n="tileCulledSub">Архів вибуття</p>
                 </button>
-                <button @click="filterByStatus('Open')" id="tileBtnOpen" class="herd-tile-btn text-left bg-blue-50/70 hover:bg-blue-100/70 border border-blue-200 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
+                <button @click="filterByStatus('Open')" id="tileBtnOpen" :class="{ 'active-filter': herd.statusFilter === 'Open' }" class="herd-tile-btn text-left bg-blue-50/70 hover:bg-blue-100/70 border border-blue-200 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
                     <div class="flex justify-between items-center w-full">
                         <span class="text-[9.5px] sm:text-[10px] font-bold uppercase tracking-wider text-blue-700 truncate pr-1" data-i18n="tileOpenTitle">Готові до осіменіння</span>
                         <span id="tileOpenPct" v-text="dashboard.formatTileSub(dashboard.stats.herd_tiles?.open, dashboard.pctOpen)" class="text-[9.5px] sm:text-[10px] font-semibold text-blue-600 bg-blue-100/80 px-1.5 py-0.2 rounded-full">0%</span>
@@ -772,7 +772,7 @@
                     <h4 id="tileOpen" v-text="dashboard.formatTileMain(dashboard.stats.herd_tiles?.open, dashboard.pctOpen)" class="text-xl sm:text-2xl font-black text-blue-900 my-0.5 group-hover:scale-105 transition-transform origin-left">0</h4>
                     <p class="text-[9.5px] text-blue-600 truncate" data-i18n="tileOpenSub">Охота / Сервіс-період</p>
                 </button>
-                <button @click="filterByStatus('Inseminated')" id="tileBtnIns" class="herd-tile-btn text-left bg-amber-50/70 hover:bg-amber-100/70 border border-amber-200 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500">
+                <button @click="filterByStatus('Inseminated')" id="tileBtnIns" :class="{ 'active-filter': herd.statusFilter === 'Inseminated' }" class="herd-tile-btn text-left bg-amber-50/70 hover:bg-amber-100/70 border border-amber-200 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500">
                     <div class="flex justify-between items-center w-full">
                         <span class="text-[9.5px] sm:text-[10px] font-bold uppercase tracking-wider text-amber-700 truncate pr-1" data-i18n="tileInsTitle">Осімененi</span>
                         <span id="tileInsPct" v-text="dashboard.formatTileSub(dashboard.stats.herd_tiles?.inseminated, dashboard.pctIns)" class="text-[9.5px] sm:text-[10px] font-semibold text-amber-700 bg-amber-100/80 px-1.5 py-0.2 rounded-full">0%</span>
@@ -780,7 +780,7 @@
                     <h4 id="tileIns" v-text="dashboard.formatTileMain(dashboard.stats.herd_tiles?.inseminated, dashboard.pctIns)" class="text-xl sm:text-2xl font-black text-amber-900 my-0.5 group-hover:scale-105 transition-transform origin-left">0</h4>
                     <p class="text-[9.5px] text-amber-600 truncate" data-i18n="tileInsSub">Очікують УЗД</p>
                 </button>
-                <button @click="filterByStatus('Pregnant')" id="tileBtnPreg" class="herd-tile-btn text-left bg-emerald-50/70 hover:bg-emerald-100/70 border border-emerald-200 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500">
+                <button @click="filterByStatus('Pregnant')" id="tileBtnPreg" :class="{ 'active-filter': herd.statusFilter === 'Pregnant' }" class="herd-tile-btn text-left bg-emerald-50/70 hover:bg-emerald-100/70 border border-emerald-200 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500">
                     <div class="flex justify-between items-center w-full">
                         <span class="text-[9.5px] sm:text-[10px] font-bold uppercase tracking-wider text-emerald-700 truncate pr-1" data-i18n="tilePregTitle">Тільні</span>
                         <span id="tilePregPct" v-text="dashboard.formatTileSub(dashboard.stats.herd_tiles?.pregnant, dashboard.pctPreg)" class="text-[9.5px] sm:text-[10px] font-semibold text-emerald-700 bg-emerald-100/80 px-1.5 py-0.2 rounded-full">0%</span>
@@ -788,7 +788,7 @@
                     <h4 id="tilePreg" v-text="dashboard.formatTileMain(dashboard.stats.herd_tiles?.pregnant, dashboard.pctPreg)" class="text-xl sm:text-2xl font-black text-emerald-900 my-0.5 group-hover:scale-105 transition-transform origin-left">0</h4>
                     <p class="text-[9.5px] text-emerald-600 truncate" data-i18n="tilePregSub">Підтверджено</p>
                 </button>
-                <button @click="filterByStatus('Dry')" id="tileBtnDry" class="herd-tile-btn text-left bg-orange-50/70 hover:bg-orange-100/70 border border-orange-200 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
+                <button @click="filterByStatus('Dry')" id="tileBtnDry" :class="{ 'active-filter': herd.statusFilter === 'Dry' }" class="herd-tile-btn text-left bg-orange-50/70 hover:bg-orange-100/70 border border-orange-200 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
                     <div class="flex justify-between items-center w-full">
                         <span class="text-[9.5px] sm:text-[10px] font-bold uppercase tracking-wider text-orange-700 truncate pr-1" data-i18n="tileDryTitle">Сухостійні</span>
                         <span id="tileDryPct" v-text="dashboard.formatTileSub(dashboard.stats.herd_tiles?.dry, dashboard.pctDry)" class="text-[9.5px] sm:text-[10px] font-semibold text-orange-700 bg-orange-100/80 px-1.5 py-0.2 rounded-full">0%</span>
@@ -796,7 +796,7 @@
                     <h4 id="tileDry" v-text="dashboard.formatTileMain(dashboard.stats.herd_tiles?.dry, dashboard.pctDry)" class="text-xl sm:text-2xl font-black text-orange-900 my-0.5 group-hover:scale-105 transition-transform origin-left">0</h4>
                     <p class="text-[9.5px] text-orange-600 truncate" data-i18n="tileDrySub">Перед отелом</p>
                 </button>
-                <button @click="filterByStatus('Fresh')" id="tileBtnFresh" class="herd-tile-btn text-left bg-cyan-50/70 hover:bg-cyan-100/70 border border-cyan-200 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500">
+                <button @click="filterByStatus('Fresh')" id="tileBtnFresh" :class="{ 'active-filter': herd.statusFilter === 'Fresh' }" class="herd-tile-btn text-left bg-cyan-50/70 hover:bg-cyan-100/70 border border-cyan-200 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500">
                     <div class="flex justify-between items-center w-full">
                         <span class="text-[9.5px] sm:text-[10px] font-bold uppercase tracking-wider text-cyan-700 truncate pr-1" data-i18n="tileFreshTitle">Новотільні</span>
                         <span id="tileFreshPct" v-text="dashboard.formatTileSub(dashboard.stats.herd_tiles?.fresh, dashboard.pctFresh)" class="text-[9.5px] sm:text-[10px] font-semibold text-cyan-700 bg-cyan-100/80 px-1.5 py-0.2 rounded-full">0%</span>
@@ -804,7 +804,7 @@
                     <h4 id="tileFresh" v-text="dashboard.formatTileMain(dashboard.stats.herd_tiles?.fresh, dashboard.pctFresh)" class="text-xl sm:text-2xl font-black text-cyan-900 my-0.5 group-hover:scale-105 transition-transform origin-left">0</h4>
                     <p class="text-[9.5px] text-cyan-600 truncate" data-i18n="tileFreshSub">0-30 днів лактації</p>
                 </button>
-                <button @click="filterByStatus('Heifer')" id="tileBtnHeifers" class="herd-tile-btn text-left bg-purple-50/70 hover:bg-purple-100/70 border border-purple-200 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500">
+                <button @click="filterByStatus('Heifer')" id="tileBtnHeifers" :class="{ 'active-filter': herd.statusFilter === 'Heifer' }" class="herd-tile-btn text-left bg-purple-50/70 hover:bg-purple-100/70 border border-purple-200 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500">
                     <div class="flex justify-between items-center w-full">
                         <span class="text-[9.5px] sm:text-[10px] font-bold uppercase tracking-wider text-purple-700 truncate pr-1" data-i18n="tileHeifersTitle">Нетелі / Телиці</span>
                         <span id="tileHeifersPct" v-text="dashboard.formatTileSub(dashboard.stats.herd_tiles?.heifers, dashboard.pctHeifers)" class="text-[9.5px] sm:text-[10px] font-semibold text-purple-700 bg-purple-100/80 px-1.5 py-0.2 rounded-full">0%</span>
@@ -812,7 +812,7 @@
                     <h4 id="tileHeifers" v-text="dashboard.formatTileMain(dashboard.stats.herd_tiles?.heifers, dashboard.pctHeifers)" class="text-xl sm:text-2xl font-black text-purple-900 my-0.5 group-hover:scale-105 transition-transform origin-left">0</h4>
                     <p class="text-[9.5px] text-purple-600 truncate" data-i18n="tileHeifersSub">Ремонтний молодняк</p>
                 </button>
-                <button @click="filterByStatus('Quarantine')" id="tileBtnQuar" class="herd-tile-btn text-left bg-rose-50/70 hover:bg-rose-100/70 border border-rose-200 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500">
+                <button @click="filterByStatus('Quarantine')" id="tileBtnQuar" :class="{ 'active-filter': herd.statusFilter === 'Quarantine' }" class="herd-tile-btn text-left bg-rose-50/70 hover:bg-rose-100/70 border border-rose-200 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500">
                     <div class="flex justify-between items-center w-full">
                         <span class="text-[9.5px] sm:text-[10px] font-bold uppercase tracking-wider text-rose-700 truncate pr-1" data-i18n="tileQuarTitle">Каренція</span>
                         <span id="tileQuarPct" v-text="dashboard.formatTileSub(dashboard.stats.in_quarantine, dashboard.pctQuar)" class="text-[9.5px] sm:text-[10px] font-semibold text-rose-700 bg-rose-100/80 px-1.5 py-0.2 rounded-full">0%</span>
@@ -1512,8 +1512,32 @@
                             </tr>
                         </thead>
                         <tbody id="gridTableBody" class="divide-y divide-slate-100 text-slate-700">
-                            <tr>
-                                <td colspan="7" class="p-8 text-center text-slate-400">Завантаження гріда подій...</td>
+                            <tr v-if="!store.eventsList || store.eventsList.length === 0">
+                                <td colspan="7" class="p-8 text-center text-slate-400">У обраному фільтрі подій не знайдено або завантаження...</td>
+                            </tr>
+                            <tr v-for="e in store.eventsList" :key="e.id || (e.animal_id + '-' + e.event_date)" class="hover:bg-slate-50/80 transition">
+                                <td class="p-3 font-bold text-slate-900" v-text="e.start_date || e.event_date || '-'"></td>
+                                <td class="p-3 font-extrabold text-emerald-700" v-text="e.farm_number || '-'"></td>
+                                <td class="p-3 text-slate-500 font-mono" v-text="e.official_tag || '-'"></td>
+                                <td class="p-3">
+                                    <span v-if="e.category === 'CALVING_PLAN'" class="bg-amber-100 text-amber-800 font-semibold px-2 py-0.5 rounded text-[10px]">Плановий отел</span>
+                                    <span v-else-if="e.category === 'HEALTH'" class="bg-rose-100 text-rose-800 font-semibold px-2 py-0.5 rounded text-[10px]">Каренція / Лікування</span>
+                                    <span v-else-if="e.category === 'REPRODUCTION'" class="bg-indigo-100 text-indigo-800 font-semibold px-2 py-0.5 rounded text-[10px]">Відтворення</span>
+                                    <span v-else class="bg-slate-100 text-slate-600 font-medium px-2 py-0.5 rounded text-[10px]" v-text="e.category || '-'"></span>
+                                </td>
+                                <td class="p-3">
+                                    <div class="font-bold text-slate-900" v-text="e.title || e.event_title || e.event_type || 'Подія'"></div>
+                                    <div class="text-[11px] text-slate-500" v-text="e.details || e.event_status || '-'"></div>
+                                </td>
+                                <td class="p-3">
+                                    <span v-if="e.status === 'ACTIVE_WITHHOLDING'" class="bg-rose-50 text-rose-700 border border-rose-200 font-bold px-2 py-0.5 rounded text-[10px] animate-pulse">БРАКЕРАЖ МОЛОКА</span>
+                                    <span v-else-if="e.status === 'DUE_SOON'" class="bg-amber-50 text-amber-700 border border-amber-200 font-bold px-2 py-0.5 rounded text-[10px]">Очікується отел</span>
+                                    <span v-else-if="e.status === 'OVERDUE'" class="bg-red-50 text-red-700 border border-red-200 font-bold px-2 py-0.5 rounded text-[10px]">Прострочено</span>
+                                    <span v-else class="bg-slate-100 text-slate-600 font-medium px-2 py-0.5 rounded text-[10px]">Виконано</span>
+                                </td>
+                                <td class="p-3 text-right">
+                                    <button :onclick="'openCow360(\'' + e.animal_id + '\')'" class="text-emerald-600 hover:text-emerald-800 font-semibold text-xs bg-emerald-50 hover:bg-emerald-100 px-2 py-1 rounded-lg">360°</button>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -2275,7 +2299,17 @@
                                 </tr>
                             </thead>
                             <tbody id="vcQuarTable" class="divide-y divide-slate-100">
-                                <tr><td colspan="6" class="p-4 text-center text-slate-400">Немає корів під каренцією</td></tr>
+                                <tr v-if="!dashboard.actionLists.quarantine_milk || dashboard.actionLists.quarantine_milk.length === 0">
+                                    <td colspan="6" class="p-4 text-center text-slate-400">Немає корів під каренцією</td>
+                                </tr>
+                                <tr v-for="c in dashboard.actionLists.quarantine_milk" :key="c.animal_id || c.id" class="hover:bg-slate-50 border-b border-slate-100">
+                                    <td class="p-2.5 font-bold text-slate-900" v-text="'№ ' + c.farm_number"></td>
+                                    <td class="p-2.5 font-mono text-slate-500" v-text="c.official_tag || '-'"></td>
+                                    <td class="p-2.5 font-semibold text-rose-700" v-text="c.diagnosis || 'Терапія'"></td>
+                                    <td class="p-2.5 text-slate-700" v-text="c.medication || c.medication_name || '-'"></td>
+                                    <td class="p-2.5 text-rose-600 font-bold" v-text="(c.withholding_until || '-') + ' (' + (c.days_left || 0) + ' дн.)'"></td>
+                                    <td class="p-2.5 text-right font-mono text-slate-300">____________</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -2287,7 +2321,7 @@
                         <h4 class="font-bold text-amber-700 flex items-center gap-2 text-sm">
                             <i class="fa-solid fa-stethoscope"></i> 2. Перевірка на тільність (УЗД / Ректально 35-70 днів)
                         </h4>
-                        <span id="vcPregCount" class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-bold text-[10px]">0</span>
+                        <span id="vcPregCount" v-text="dashboard.actionLists.pregnancy_check?.length || 0" class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-bold text-[10px]">0</span>
                     </div>
                     <div class="overflow-x-auto rounded-xl border border-slate-200">
                         <table class="w-full text-left border-collapse">
@@ -2302,7 +2336,19 @@
                                 </tr>
                             </thead>
                             <tbody id="vcPregTable" class="divide-y divide-slate-100">
-                                <tr><td colspan="6" class="p-4 text-center text-slate-400">Немає корів на перевірку</td></tr>
+                                <tr v-if="!dashboard.actionLists.pregnancy_check || dashboard.actionLists.pregnancy_check.length === 0">
+                                    <td colspan="6" class="p-4 text-center text-slate-400">Немає корів на перевірку</td>
+                                </tr>
+                                <tr v-for="c in dashboard.actionLists.pregnancy_check" :key="c.animal_id || c.id" class="hover:bg-slate-50 border-b border-slate-100">
+                                    <td class="p-2.5 font-bold text-slate-900" v-text="'№ ' + c.farm_number"></td>
+                                    <td class="p-2.5 font-mono text-slate-500" v-text="c.official_tag || '-'"></td>
+                                    <td class="p-2.5 text-slate-700" v-text="c.insemination_date || '-'"></td>
+                                    <td class="p-2.5 font-bold text-amber-700" v-text="(c.days_since_ins || '-') + ' дн.'"></td>
+                                    <td class="p-2.5 text-slate-400 font-mono">[ ] Тільна &nbsp; [ ] Холоста</td>
+                                    <td class="p-2.5 text-right">
+                                        <button :onclick="'openCow360(\'' + c.animal_id + '\')'" class="text-emerald-600 hover:underline font-bold">Оглянути</button>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -2314,7 +2360,7 @@
                         <h4 class="font-bold text-emerald-700 flex items-center gap-2 text-sm">
                             <i class="fa-solid fa-shield-halved"></i> 3. Кандидати на запуск (Сухостій за 60 днів до отелу)
                         </h4>
-                        <span id="vcDryCount" class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold text-[10px]">0</span>
+                        <span id="vcDryCount" v-text="dashboard.actionLists.dry_off_candidates?.length || 0" class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold text-[10px]">0</span>
                     </div>
                     <div class="overflow-x-auto rounded-xl border border-slate-200">
                         <table class="w-full text-left border-collapse">
@@ -2329,7 +2375,17 @@
                                 </tr>
                             </thead>
                             <tbody id="vcDryTable" class="divide-y divide-slate-100">
-                                <tr><td colspan="6" class="p-4 text-center text-slate-400">Немає кандидатів на запуск</td></tr>
+                                <tr v-if="!dashboard.actionLists.dry_off_candidates || dashboard.actionLists.dry_off_candidates.length === 0">
+                                    <td colspan="6" class="p-4 text-center text-slate-400">Немає кандидатів на запуск</td>
+                                </tr>
+                                <tr v-for="c in dashboard.actionLists.dry_off_candidates" :key="c.animal_id || c.id" class="hover:bg-slate-50 border-b border-slate-100">
+                                    <td class="p-2.5 font-bold text-slate-900" v-text="'№ ' + c.farm_number"></td>
+                                    <td class="p-2.5 font-mono text-slate-500" v-text="c.official_tag || '-'"></td>
+                                    <td class="p-2.5 font-bold text-emerald-700" v-text="(c.days_pregnant || 220) + ' дн.'"></td>
+                                    <td class="p-2.5 text-slate-800 font-semibold" v-text="c.expected_calving || c.expected_calving_date || '-'"></td>
+                                    <td class="p-2.5 font-mono text-slate-400">[ ] Введено консервант</td>
+                                    <td class="p-2.5 text-right font-mono text-slate-300">____________</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>

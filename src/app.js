@@ -646,9 +646,16 @@
                     window.store.farmsList = farmsList;
                 }
 
-                const currentFarm = (savedFarmId && farmsList.find(f => f.id === savedFarmId)) 
+                let currentFarm = (savedFarmId && farmsList.find(f => f.id === savedFarmId)) 
                     ? farmsList.find(f => f.id === savedFarmId) 
                     : (farmsList.find(f => f.is_current) || farmsList[0]);
+
+                if (currentFarm && (!currentFarm.cow_count || currentFarm.cow_count === 0)) {
+                    const populatedFarm = farmsList.find(f => (f.cow_count && f.cow_count > 0));
+                    if (populatedFarm) {
+                        currentFarm = populatedFarm;
+                    }
+                }
 
                 if (currentFarm) {
                     localStorage.setItem("dairy_selected_farm", currentFarm.id);
@@ -972,71 +979,16 @@
 
         async function openVetChecklistModal() {
             try {
-                const res = await fetch(`${API_BASE}/api/dashboard/action-lists`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                const d = await res.json();
-                
-                const quarList = d.quarantine_milk || d.milk_quarantine || [];
-                const pregList = d.pregnancy_check || d.pregnancy_check_due || [];
-                const dryList = d.dry_off_candidates || [];
-
-                document.getElementById('vetChecklistSubtitle').textContent = `Формування на ${new Date().toLocaleDateString('uk-UA')} • Всього завдань: ${quarList.length + pregList.length + dryList.length}`;
-
-                // 1. Quarantine
-                document.getElementById('vcQuarCount').textContent = quarList.length;
-                const qTbody = document.getElementById('vcQuarTable');
-                if (quarList.length > 0) {
-                    qTbody.innerHTML = quarList.map(c => `
-                        <tr class="hover:bg-slate-50 border-b border-slate-100">
-                            <td class="p-2.5 font-bold text-slate-900">№ ${c.farm_number}</td>
-                            <td class="p-2.5 font-mono text-slate-500">${c.official_tag || '-'}</td>
-                            <td class="p-2.5 font-semibold text-rose-700">${c.diagnosis || 'Терапія'}</td>
-                            <td class="p-2.5 text-slate-700">${c.medication || c.medication_name || '-'}</td>
-                            <td class="p-2.5 text-rose-600 font-bold">${c.withholding_until || '-'} (${c.days_left || 0} дн.)</td>
-                            <td class="p-2.5 text-right font-mono text-slate-300">____________</td>
-                        </tr>
-                    `).join('');
-                } else {
-                    qTbody.innerHTML = `<tr><td colspan="6" class="p-3 text-center text-slate-400">Корів під каренцією немає</td></tr>`;
+                if (window.dashboardModule && typeof window.dashboardModule.loadActionLists === 'function') {
+                    await window.dashboardModule.loadActionLists();
                 }
+                const activeFarm = (window.store && window.store.currentFarmId) || localStorage.getItem("dairy_selected_farm");
+                const lists = (window.dashboardModule && window.dashboardModule.actionLists) || {};
+                const totalTasks = (lists.quarantine_milk?.length || 0) + (lists.pregnancy_check?.length || 0) + (lists.dry_off_candidates?.length || 0);
 
-                // 2. Pregnancy Check
-                document.getElementById('vcPregCount').textContent = pregList.length;
-                const pTbody = document.getElementById('vcPregTable');
-                if (pregList.length > 0) {
-                    pTbody.innerHTML = pregList.map(c => `
-                        <tr class="hover:bg-slate-50 border-b border-slate-100">
-                            <td class="p-2.5 font-bold text-slate-900">№ ${c.farm_number}</td>
-                            <td class="p-2.5 font-mono text-slate-500">${c.official_tag || '-'}</td>
-                            <td class="p-2.5 text-slate-700">${c.insemination_date || '-'}</td>
-                            <td class="p-2.5 font-bold text-amber-700">${c.days_since_ins || '-'} дн.</td>
-                            <td class="p-2.5 text-slate-400 font-mono">[ ] Тільна &nbsp; [ ] Холоста</td>
-                            <td class="p-2.5 text-right">
-                                <button onclick="openCow360('${c.animal_id}')" class="text-emerald-600 hover:underline font-bold">Оглянути</button>
-                            </td>
-                        </tr>
-                    `).join('');
-                } else {
-                    pTbody.innerHTML = `<tr><td colspan="6" class="p-3 text-center text-slate-400">Корів на планову перевірку немає</td></tr>`;
-                }
-
-                // 3. Dry-off
-                document.getElementById('vcDryCount').textContent = dryList.length;
-                const dTbody = document.getElementById('vcDryTable');
-                if (dryList.length > 0) {
-                    dTbody.innerHTML = dryList.map(c => `
-                        <tr class="hover:bg-slate-50 border-b border-slate-100">
-                            <td class="p-2.5 font-bold text-slate-900">№ ${c.farm_number}</td>
-                            <td class="p-2.5 font-mono text-slate-500">${c.official_tag || '-'}</td>
-                            <td class="p-2.5 font-bold text-emerald-700">${c.days_pregnant || 220} дн.</td>
-                            <td class="p-2.5 text-slate-800 font-semibold">${c.expected_calving || c.expected_calving_date || '-'}</td>
-                            <td class="p-2.5 font-mono text-slate-400">[ ] Введено консервант</td>
-                            <td class="p-2.5 text-right font-mono text-slate-300">____________</td>
-                        </tr>
-                    `).join('');
-                } else {
-                    dTbody.innerHTML = `<tr><td colspan="6" class="p-3 text-center text-slate-400">Кандидатів на запуск немає</td></tr>`;
+                const subEl = document.getElementById('vetChecklistSubtitle');
+                if (subEl) {
+                    subEl.textContent = `Формування на ${new Date().toLocaleDateString('uk-UA')} • Всього завдань: ${totalTasks}`;
                 }
 
                 document.getElementById('vetChecklistModal').classList.remove('hidden');
@@ -1669,8 +1621,6 @@
 
         // 13. Herd Event Grid & Matrix Loader
         async function loadEventGrid() {
-            const tbody = document.getElementById('gridTableBody');
-            tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-slate-400">Завантаження гріда подій...</td></tr>`;
             try {
                 const filterVal = document.getElementById('gridWindowFilter')?.value || '14';
                 const cat = document.getElementById('gridCatFilter')?.value || 'ALL';
@@ -1694,47 +1644,11 @@
                     events = events.filter(e => e.category === cat);
                 }
 
-                if (events.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-slate-400">У обраному фільтрі подій не знайдено. Спробуйте обрати «Вся історія стада» або інший часовий інтервал.</td></tr>`;
-                    return;
+                if (window.store) {
+                    window.store.eventsList = events;
                 }
-
-
-                tbody.innerHTML = events.map(e => {
-                    let catBadge = '';
-                    if (e.category === 'CALVING_PLAN') catBadge = '<span class="bg-amber-100 text-amber-800 font-semibold px-2 py-0.5 rounded text-[10px]">Плановий отел</span>';
-                    else if (e.category === 'HEALTH') catBadge = '<span class="bg-rose-100 text-rose-800 font-semibold px-2 py-0.5 rounded text-[10px]">Каренція / Лікування</span>';
-                    else if (e.category === 'REPRODUCTION') catBadge = '<span class="bg-indigo-100 text-indigo-800 font-semibold px-2 py-0.5 rounded text-[10px]">Відтворення</span>';
-                    
-                    let statusBadge = '';
-                    if (e.status === 'ACTIVE_WITHHOLDING') statusBadge = '<span class="bg-rose-50 text-rose-700 border border-rose-200 font-bold px-2 py-0.5 rounded text-[10px] animate-pulse">БРАКЕРАЖ МОЛОКА</span>';
-                    else if (e.status === 'DUE_SOON') statusBadge = '<span class="bg-amber-50 text-amber-700 border border-amber-200 font-bold px-2 py-0.5 rounded text-[10px]">Очікується отел</span>';
-                    else if (e.status === 'OVERDUE') statusBadge = '<span class="bg-red-50 text-red-700 border border-red-200 font-bold px-2 py-0.5 rounded text-[10px]">Прострочено</span>';
-                    else statusBadge = '<span class="bg-slate-100 text-slate-600 font-medium px-2 py-0.5 rounded text-[10px]">Виконано</span>';
-
-                    const dateDisplay = e.start_date || e.event_date || '-';
-                    const titleDisplay = e.title || e.event_title || e.event_type || 'Подія';
-                    const detailsDisplay = e.details || e.event_status || '-';
-
-                    return `
-                        <tr class="hover:bg-slate-50/80 transition">
-                            <td class="p-3 font-bold text-slate-900">${dateDisplay}</td>
-                            <td class="p-3 font-extrabold text-emerald-700">${e.farm_number || '-'}</td>
-                            <td class="p-3 text-slate-500 font-mono">${e.official_tag || '-'}</td>
-                            <td class="p-3">${catBadge}</td>
-                            <td class="p-3">
-                                <div class="font-bold text-slate-900">${titleDisplay}</div>
-                                <div class="text-[11px] text-slate-500">${detailsDisplay}</div>
-                            </td>
-                            <td class="p-3">${statusBadge}</td>
-                            <td class="p-3 text-right">
-                                <button onclick="openCow360('${e.animal_id}')" class="text-emerald-600 hover:text-emerald-800 font-semibold text-xs bg-emerald-50 hover:bg-emerald-100 px-2 py-1 rounded-lg">360°</button>
-                            </td>
-                        </tr>
-                    `;
-                }).join('');
             } catch (err) {
-                tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-rose-500">Помилка завантаження гріда: ${err.message}</td></tr>`;
+                console.error("loadEventGrid error:", err);
             }
         }
 

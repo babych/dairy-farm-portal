@@ -13,9 +13,17 @@ export const farmsModule = {
             if (!res) return;
             store.farmsList = res;
 
-            const currentFarm = (savedFarmId && store.farmsList.find(f => f.id === savedFarmId))
+            let currentFarm = (savedFarmId && store.farmsList.find(f => f.id === savedFarmId))
                 ? store.farmsList.find(f => f.id === savedFarmId)
                 : (store.farmsList.find(f => f.is_current) || store.farmsList[0]);
+
+            // If the currently chosen farm has 0 cows, but there is a farm with cows, prefer the populated farm
+            if (currentFarm && (!currentFarm.cow_count || currentFarm.cow_count === 0)) {
+                const populatedFarm = store.farmsList.find(f => (f.cow_count && f.cow_count > 0));
+                if (populatedFarm) {
+                    currentFarm = populatedFarm;
+                }
+            }
 
             if (currentFarm) {
                 store.setSelectedFarm(currentFarm.id);
