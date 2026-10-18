@@ -1743,7 +1743,7 @@
                 } catch (e) {}
             }
 
-            const currentFarm = farmsList.find(f => f.is_current);
+            const currentFarm = getActiveSelectedFarm();
             const formData = new FormData();
             formData.append("file", uploadFile);
             if (currentFarm) formData.append("farm_id", currentFarm.id);

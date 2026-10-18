@@ -371,6 +371,61 @@ export async function handleSystem({ path, method, request, url, env, db, jsonRe
 
         let activeFarmId = targetFarmId;
 
+        // Mode: 'diff_check' (Preview changes without writing to DB)
+        if (mode === "diff_check") {
+            let existingAnimals = [];
+            if (activeFarmId) {
+                existingAnimals = (await db.prepare("SELECT * FROM animals WHERE farm_id = ?").bind(activeFarmId).all()).results || [];
+            } else {
+                existingAnimals = (await db.prepare("SELECT * FROM animals LIMIT 2000").all()).results || [];
+            }
+
+            const existingMap = new Map();
+            for (const a of existingAnimals) {
+                if (a.farm_number) existingMap.set(String(a.farm_number).trim(), a);
+            }
+
+            let addedCount = 0;
+            let modifiedCount = 0;
+            let unchangedCount = 0;
+            const sampleModified = [];
+
+            for (const a of animals) {
+                const key = String(a.farm_number || '').trim();
+                const existing = existingMap.get(key);
+                if (!existing) {
+                    addedCount++;
+                } else {
+                    const changes = {};
+                    if (a.name && a.name !== existing.name) changes['Кличка'] = { old: existing.name, new: a.name };
+                    if (a.current_status && a.current_status !== existing.current_status) changes['Статус'] = { old: existing.current_status, new: a.current_status };
+                    if (a.lactation_number != null && a.lactation_number !== existing.lactation_number) changes['Лактація'] = { old: existing.lactation_number, new: a.lactation_number };
+                    if (a.official_tag && a.official_tag !== existing.official_tag) changes['Держ. бирка'] = { old: existing.official_tag, new: a.official_tag };
+
+                    if (Object.keys(changes).length > 0) {
+                        modifiedCount++;
+                        if (sampleModified.length < 50) {
+                            sampleModified.push({ farm_number: key, changes });
+                        }
+                    } else {
+                        unchangedCount++;
+                    }
+                }
+            }
+
+            return jsonResponse({
+                status: "success",
+                farm_name: farmName,
+                diff: {
+                    total_in_backup: animals.length,
+                    added_count: addedCount,
+                    modified_count: modifiedCount,
+                    unchanged_count: unchangedCount,
+                    sample_modified: sampleModified
+                }
+            });
+        }
+
         if (mode === "create_new" || !activeFarmId) {
             activeFarmId = crypto.randomUUID();
             const farmCode = `FARM_${Date.now().toString(36).toUpperCase()}`;
