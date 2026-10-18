@@ -373,11 +373,18 @@ export async function handleSystem({ path, method, request, url, env, db, jsonRe
 
         // Mode: 'diff_check' (Preview changes without writing to DB)
         if (mode === "diff_check") {
+            let activeFarm = null;
+            if (activeFarmId) {
+                activeFarm = await db.prepare("SELECT * FROM farms WHERE id = ?").bind(activeFarmId).first();
+            }
+            if (!activeFarm) {
+                activeFarm = await db.prepare("SELECT * FROM farms ORDER BY imported_at DESC, created_at DESC LIMIT 1").first();
+                if (activeFarm) activeFarmId = activeFarm.id;
+            }
+
             let existingAnimals = [];
             if (activeFarmId) {
                 existingAnimals = (await db.prepare("SELECT * FROM animals WHERE farm_id = ?").bind(activeFarmId).all()).results || [];
-            } else {
-                existingAnimals = (await db.prepare("SELECT * FROM animals LIMIT 2000").all()).results || [];
             }
 
             const existingMap = new Map();
@@ -401,6 +408,9 @@ export async function handleSystem({ path, method, request, url, env, db, jsonRe
                     if (a.current_status && a.current_status !== existing.current_status) changes['Статус'] = { old: existing.current_status, new: a.current_status };
                     if (a.lactation_number != null && a.lactation_number !== existing.lactation_number) changes['Лактація'] = { old: existing.lactation_number, new: a.lactation_number };
                     if (a.official_tag && a.official_tag !== existing.official_tag) changes['Держ. бирка'] = { old: existing.official_tag, new: a.official_tag };
+                    if (a.last_insemination_date && a.last_insemination_date !== existing.last_insemination_date) changes['Осіменіння'] = { old: existing.last_insemination_date, new: a.last_insemination_date };
+                    if (a.days_pregnant != null && a.days_pregnant !== existing.days_pregnant) changes['Дні тільності'] = { old: existing.days_pregnant, new: a.days_pregnant };
+                    if (a.last_calving_date && a.last_calving_date !== existing.last_calving_date) changes['Отел'] = { old: existing.last_calving_date, new: a.last_calving_date };
 
                     if (Object.keys(changes).length > 0) {
                         modifiedCount++;
@@ -415,7 +425,7 @@ export async function handleSystem({ path, method, request, url, env, db, jsonRe
 
             return jsonResponse({
                 status: "success",
-                farm_name: farmName,
+                farm_name: activeFarm?.name || farmName,
                 diff: {
                     total_in_backup: animals.length,
                     added_count: addedCount,
