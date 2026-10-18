@@ -400,6 +400,9 @@
 
             const userNameEl = document.getElementById('userNameDisplay');
             if (userNameEl) userNameEl.textContent = currentUser?.full_name || "Користувач";
+            document.querySelectorAll('.userRoleBadgeClass').forEach(el => {
+                el.textContent = isGuest ? "Гість (Демо)" : (currentUser?.role || "operator");
+            });
             const roleEl = document.getElementById('userRoleBadge');
             if (roleEl) roleEl.textContent = isGuest ? "Гість (Демо)" : (currentUser?.role || "operator");
             if (window.store && currentUser) {
@@ -2509,36 +2512,42 @@
                 if (e) {
                     if (typeof e.stopPropagation === 'function') e.stopPropagation();
                 }
-                const menu = document.getElementById('techMenuDropdown');
-                const isCurrentlyOpen = window.store ? !!window.store.techMenuOpen : (menu ? !menu.classList.contains('hidden') : false);
+                const menus = document.querySelectorAll('.techMenuDropdownClass');
+                const isCurrentlyOpen = window.store ? !!window.store.techMenuOpen : (menus.length > 0 ? !menus[0].classList.contains('hidden') : false);
                 const targetState = !isCurrentlyOpen;
 
                 if (window.store) {
                     window.store.techMenuOpen = targetState;
                 }
-                if (menu) {
+                menus.forEach(menu => {
                     if (targetState) {
                         menu.classList.remove('hidden');
                     } else {
                         menu.classList.add('hidden');
                     }
-                }
+                });
             };
 
             window.closeTechMenu = function() {
                 if (window.store) {
                     window.store.techMenuOpen = false;
                 }
-                const menu = document.getElementById('techMenuDropdown');
-                if (menu) {
+                const menus = document.querySelectorAll('.techMenuDropdownClass');
+                menus.forEach(menu => {
                     menu.classList.add('hidden');
-                }
+                });
             };
 
             // Global Click-Outside handler for Technical Settings Dropdown
             document.addEventListener('click', (event) => {
-                const container = document.getElementById('techMenuDropdownContainer');
-                if (container && !container.contains(/** @type {Node} */ (event.target))) {
+                const containers = document.querySelectorAll('.techMenuContainerClass');
+                let clickedInside = false;
+                containers.forEach(c => {
+                    if (c && c.contains(/** @type {Node} */ (event.target))) {
+                        clickedInside = true;
+                    }
+                });
+                if (!clickedInside) {
                     window.closeTechMenu();
                 }
             });

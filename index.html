@@ -359,8 +359,101 @@
             </div>
         </a>
         <div id="authHeaderArea" class="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
-            <!-- Guest Login Button in Header -->
-            <button id="headerLoginBtn" onclick="openLoginModal()" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 sm:px-3.5 py-1.5 rounded-xl text-xs font-semibold shadow-sm transition flex items-center gap-1.5">
+            <!-- ДЕСКТОП: Селектор ферми, Роль, Кнопка входу та Шестерня (видимо тільки на lg+) -->
+            <div class="hidden lg:flex items-center gap-2 mr-1">
+                <!-- Селектор активної ферми на десктопі -->
+                <div class="flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-2.5 h-9 rounded-xl max-w-[280px]">
+                    <span class="text-[11px] text-slate-500 font-medium whitespace-nowrap" data-i18n="activeFarmLabel">Ферма:</span>
+                    <div class="relative min-w-0 flex-1 max-w-[200px]">
+                        <select v-model="store.currentFarmId" @change="farms.switchFarm($event.target.value)" class="w-full bg-transparent text-xs font-bold text-slate-800 cursor-pointer focus:outline-none focus:ring-0 truncate pr-4">
+                            <option v-if="!store.farmsList || store.farmsList.length === 0" value="" data-i18n="loadingFarms">Завантаження ферм...</option>
+                            <option v-for="f in store.farmsList" :key="f.id" :value="f.id" v-text="f.name + (f.role ? ' (' + f.role + ')' : '')"></option>
+                        </select>
+                    </div>
+                    <button onclick="openNewFarmModal()" title="Створити нову ферму" class="text-slate-400 hover:text-emerald-600 p-0.5 text-xs transition flex-shrink-0">
+                        <i class="fa-solid fa-circle-plus"></i>
+                    </button>
+                </div>
+
+                <!-- Роль користувача на десктопі -->
+                <span class="userRoleBadgeClass bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-1 rounded-lg text-[11px] font-semibold" v-text="store.currentUser ? store.currentUser.role : 'guest'">superadmin</span>
+
+                <!-- Кнопка швидкого входу для гостей / демо на десктопі -->
+                <button v-if="!store.currentUser || store.currentUser.role === 'guest'" onclick="openLoginModal()" class="bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white h-9 px-3 rounded-xl text-xs font-semibold shadow-xs transition flex items-center gap-1.5 cursor-pointer touch-manipulation">
+                    <i class="fa-brands fa-google text-xs"></i>
+                    <span>Увійти</span>
+                </button>
+
+                <!-- ⚙️ Шестерня на десктопі -->
+                <div class="relative techMenuContainerClass">
+                    <button type="button" onclick="window.toggleTechMenu(event)" title="Сервісні налаштування & Інструменти" class="relative bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 border border-slate-200 w-9 h-9 rounded-xl flex items-center justify-center transition shadow-2xs cursor-pointer touch-manipulation before:absolute before:-inset-1.5 before:content-['']">
+                        <i class="fa-solid fa-gear text-slate-600 text-sm pointer-events-none"></i>
+                    </button>
+
+                    <!-- Dropdown Menu Desktop -->
+                    <div class="techMenuDropdownClass hidden absolute right-0 mt-1.5 w-60 bg-white border border-slate-200 rounded-2xl shadow-xl py-1.5 z-50 text-xs divide-y divide-slate-100">
+                        <!-- 1. Профіль користувача -->
+                        <div class="px-3.5 py-2.5 bg-slate-50/70">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0 text-sm font-bold">
+                                    <i class="fa-solid fa-circle-user text-base"></i>
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <p class="font-bold text-slate-900 truncate leading-tight" v-text="store.currentUser ? (store.currentUser.name || store.currentUser.email) : 'Оператор'"></p>
+                                    <p class="text-[10px] text-slate-500 truncate" v-text="store.currentUser ? store.currentUser.email : ''"></p>
+                                </div>
+                            </div>
+                            <button onclick="openProfileModal(); window.closeTechMenu()" class="mt-2 w-full text-center bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 rounded-lg py-1 text-[11px] font-semibold transition cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs">
+                                <i class="fa-solid fa-id-badge text-emerald-600"></i>
+                                <span data-i18n="menuProfile">Мій акаунт & Профіль</span>
+                            </button>
+                        </div>
+
+                        <!-- Пункт швидкого входу для гостей всередині меню -->
+                        <div v-if="!store.currentUser || store.currentUser.role === 'guest'" class="py-1 bg-emerald-50/50">
+                            <button onclick="openLoginModal(); window.closeTechMenu()" class="w-full text-left px-3.5 py-2 hover:bg-emerald-100/50 text-emerald-800 font-bold transition cursor-pointer flex items-center gap-2">
+                                <i class="fa-brands fa-google text-emerald-600 w-4 text-center"></i>
+                                <span>Увійти через Google</span>
+                            </button>
+                        </div>
+
+                        <!-- 2. Основні інструменти -->
+                        <div class="py-1">
+                            <button onclick="openImportModal(); window.closeTechMenu()" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center gap-2 text-indigo-700 font-semibold transition cursor-pointer">
+                                <i class="fa-solid fa-file-import text-indigo-600 w-4 text-center"></i>
+                                <span data-i18n="menuImportUniform">Імпорт Uniform (.FDB / .ZIP)</span>
+                            </button>
+                            <button onclick="openFarmPassportModal(); window.closeTechMenu()" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center gap-2 text-slate-700 font-medium transition cursor-pointer">
+                                <i class="fa-solid fa-id-card text-emerald-600 w-4 text-center"></i>
+                                <span data-i18n="menuFarmPassport">Паспорт господарства</span>
+                            </button>
+                            <button onclick="switchTab('logs'); window.closeTechMenu()" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center gap-2 text-slate-700 font-medium transition cursor-pointer">
+                                <i class="fa-solid fa-clock-rotate-left text-slate-500 w-4 text-center"></i>
+                                <span data-i18n="menuEventLogs">Логи подій & Аудит</span>
+                            </button>
+                            <button onclick="switchTab('metrics'); window.closeTechMenu()" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center gap-2 text-slate-700 font-medium transition cursor-pointer">
+                                <i class="fa-solid fa-chart-line text-purple-600 w-4 text-center"></i>
+                                <span data-i18n="menuSiteMetrics">Метрики сайту</span>
+                            </button>
+                            <button onclick="downloadBackup(); window.closeTechMenu()" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center gap-2 text-slate-700 font-medium transition cursor-pointer">
+                                <i class="fa-solid fa-download text-emerald-600 w-4 text-center"></i>
+                                <span data-i18n="menuDownloadBackup">Завантажити бекап (JSON)</span>
+                            </button>
+                        </div>
+
+                        <!-- 3. Вихід -->
+                        <div class="py-1">
+                            <button onclick="logout(); window.closeTechMenu()" class="w-full text-left px-3.5 py-2 hover:bg-rose-50 text-rose-600 font-medium transition cursor-pointer flex items-center gap-2">
+                                <i class="fa-solid fa-arrow-right-from-bracket text-rose-500 w-4 text-center"></i>
+                                <span data-i18n="logoutBtn">Вийти</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Guest Login Button in Header (Mobile only fallback) -->
+            <button id="headerLoginBtn" onclick="openLoginModal()" class="hidden lg:hidden bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 sm:px-3.5 py-1.5 rounded-xl text-xs font-semibold shadow-sm transition flex items-center gap-1.5">
                 <i class="fa-brands fa-google text-xs"></i> <span class="hidden sm:inline">Увійти через Google</span><span class="sm:hidden text-xs">Вхід</span>
             </button>
             <!-- Network Connection Status Pill (clickable to view and manage offline outbox items) -->
@@ -532,8 +625,8 @@
                 </button>
             </div>
 
-            <!-- Селектор ферми, роль та шестерня сервісу (Праворуч на десктопі, 1-й поверх на телефоні) -->
-            <div class="flex items-center justify-between lg:justify-end gap-2.5 order-1 lg:order-2 border-b lg:border-b-0 border-slate-100 pb-2.5 lg:pb-0 flex-shrink-0 min-w-0">
+            <!-- Мобільна панель: Селектор ферми, роль та шестерня сервісу (1-й поверх на телефоні, приховано на десктопі lg:hidden) -->
+            <div class="flex lg:hidden items-center justify-between gap-2.5 order-1 border-b border-slate-100 pb-2.5 flex-shrink-0 min-w-0">
                 <!-- Селектор активної ферми з захистом від переповнення контейнера -->
                 <div class="flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-2.5 h-9 rounded-xl flex-1 sm:flex-initial max-w-full sm:max-w-fit min-w-0">
                     <span class="text-[11px] text-slate-500 font-medium whitespace-nowrap" data-i18n="activeFarmLabel">Ферма:</span>
@@ -548,9 +641,9 @@
                     </button>
                 </div>
 
-                <!-- Роль користувача & Шестерня сервісних налаштувань -->
+                <!-- Роль користувача & Шестерня сервісних налаштувань (Мобільна версія) -->
                 <div class="flex items-center gap-2 flex-shrink-0">
-                    <span id="userRoleBadge" v-text="store.currentUser ? store.currentUser.role : 'guest'" class="hidden sm:inline-block bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-1 rounded-lg text-[11px] font-semibold">superadmin</span>
+                    <span id="userRoleBadge" v-text="store.currentUser ? store.currentUser.role : 'guest'" class="userRoleBadgeClass hidden sm:inline-block bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-1 rounded-lg text-[11px] font-semibold">superadmin</span>
 
                     <!-- Кнопка швидкого входу для гостей / демо (Toolbar) -->
                     <button v-if="!store.currentUser || store.currentUser.role === 'guest'" onclick="openLoginModal()" class="bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white h-9 px-3 rounded-xl text-xs font-semibold shadow-xs transition flex items-center gap-1.5 cursor-pointer touch-manipulation">
@@ -558,14 +651,14 @@
                         <span>Увійти</span>
                     </button>
 
-                    <!-- ⚙️ Шестерня (Одразу після селектора ферми) -->
-                    <div class="relative" id="techMenuDropdownContainer">
+                    <!-- ⚙️ Шестерня (Мобільна) -->
+                    <div class="relative techMenuContainerClass" id="techMenuDropdownContainer">
                         <button id="techMenuGearBtn" type="button" onclick="window.toggleTechMenu(event)" title="Сервісні налаштування & Інструменти" class="relative bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 border border-slate-200 w-9 h-9 rounded-xl flex items-center justify-center transition shadow-2xs cursor-pointer touch-manipulation before:absolute before:-inset-1.5 before:content-['']">
                             <i class="fa-solid fa-gear text-slate-600 text-sm pointer-events-none"></i>
                         </button>
 
-                        <!-- Dropdown Menu -->
-                        <div id="techMenuDropdown" class="hidden absolute right-0 mt-1.5 w-60 bg-white border border-slate-200 rounded-2xl shadow-xl py-1.5 z-50 text-xs divide-y divide-slate-100">
+                        <!-- Dropdown Menu Mobile -->
+                        <div id="techMenuDropdown" class="techMenuDropdownClass hidden absolute right-0 mt-1.5 w-60 bg-white border border-slate-200 rounded-2xl shadow-xl py-1.5 z-50 text-xs divide-y divide-slate-100">
                             <!-- 1. Профіль користувача -->
                             <div class="px-3.5 py-2.5 bg-slate-50/70">
                                 <div class="flex items-center gap-2.5">
