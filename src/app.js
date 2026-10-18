@@ -269,6 +269,10 @@
                 currentUser = data.user;
                 localStorage.setItem("dairy_token", token);
                 localStorage.setItem("dairy_user", JSON.stringify(currentUser));
+                if (window.store) {
+                    window.store.setToken(token);
+                    window.store.setCurrentUser(currentUser);
+                }
                 showToast("Успішний вхід у систему!");
                 showDashboard();
             } catch (err) {
@@ -295,6 +299,10 @@
                 currentUser = data.user;
                 localStorage.setItem("dairy_token", token);
                 localStorage.setItem("dairy_user", JSON.stringify(currentUser));
+                if (window.store) {
+                    window.store.setToken(token);
+                    window.store.setCurrentUser(currentUser);
+                }
                 showToast(`Вітаємо, ${currentUser.full_name}!`);
                 closeModal('importAuthRequiredModal');
                 showDashboard();
