@@ -2509,33 +2509,16 @@
 
             // Technical Settings Dropdown Helpers
             window.toggleTechMenu = function(e) {
-                if (e) {
-                    if (typeof e.stopPropagation === 'function') e.stopPropagation();
-                }
-                const menus = document.querySelectorAll('.techMenuDropdownClass');
-                const isCurrentlyOpen = window.store ? !!window.store.techMenuOpen : (menus.length > 0 ? !menus[0].classList.contains('hidden') : false);
-                const targetState = !isCurrentlyOpen;
-
+                if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
                 if (window.store) {
-                    window.store.techMenuOpen = targetState;
+                    window.store.toggleTechMenu();
                 }
-                menus.forEach(menu => {
-                    if (targetState) {
-                        menu.classList.remove('hidden');
-                    } else {
-                        menu.classList.add('hidden');
-                    }
-                });
             };
 
             window.closeTechMenu = function() {
                 if (window.store) {
-                    window.store.techMenuOpen = false;
+                    window.store.closeTechMenu();
                 }
-                const menus = document.querySelectorAll('.techMenuDropdownClass');
-                menus.forEach(menu => {
-                    menu.classList.add('hidden');
-                });
             };
 
             // Global Click-Outside handler for Technical Settings Dropdown
@@ -2547,8 +2530,8 @@
                         clickedInside = true;
                     }
                 });
-                if (!clickedInside) {
-                    window.closeTechMenu();
+                if (!clickedInside && window.store && window.store.techMenuOpen) {
+                    window.store.closeTechMenu();
                 }
             });
         })();
