@@ -1547,8 +1547,8 @@
                         🐮
                     </div>
                     <div>
-                        <h3 class="text-base font-bold text-slate-900" id="mCowTitle">Картка корови № 0000</h3>
-                        <p class="text-xs text-slate-500" id="mCowSubtitle">UA 00000000 • Група 1</p>
+                        <h3 class="text-base font-bold text-slate-900" id="mCowTitle" v-text="'Картка корови № ' + (herd.currentCow?.farm_number || '0000') + (herd.currentCow?.name ? ' «' + herd.currentCow.name + '»' : '')">Картка корови № 0000</h3>
+                        <p class="text-xs text-slate-500" id="mCowSubtitle" v-text="(herd.currentCow?.official_tag || 'Без бирки') + ' • ' + (herd.currentCow?.group_name || 'Група 1')">UA 00000000 • Група 1</p>
                     </div>
                 </div>
                 <button onclick="closeCowModal()" class="text-slate-400 hover:text-slate-600 text-lg">
@@ -1557,24 +1557,24 @@
             </div>
 
             <!-- Modal Content with tabs -->
-            <div class="flex-1 overflow-y-auto p-6 space-y-6">
+            <div class="flex-1 overflow-y-auto p-6 space-y-6" v-if="herd.currentCow">
                 <!-- Info cards -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs bg-slate-50 p-4 rounded-2xl border border-slate-200">
                     <div>
                         <span class="text-slate-500 block">Робочий номер:</span>
-                        <input id="mEditNumber" class="font-bold text-slate-900 bg-white border border-slate-300 rounded px-2 py-1 mt-0.5 w-full">
+                        <input id="mEditNumber" v-model="herd.currentCow.farm_number" class="font-bold text-slate-900 bg-white border border-slate-300 rounded px-2 py-1 mt-0.5 w-full">
                     </div>
                     <div>
                         <span class="text-slate-500 block">Офіційна бирка:</span>
-                        <input id="mEditTag" class="font-medium text-slate-900 bg-white border border-slate-300 rounded px-2 py-1 mt-0.5 w-full">
+                        <input id="mEditTag" v-model="herd.currentCow.official_tag" class="font-medium text-slate-900 bg-white border border-slate-300 rounded px-2 py-1 mt-0.5 w-full">
                     </div>
                     <div>
                         <span class="text-slate-500 block">Кличка:</span>
-                        <input id="mEditName" class="font-medium text-slate-900 bg-white border border-slate-300 rounded px-2 py-1 mt-0.5 w-full">
+                        <input id="mEditName" v-model="herd.currentCow.name" class="font-medium text-slate-900 bg-white border border-slate-300 rounded px-2 py-1 mt-0.5 w-full">
                     </div>
                     <div>
                         <span class="text-slate-500 block">Статус:</span>
-                        <select id="mEditStatus" class="font-bold bg-white border border-slate-300 rounded px-2 py-1 mt-0.5 w-full">
+                        <select id="mEditStatus" v-model="herd.currentCow.current_status" class="font-bold bg-white border border-slate-300 rounded px-2 py-1 mt-0.5 w-full">
                             <option value="Active" data-i18n="optActive">Active</option>
                             <option value="Heifer" data-i18n="optHeifer">Heifer</option>
                             <option value="Open" data-i18n="optOpen">Open</option>
@@ -1589,24 +1589,24 @@
                     </div>
                     <div>
                         <span class="text-slate-500 block">Номер лактації:</span>
-                        <input id="mEditLactation" type="number" class="font-bold text-slate-900 bg-white border border-slate-300 rounded px-2 py-1 mt-0.5 w-full">
+                        <input id="mEditLactation" v-model.number="herd.currentCow.lactation_number" type="number" class="font-bold text-slate-900 bg-white border border-slate-300 rounded px-2 py-1 mt-0.5 w-full">
                     </div>
                     <div>
                         <span class="text-slate-500 block">Дата народження:</span>
-                        <input id="mEditBirth" type="date" class="font-medium text-slate-900 bg-white border border-slate-300 rounded px-2 py-1 mt-0.5 w-full">
+                        <input id="mEditBirth" v-model="herd.currentCow.birth_date" type="date" class="font-medium text-slate-900 bg-white border border-slate-300 rounded px-2 py-1 mt-0.5 w-full">
                     </div>
                     <div>
                         <span class="text-slate-500 block">Останній отел:</span>
-                        <input id="mEditLastCalv" type="date" class="font-medium text-slate-900 bg-white border border-slate-300 rounded px-2 py-1 mt-0.5 w-full">
+                        <input id="mEditLastCalv" v-model="herd.currentCow.last_calving_date" type="date" class="font-medium text-slate-900 bg-white border border-slate-300 rounded px-2 py-1 mt-0.5 w-full">
                     </div>
                     <div>
                         <span class="text-slate-500 block">Очікуваний отел:</span>
-                        <input id="mEditExpCalv" type="date" class="font-medium text-slate-900 bg-white border border-slate-300 rounded px-2 py-1 mt-0.5 w-full">
+                        <input id="mEditExpCalv" v-model="herd.currentCow.expected_calving_date" type="date" class="font-medium text-slate-900 bg-white border border-slate-300 rounded px-2 py-1 mt-0.5 w-full">
                     </div>
                 </div>
 
                 <div class="flex justify-end gap-2">
-                    <button onclick="saveCowEdits()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-sm">
+                    <button @click="herd.saveCurrentCow()" onclick="saveCowEdits()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-sm transition">
                         <i class="fa-solid fa-floppy-disk"></i> Зберегти зміни
                     </button>
                 </div>
@@ -1626,7 +1626,16 @@
                     <h4 class="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-2">
                         <i class="fa-solid fa-timeline"></i> Історія відтворення
                     </h4>
-                    <div id="mReproTimeline" class="space-y-2 text-xs"></div>
+                    <div id="mReproTimeline" class="space-y-2 text-xs">
+                        <p v-if="!herd.currentCow.reproduction_history || herd.currentCow.reproduction_history.length === 0" class="text-slate-400 p-2">Подій відтворення не зареєстровано</p>
+                        <div v-for="r in (herd.currentCow.reproduction_history || [])" :key="r.id" class="p-3 bg-amber-50/60 rounded-xl border border-amber-200/60 flex justify-between items-center">
+                            <div>
+                                <span class="font-bold text-amber-900" v-text="r.event_type"></span> • <span class="text-slate-500" v-text="r.event_date"></span>
+                                <div class="text-slate-600 mt-0.5" v-text="(r.bull_code ? 'Бугай: ' + r.bull_code : '') + (r.result ? ' | Результат: ' + r.result : '')"></div>
+                            </div>
+                            <span class="text-slate-400 text-[10px]" v-text="r.operator_name || ''"></span>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Health history -->
@@ -1634,7 +1643,19 @@
                     <h4 class="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-2">
                         <i class="fa-solid fa-notes-medical"></i> Ветеринарна історія та каренція
                     </h4>
-                    <div id="mHealthTimeline" class="space-y-2 text-xs"></div>
+                    <div id="mHealthTimeline" class="space-y-2 text-xs">
+                        <p v-if="!herd.currentCow.health_history || herd.currentCow.health_history.length === 0" class="text-slate-400 p-2">Записів лікування не знайдено</p>
+                        <div v-for="h in (herd.currentCow.health_history || [])" :key="h.id" class="p-3 bg-rose-50/60 rounded-xl border border-rose-200/60 flex justify-between items-center">
+                            <div>
+                                <span class="font-bold text-rose-900" v-text="h.diagnosis || 'Терапія'"></span> • <span class="text-slate-500" v-text="h.event_date"></span>
+                                <div class="text-slate-600 mt-0.5">
+                                    <span v-text="h.medication_name ? 'Ліки: ' + h.medication_name : ''"></span>
+                                    <span> (Каренція молока до: <b class="text-rose-600" v-text="h.milk_withholding_until || '-'"></b>)</span>
+                                </div>
+                            </div>
+                            <span class="text-slate-400 text-[10px]" v-text="h.veterinarian_name || ''"></span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

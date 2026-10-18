@@ -3,6 +3,7 @@ import { apiRequest, cacheFarmAnimals } from '../api/client.js';
 
 export const herdModule = {
     animals: [],
+    currentCow: null,
     totalCount: 0,
     searchQuery: '',
     statusFilter: 'ALL',
@@ -133,6 +134,51 @@ export const herdModule = {
     openCow360(id) {
         if (typeof window.openCow360 === 'function') {
             window.openCow360(id);
+        }
+    },
+
+    async loadCow360(id) {
+        store.currentCowId = id;
+        try {
+            let a = null;
+            if (!navigator.onLine && window.getCachedAnimal) {
+                a = await window.getCachedAnimal(id);
+            }
+            if (!a) {
+                a = await apiRequest(`/api/animals/${id}`, { method: 'GET' });
+            }
+            if (!a) throw new Error("Тварину не знайдено");
+            this.currentCow = a;
+            store.currentCow = a;
+            return a;
+        } catch (err) {
+            console.error("Load cow 360 error:", err);
+            store.addToast("Помилка завантаження картки: " + err.message, "error");
+            return null;
+        }
+    },
+
+    async saveCurrentCow() {
+        if (!this.currentCow || !this.currentCow.id) return;
+        const payload = {
+            farm_number: this.currentCow.farm_number,
+            official_tag: this.currentCow.official_tag || '',
+            name: this.currentCow.name || '',
+            current_status: this.currentCow.current_status || 'Active',
+            lactation_number: parseInt(this.currentCow.lactation_number) || 0,
+            birth_date: this.currentCow.birth_date || null,
+            last_calving_date: this.currentCow.last_calving_date || null,
+            expected_calving_date: this.currentCow.expected_calving_date || null
+        };
+        try {
+            await apiRequest(`/api/animals/${this.currentCow.id}`, {
+                method: 'PUT',
+                body: JSON.stringify(payload)
+            });
+            store.addToast("Зміни картки успішно збережено!");
+            this.loadAnimals();
+        } catch (err) {
+            store.addToast(err.message, "error");
         }
     },
 

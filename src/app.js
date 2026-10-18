@@ -1135,101 +1135,26 @@
         // 8. Cow 360° Profile Logic
         async function openCow360(id) {
             currentCowId = id;
-            try {
-                let a = null;
-                if (!navigator.onLine && window.getCachedAnimal) {
-                    a = await window.getCachedAnimal(id);
+            if (window.herdModule && typeof window.herdModule.loadCow360 === 'function') {
+                const cow = await window.herdModule.loadCow360(id);
+                if (cow) {
+                    document.getElementById('cowModal').classList.remove('hidden');
+                    return;
                 }
-                if (!a) {
-                    try {
-                        const res = await fetch(`${API_BASE}/api/animals/${id}`, {
-                            headers: { 'Authorization': `Bearer ${token}` }
-                        });
-                        if (res.ok) {
-                            a = await res.json();
-                        }
-                    } catch (netErr) {
-                        if (window.getCachedAnimal) {
-                            a = await window.getCachedAnimal(id);
-                        }
-                        if (!a) throw netErr;
-                    }
-                }
-                if (!a) throw new Error("Тварину не знайдено в мережі або кеші");
-
-                document.getElementById('mCowTitle').textContent = `Картка корови № ${a.farm_number} ${a.name ? '«' + a.name + '»' : ''}`;
-                document.getElementById('mCowSubtitle').textContent = `${a.official_tag || 'Без бирки'} • ${a.group_name || 'Група 1'}`;
-
-                document.getElementById('mEditNumber').value = a.farm_number;
-                document.getElementById('mEditTag').value = a.official_tag || '';
-                document.getElementById('mEditName').value = a.name || '';
-                document.getElementById('mEditStatus').value = a.current_status || 'Active';
-                document.getElementById('mEditLactation').value = a.lactation_number || 0;
-                document.getElementById('mEditBirth').value = a.birth_date || '';
-                document.getElementById('mEditLastCalv').value = a.last_calving_date || '';
-                document.getElementById('mEditExpCalv').value = a.expected_calving_date || '';
-
-                // Repro timeline
-                const reproList = a.reproduction_history || a.repro_history || [];
-                document.getElementById('mReproTimeline').innerHTML = reproList.length ? reproList.map(r => `
-                    <div class="p-3 bg-amber-50/60 rounded-xl border border-amber-200/60 flex justify-between items-center">
-                        <div>
-                            <span class="font-bold text-amber-900">${r.event_type}</span> • <span class="text-slate-500">${r.event_date}</span>
-                            <div class="text-slate-600 mt-0.5">${r.bull_code ? 'Бугай: ' + r.bull_code : ''} ${r.result ? ' | Результат: ' + r.result : ''}</div>
-                        </div>
-                        <span class="text-slate-400 text-[10px]">${r.operator_name || ''}</span>
-                    </div>
-                `).join('') : `<p class="text-slate-400 p-2">Подій відтворення не зареєстровано</p>`;
-
-                // Health timeline
-                const healthList = a.health_history || [];
-                document.getElementById('mHealthTimeline').innerHTML = healthList.length ? healthList.map(h => `
-                    <div class="p-3 bg-rose-50/60 rounded-xl border border-rose-200/60 flex justify-between items-center">
-                        <div>
-                            <span class="font-bold text-rose-900">${h.diagnosis || 'Терапія'}</span> • <span class="text-slate-500">${h.event_date}</span>
-                            <div class="text-slate-600 mt-0.5">${h.medication_name ? 'Ліки: ' + h.medication_name : ''} (Каренція молока до: <b class="text-rose-600">${h.milk_withholding_until || '-'}</b>)</div>
-                        </div>
-                        <span class="text-slate-400 text-[10px]">${h.veterinarian_name || ''}</span>
-                    </div>
-                `).join('') : `<p class="text-slate-400 p-2">Записів лікування не знайдено</p>`;
-
-                document.getElementById('cowModal').classList.remove('hidden');
-
-            } catch (err) {
-                console.error("Cow 360 error:", err);
-                showToast("Помилка завантаження картки: " + err.message, "error");
             }
         }
 
         async function saveCowEdits() {
-            if (!currentCowId) return;
-            const payload = {
-                farm_number: document.getElementById('mEditNumber').value,
-                official_tag: document.getElementById('mEditTag').value,
-                name: document.getElementById('mEditName').value,
-                current_status: document.getElementById('mEditStatus').value,
-                lactation_number: parseInt(document.getElementById('mEditLactation').value) || 0,
-                birth_date: document.getElementById('mEditBirth').value || null,
-                last_calving_date: document.getElementById('mEditLastCalv').value || null,
-                expected_calving_date: document.getElementById('mEditExpCalv').value || null
-            };
-
-            try {
-                const res = await fetch(`${API_BASE}/api/animals/${currentCowId}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                    body: JSON.stringify(payload)
-                });
-                if (!res.ok) throw new Error("Помилка збереження");
-                showToast("Зміни картки успішно збережено!");
-                loadAnimals();
-            } catch (e) {
-                showToast(e.message, "error");
+            if (window.herdModule && typeof window.herdModule.saveCurrentCow === 'function') {
+                await window.herdModule.saveCurrentCow();
             }
         }
 
         function closeCowModal() {
             document.getElementById('cowModal').classList.add('hidden');
+            if (window.herdModule) {
+                window.herdModule.currentCow = null;
+            }
         }
 
         // 9. Repro & Health Modals
