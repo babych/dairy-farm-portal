@@ -58,6 +58,8 @@ export const en = {
     metricModeHeads: "Heads",
     metricModePct: "%",
     menuServiceTitle: "Service & Settings",
+    menuProfile: "My Account & Profile",
+    menuImportUniform: "Import Uniform (.FDB / .ZIP)",
     menuFarmPassport: "Farm Passport",
     menuEventLogs: "Event Logs & Audit",
     menuSiteMetrics: "Platform Metrics",

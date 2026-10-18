@@ -58,6 +58,8 @@ export const uk = {
     metricModeHeads: "Гол",
     metricModePct: "%",
     menuServiceTitle: "Сервіс & Налаштування",
+    menuProfile: "Мій акаунт & Профіль",
+    menuImportUniform: "Імпорт Uniform (.FDB / .ZIP)",
     menuFarmPassport: "Паспорт господарства",
     menuEventLogs: "Логи подій & Аудит",
     menuSiteMetrics: "Метрики сайту",

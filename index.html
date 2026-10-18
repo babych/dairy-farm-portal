@@ -268,11 +268,6 @@
             <button id="headerLoginBtn" onclick="openLoginModal()" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 sm:px-3.5 py-1.5 rounded-xl text-xs font-semibold shadow-sm transition flex items-center gap-1.5">
                 <i class="fa-brands fa-google text-xs"></i> <span class="hidden sm:inline">Увійти через Google</span><span class="sm:hidden text-xs">Вхід</span>
             </button>
-            <!-- User Profile Chip in Header -->
-            <button id="headerUserChip" onclick="openProfileModal()" class="hidden items-center gap-1.5 sm:gap-2 bg-slate-100 hover:bg-slate-200 border border-slate-200 px-2 sm:px-3 py-1.5 sm:py-1 rounded-xl text-xs font-semibold text-slate-800 transition cursor-pointer" title="Мій акаунт">
-                <i class="fa-solid fa-circle-user text-emerald-600 text-sm sm:text-xs"></i>
-                <span id="headerUserEmail" class="hidden sm:inline truncate max-w-[160px]"></span>
-            </button>
             <!-- Network Connection Status Pill (clickable to view and manage offline outbox items) -->
             <button id="headerNetworkStatus" onclick="openOutboxModal()" class="hidden items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-semibold transition cursor-pointer hover:opacity-90">
                 <span id="networkStatusDot" class="w-2 h-2 rounded-full"></span>
@@ -282,10 +277,6 @@
             <!-- PWA Install / Offline Info Button -->
             <button id="headerInstallBtn" onclick="openInstallModal()" title="Встановити додаток на смартфон / Офлайн доступ" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 px-2 sm:px-3 py-1.5 sm:py-1 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shadow-sm">
                 <i class="fa-solid fa-mobile-screen-button text-emerald-600"></i> <span class="hidden sm:inline" data-i18n="installAppBtn">Встановити</span>
-            </button>
-            <!-- Backup download button (shown only when authenticated) -->
-            <button id="headerBackupBtn" onclick="downloadBackup()" title="Завантажити резервну копію бази даних" class="hidden bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-xl text-xs font-semibold transition items-center gap-1.5 border border-slate-200">
-                <i class="fa-solid fa-download text-emerald-600"></i> <span class="hidden sm:inline">Бекап</span>
             </button>
 
             <!-- Language Switcher (UA / EN) with search-engine crawlable URLs -->
@@ -448,26 +439,40 @@
                         </button>
                     </div>
                 </div>
-                <div class="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto relative">
-                    <button onclick="openImportModal()" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shadow-sm">
-                        <i class="fa-solid fa-file-import"></i> <span data-i18n="navImport">Імпорт Uniform</span>
-                    </button>
-                    
-                    <div class="flex items-center gap-2">
-                        <!-- ⚙️ Шестерня (Технічні інструменти: Паспорт, Логи, Метрики, Бекап) -->
-                        <div class="relative">
-                            <button @click="store.toggleTechMenu()" title="Сервісні налаштування & Інструменти" class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 w-8 h-8 rounded-xl flex items-center justify-center transition shadow-2xs cursor-pointer">
-                                <i class="fa-solid fa-gear text-slate-600 text-xs"></i>
-                            </button>
+                <div class="flex items-center justify-end gap-2 relative">
+                    <!-- ⚙️ Шестерня (Сервіс, Профіль, Імпорт, Паспорт, Логи, Метрики, Бекап, Вихід) -->
+                    <div class="relative">
+                        <button @click="store.toggleTechMenu()" title="Сервісні налаштування & Інструменти" class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 w-9 h-9 rounded-xl flex items-center justify-center transition shadow-2xs cursor-pointer">
+                            <i class="fa-solid fa-gear text-slate-600 text-sm"></i>
+                        </button>
 
                         <!-- Dropdown Menu -->
-                        <div v-if="store.techMenuOpen" @click.outside="store.closeTechMenu()" class="absolute right-0 mt-1.5 w-56 bg-white border border-slate-200 rounded-2xl shadow-xl py-1.5 z-50 text-xs divide-y divide-slate-100">
-                            <div class="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider" data-i18n="menuServiceTitle">
-                                Сервіс & Налаштування
+                        <div v-if="store.techMenuOpen" @click.outside="store.closeTechMenu()" class="absolute right-0 mt-1.5 w-60 bg-white border border-slate-200 rounded-2xl shadow-xl py-1.5 z-50 text-xs divide-y divide-slate-100">
+                            <!-- 1. Профіль користувача -->
+                            <div class="px-3.5 py-2.5 bg-slate-50/70">
+                                <div class="flex items-center gap-2.5">
+                                    <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0 text-sm font-bold">
+                                        <i class="fa-solid fa-circle-user text-base"></i>
+                                    </div>
+                                    <div class="min-w-0 flex-1">
+                                        <p class="font-bold text-slate-900 truncate leading-tight" v-text="store.currentUser ? (store.currentUser.name || store.currentUser.email) : 'Оператор'"></p>
+                                        <p class="text-[10px] text-slate-500 truncate" v-text="store.currentUser ? store.currentUser.email : ''"></p>
+                                    </div>
+                                </div>
+                                <button onclick="openProfileModal(); store.closeTechMenu()" class="mt-2 w-full text-center bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 rounded-lg py-1 text-[11px] font-semibold transition cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs">
+                                    <i class="fa-solid fa-id-badge text-emerald-600"></i>
+                                    <span data-i18n="menuProfile">Мій акаунт & Профіль</span>
+                                </button>
                             </div>
+
+                            <!-- 2. Основні інструменти -->
                             <div class="py-1">
+                                <button onclick="openImportModal(); store.closeTechMenu()" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center gap-2 text-indigo-700 font-semibold transition cursor-pointer">
+                                    <i class="fa-solid fa-file-import text-indigo-600 w-4 text-center"></i>
+                                    <span data-i18n="menuImportUniform">Імпорт Uniform (.FDB / .ZIP)</span>
+                                </button>
                                 <button onclick="openFarmPassportModal(); store.closeTechMenu()" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center gap-2 text-slate-700 font-medium transition cursor-pointer">
-                                    <i class="fa-solid fa-id-card text-indigo-600 w-4 text-center"></i>
+                                    <i class="fa-solid fa-id-card text-emerald-600 w-4 text-center"></i>
                                     <span data-i18n="menuFarmPassport">Паспорт господарства</span>
                                 </button>
                                 <button onclick="switchTab('logs'); store.closeTechMenu()" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center gap-2 text-slate-700 font-medium transition cursor-pointer">
@@ -483,11 +488,16 @@
                                     <span data-i18n="menuDownloadBackup">Завантажити бекап (JSON)</span>
                                 </button>
                             </div>
+
+                            <!-- 3. Вихід -->
+                            <div class="py-1">
+                                <button onclick="logout(); store.closeTechMenu()" class="w-full text-left px-3.5 py-2 hover:bg-rose-50 text-rose-600 font-medium transition cursor-pointer flex items-center gap-2">
+                                    <i class="fa-solid fa-arrow-right-from-bracket text-rose-500 w-4 text-center"></i>
+                                    <span data-i18n="logoutBtn">Вийти</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <button onclick="logout()" class="bg-slate-100 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 text-slate-600 border border-slate-200 px-3 py-1.5 rounded-xl text-xs font-semibold transition">
-                        <span data-i18n="logoutBtn">Вийти</span>
-                    </button>
                 </div>
             </div>
             </div>
