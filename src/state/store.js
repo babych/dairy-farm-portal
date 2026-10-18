@@ -26,7 +26,7 @@ export const store = reactive({
     currentCowId: null,
     
     // UI Navigation State
-    currentTab: 'herd', // 'herd', 'actions', 'events', 'admin'
+    currentTab: 'animals', // 'animals', 'actions', 'grid', 'meds', 'users', 'metrics', 'logs'
     activeSubFilter: 'Active', // for stats filter
     isLoading: false,
     isOnline: navigator.onLine,

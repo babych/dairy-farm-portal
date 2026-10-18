@@ -460,6 +460,10 @@
 
         // Tabs
         function switchTab(tabId) {
+            if (window.store) {
+                window.store.currentTab = tabId;
+            }
+
             document.querySelectorAll('.nav-tab-btn').forEach(b => {
                 b.classList.remove('active', 'bg-emerald-600', 'text-white', 'shadow-sm');
                 b.classList.add('bg-slate-100', 'text-slate-700');
@@ -480,6 +484,16 @@
             if (targetBtn) {
                 targetBtn.classList.add('active', 'bg-emerald-600', 'text-white', 'shadow-sm');
                 targetBtn.classList.remove('bg-slate-100', 'text-slate-700');
+            }
+
+            // Close / Hide herd status filter tiles and analytics KPI bar when switching to other tabs
+            const herdTilesPanel = document.getElementById('herdStatusTilesCard');
+            if (herdTilesPanel) {
+                if (tabId === 'animals') {
+                    herdTilesPanel.classList.remove('hidden');
+                } else {
+                    herdTilesPanel.classList.add('hidden');
+                }
             }
 
             if (tabId === 'animals') {
