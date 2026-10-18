@@ -150,5 +150,25 @@ export async function handleAuth({ path, method, request, env, db, jsonResponse 
         return jsonResponse(users);
     }
 
+    // 5. GET /api/auth/me - Validate session & return authenticated user profile
+    if (path === "/api/auth/me" && method === "GET") {
+        try {
+            const caller = requireAuth(request);
+            const user = await db.prepare("SELECT id, email, full_name, role, farm_id FROM users WHERE email = ?").bind(caller.email).first();
+            if (!user) {
+                return jsonResponse({ detail: "User not found" }, 401);
+            }
+            return jsonResponse({
+                id: user.id,
+                email: user.email,
+                full_name: user.full_name,
+                role: user.role,
+                farm_id: user.farm_id
+            });
+        } catch (authErr) {
+            return jsonResponse({ detail: authErr.message }, authErr.status || 401);
+        }
+    }
+
     return null;
 }

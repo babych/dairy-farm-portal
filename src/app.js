@@ -149,44 +149,54 @@
                 console.warn("[PWA Offline] Could not reach status endpoint, continuing in offline/cached mode:", netErr);
             }
 
-            // If real token exists, validate or resume session
+            // If real token exists, validate or resume session via dedicated /api/auth/me endpoint
             if (token && token !== "demo_mode_token") {
                 try {
-                    // Try to fetch stats with 4-second timeout
                     const controller = new AbortController();
                     const timeoutId = setTimeout(() => controller.abort(), 4000);
-                    const statsRes = await fetch(`${API_BASE}/api/dashboard/stats`, {
+                    const meRes = await fetch(`${API_BASE}/api/auth/me`, {
                         headers: { "Authorization": `Bearer ${token}` },
                         signal: controller.signal
                     });
                     clearTimeout(timeoutId);
 
-                    if (statsRes.ok) {
-                        currentUser = cachedUser || { role: 'operator', full_name: 'Користувач' };
+                    if (meRes.ok) {
+                        const userData = await meRes.json();
+                        currentUser = userData;
+                        localStorage.setItem("dairy_user", JSON.stringify(currentUser));
+                        if (window.store) {
+                            window.store.setCurrentUser(currentUser);
+                        }
                         showDashboard();
                         return;
-                    } else if (statsRes.status === 401 || statsRes.status === 403) {
-                        // Truly invalid/revoked token: clear session
+                    } else if (meRes.status === 401 || meRes.status === 403) {
+                        // Truly invalid/revoked token: clear session completely
                         localStorage.removeItem("dairy_token");
                         localStorage.removeItem("dairy_user");
                         token = null;
                         currentUser = null;
+                        if (window.store) {
+                            window.store.setToken(null);
+                            window.store.setCurrentUser(null);
+                        }
                     } else {
-                        // 5xx server error or gateway glitch: keep offline dashboard
+                        // 5xx server error or gateway glitch: keep offline dashboard only if cached user exists
                         if (cachedUser) {
                             currentUser = cachedUser;
+                            if (window.store) window.store.setCurrentUser(currentUser);
                             showDashboard();
                             return;
                         }
                     }
                 } catch (e) {
                     // Network timeout or completely offline:
-                    // Crucial fix: DO NOT show login screen or hang on white screen!
-                    // If we have token, resume dashboard immediately using cached data!
-                    console.warn("[PWA Offline] Network slow/offline, resuming dashboard with local cache", e);
-                    currentUser = cachedUser || { role: 'operator', full_name: 'Користувач' };
-                    showDashboard();
-                    return;
+                    console.warn("[PWA Offline] Network slow/offline, checking local cache", e);
+                    if (cachedUser) {
+                        currentUser = cachedUser;
+                        if (window.store) window.store.setCurrentUser(currentUser);
+                        showDashboard();
+                        return;
+                    }
                 }
             }
 
@@ -332,6 +342,10 @@
             sessionStorage.removeItem("dairy_demo_active");
             token = null;
             currentUser = null;
+            if (window.store) {
+                window.store.setToken(null);
+                window.store.setCurrentUser(null);
+            }
             document.getElementById('appDashboard').classList.add('hidden');
             document.getElementById('headerLoginBtn')?.classList.add('hidden');
             document.getElementById('headerUserChip')?.classList.add('hidden');
@@ -2109,7 +2123,7 @@
         }
 
         // Bootstrap
-        document.addEventListener('DOMContentLoaded', () => {
+        function bootstrapApp() {
             const urlParams = new URLSearchParams(window.location.search);
             const paramLang = urlParams.get('lang');
             if (paramLang && (paramLang.toLowerCase() === 'en' || paramLang.toLowerCase() === 'uk')) {
@@ -2165,7 +2179,13 @@
             setupNetworkSyncListeners();
 
             checkAppInit();
-        });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', bootstrapApp);
+        } else {
+            bootstrapApp();
+        }
 
         // --- Offline Outbox & Network Sync Architecture ---
         function getOfflineQueue() {
