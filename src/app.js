@@ -386,6 +386,9 @@
 
             document.getElementById('userNameDisplay').textContent = currentUser?.full_name || "Користувач";
             document.getElementById('userRoleBadge').textContent = isGuest ? "Гість (Демо)" : (currentUser?.role || "operator");
+            if (window.store && currentUser) {
+                window.store.setCurrentUser(currentUser);
+            }
 
             if (currentUser?.role !== 'superadmin') {
                 document.getElementById('usersTabBtn')?.classList.add('hidden');
@@ -2478,4 +2481,14 @@
                     }
                 }
             }, { passive: true });
+
+            // Global Click-Outside handler for Technical Settings Dropdown
+            document.addEventListener('click', (event) => {
+                const container = document.getElementById('techMenuDropdownContainer');
+                if (container && window.store && window.store.techMenuOpen) {
+                    if (!container.contains(event.target)) {
+                        window.store.closeTechMenu();
+                    }
+                }
+            });
         })();

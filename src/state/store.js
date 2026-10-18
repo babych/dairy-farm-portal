@@ -11,7 +11,13 @@ export function getApiBase() {
 export const store = reactive({
     apiBase: getApiBase(),
     token: localStorage.getItem("dairy_token") || null,
-    currentUser: null,
+    currentUser: (() => {
+        try {
+            return JSON.parse(localStorage.getItem("dairy_user") || "null");
+        } catch (e) {
+            return null;
+        }
+    })(),
     currentFarmId: localStorage.getItem("dairy_selected_farm") || null,
     farmsList: [],
     currentCowId: null,
