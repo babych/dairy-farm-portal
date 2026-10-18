@@ -1,5 +1,5 @@
 // DairyERP Service Worker (PWA Offline & Instant Cache)
-const CACHE_VERSION = 'dairy-erp-vd4eb25d-mvdld4hi';
+const CACHE_VERSION = 'dairy-erp-v0ad321a-mvdlkjhj';
 
 const PRECACHE_ASSETS = [
   '/',

@@ -510,10 +510,30 @@
     <!-- 2. MAIN APP DASHBOARD -->
     <div id="appDashboard" class="hidden flex-1 max-w-7xl w-full mx-auto p-3 sm:p-6 space-y-4 sm:space-y-6">
         
-        <!-- Верхня панель користувача & Навігація (Організована поверхами без горизонтального скролу) -->
-        <div class="bg-white border border-slate-200 p-3 sm:p-5 rounded-2xl shadow-sm space-y-3">
-            <!-- 1-й поверх: Селектор ферми, роль та шестерня сервісу -->
-            <div class="flex items-center justify-between gap-2.5 border-b border-slate-100 pb-3">
+        <!-- Верхня панель користувача & Навігація (1 компактний рядок на десктопі, 2 поверхи на телефоні) -->
+        <div class="bg-white border border-slate-200 p-3 sm:p-3.5 rounded-2xl shadow-sm flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2.5 lg:gap-4">
+            
+            <!-- Основні робочі розділи системи (Ліворуч на десктопі, 2-й поверх на телефоні) -->
+            <div class="flex flex-wrap items-center gap-2 order-2 lg:order-1 flex-1 min-w-0">
+                <button id="navTabAnimalsBtn" onclick="switchTab('animals')" class="nav-tab-btn active bg-emerald-600 text-white px-3.5 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shadow-sm">
+                    <i class="fa-solid fa-list-check"></i> <span data-i18n="navAnimals">Поголів'я корів</span>
+                </button>
+                <button id="navTabGridBtn" onclick="switchTab('grid')" class="nav-tab-btn bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-calendar-days text-indigo-600"></i> <span data-i18n="navGrid">Журнал подій стада</span>
+                </button>
+                <button id="navTabActionsBtn" onclick="switchTab('actions')" class="nav-tab-btn bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-bell text-amber-500"></i> <span data-i18n="navActions">Смарт-Алерти & Завдання</span>
+                </button>
+                <button id="navTabMedsBtn" onclick="switchTab('meds')" class="nav-tab-btn bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-pills text-rose-500"></i> <span data-i18n="navMeds">Аптечка & Терміни</span>
+                </button>
+                <button id="navTabUsersBtn" onclick="switchTab('users')" class="nav-tab-btn bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-users-gear text-teal-600"></i> <span data-i18n="navUsers">Користувачі</span>
+                </button>
+            </div>
+
+            <!-- Селектор ферми, роль та шестерня сервісу (Праворуч на десктопі, 1-й поверх на телефоні) -->
+            <div class="flex items-center justify-between lg:justify-end gap-2.5 order-1 lg:order-2 border-b lg:border-b-0 border-slate-100 pb-2.5 lg:pb-0 flex-shrink-0 min-w-0">
                 <!-- Селектор активної ферми з захистом від переповнення контейнера -->
                 <div class="flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-2.5 h-9 rounded-xl flex-1 sm:flex-initial max-w-full sm:max-w-fit min-w-0">
                     <span class="text-[11px] text-slate-500 font-medium whitespace-nowrap" data-i18n="activeFarmLabel">Ферма:</span>
@@ -591,25 +611,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- 2-й поверх: Основні робочі розділи системи -->
-            <div class="flex flex-wrap items-center gap-2 pt-0.5">
-                <button id="navTabAnimalsBtn" onclick="switchTab('animals')" class="nav-tab-btn active bg-emerald-600 text-white px-3.5 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shadow-sm">
-                    <i class="fa-solid fa-list-check"></i> <span data-i18n="navAnimals">Поголів'я корів</span>
-                </button>
-                <button id="navTabGridBtn" onclick="switchTab('grid')" class="nav-tab-btn bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-calendar-days text-indigo-600"></i> <span data-i18n="navGrid">Журнал подій стада</span>
-                </button>
-                <button id="navTabActionsBtn" onclick="switchTab('actions')" class="nav-tab-btn bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-bell text-amber-500"></i> <span data-i18n="navActions">Смарт-Алерти & Завдання</span>
-                </button>
-                <button id="navTabMedsBtn" onclick="switchTab('meds')" class="nav-tab-btn bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-pills text-rose-500"></i> <span data-i18n="navMeds">Аптечка & Терміни</span>
-                </button>
-                <button id="navTabUsersBtn" onclick="switchTab('users')" class="nav-tab-btn bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-users-gear text-teal-600"></i> <span data-i18n="navUsers">Користувачі</span>
-                </button>
             </div>
         </div>
 
