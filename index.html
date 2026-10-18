@@ -1026,16 +1026,16 @@
                         <span id="badgeQuarantine" v-text="(dashboard.actionLists.quarantine_milk || []).length" class="bg-rose-100 text-rose-800 text-xs px-2.5 py-0.5 rounded-full font-bold">0</span>
                     </div>
                     <div id="listQuarantine" class="space-y-2 max-h-72 overflow-y-auto text-xs">
-                        <p v-if="!dashboard.actionLists.quarantine_milk || dashboard.actionLists.quarantine_milk.length === 0" class="p-4 text-center text-slate-400">Немає корів під каренцією</p>
+                        <p v-if="!dashboard.actionLists.quarantine_milk || dashboard.actionLists.quarantine_milk.length === 0" class="p-4 text-center text-slate-400" data-i18n="lblNoQuarantine">Немає корів під каренцією</p>
                         <div v-for="q in dashboard.actionLists.quarantine_milk" :key="q.id" class="flex justify-between items-center p-2.5 bg-rose-50 rounded-xl border border-rose-100">
                             <div>
                                 <span class="font-bold text-slate-900" v-text="'№ ' + q.farm_number"></span>
                                 <span class="text-slate-500" v-text="'(' + (q.official_tag || '') + ')'"></span>
-                                <div class="text-[11px] text-rose-700 mt-0.5" v-text="'Лікування: ' + q.diagnosis + (q.medication ? ' • ' + q.medication : '')"></div>
+                                <div class="text-[11px] text-rose-700 mt-0.5" v-text="(window.t ? window.t('lblTreatmentPrefix') : 'Лікування: ') + q.diagnosis + (q.medication ? ' • ' + q.medication : '')"></div>
                             </div>
                             <div class="text-right">
-                                <span class="font-bold text-rose-700" v-text="'до ' + q.withholding_until"></span>
-                                <div class="text-[10px] text-slate-400" v-text="'залишилось ' + q.days_left + ' дн.'"></div>
+                                <span class="font-bold text-rose-700" v-text="(window.t ? window.t('lblUntilPrefix') : 'до ') + q.withholding_until"></span>
+                                <div class="text-[10px] text-slate-400" v-text="(window.t ? window.t('lblDaysLeftPrefix') : 'залишилось ') + q.days_left + (window.t ? window.t('lblDaysLeftSuffix') : ' дн.')"></div>
                             </div>
                         </div>
                     </div>
@@ -1050,13 +1050,13 @@
                         <span id="badgePregnancy" v-text="(dashboard.actionLists.pregnancy_check || []).length" class="bg-amber-100 text-amber-800 text-xs px-2.5 py-0.5 rounded-full font-bold">0</span>
                     </div>
                     <div id="listPregnancy" class="space-y-2 max-h-72 overflow-y-auto text-xs">
-                        <p v-if="!dashboard.actionLists.pregnancy_check || dashboard.actionLists.pregnancy_check.length === 0" class="p-4 text-center text-slate-400">Немає корів на перевірку</p>
+                        <p v-if="!dashboard.actionLists.pregnancy_check || dashboard.actionLists.pregnancy_check.length === 0" class="p-4 text-center text-slate-400" data-i18n="lblNoPregCheck">Немає корів на перевірку</p>
                         <div v-for="p in dashboard.actionLists.pregnancy_check" :key="p.animal_id" class="flex justify-between items-center p-2.5 bg-amber-50 rounded-xl border border-amber-100">
                             <div>
                                 <span class="font-bold text-slate-900" v-text="'№ ' + p.farm_number"></span>
-                                <div class="text-[11px] text-amber-800 mt-0.5" v-text="'Осіменена: ' + p.insemination_date + ' (' + p.days_since_ins + ' дн. тому)'"></div>
+                                <div class="text-[11px] text-amber-800 mt-0.5" v-text="(window.t ? window.t('lblInseminatedPrefix') : 'Осіменена: ') + p.insemination_date + ' (' + p.days_since_ins + (window.t ? window.t('lblDaysAgoSuffix') : ' дн. тому') + ')'"></div>
                             </div>
-                            <button @click="herd.openCow360(p.animal_id)" :onclick="'openCow360(\'' + p.animal_id + '\')'" class="bg-amber-600 text-white px-2 py-1 rounded-lg text-[10px] font-bold">
+                            <button @click="herd.openCow360(p.animal_id)" :onclick="'openCow360(\'' + p.animal_id + '\')'" class="bg-amber-600 text-white px-2 py-1 rounded-lg text-[10px] font-bold" data-i18n="lblInspectBtn">
                                 Оглянути
                             </button>
                         </div>
@@ -1072,14 +1072,14 @@
                         <span id="badgeDryOff" v-text="(dashboard.actionLists.dry_off_candidates || []).length" class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-0.5 rounded-full font-bold">0</span>
                     </div>
                     <div id="listDryOff" class="space-y-2 max-h-72 overflow-y-auto text-xs">
-                        <p v-if="!dashboard.actionLists.dry_off_candidates || dashboard.actionLists.dry_off_candidates.length === 0" class="p-4 text-center text-slate-400">Немає кандидатів на запуск</p>
+                        <p v-if="!dashboard.actionLists.dry_off_candidates || dashboard.actionLists.dry_off_candidates.length === 0" class="p-4 text-center text-slate-400" data-i18n="lblNoDryOff">Немає кандидатів на запуск</p>
                         <div v-for="c in dashboard.actionLists.dry_off_candidates" :key="c.animal_id" class="flex justify-between items-center p-2.5 bg-emerald-50 rounded-xl border border-emerald-100">
                             <div>
                                 <span class="font-bold text-slate-900" v-text="'№ ' + c.farm_number"></span>
-                                <span class="text-slate-500" v-text="' (лактація ' + (c.lactation || 0) + ')'"></span>
-                                <div class="text-[11px] text-emerald-800 mt-0.5" v-text="'Очікуваний отел: ' + (c.expected_calving || '-')"></div>
+                                <span class="text-slate-500" v-text="' (' + (window.t ? window.t('lblLactationPrefix') : 'лактація ') + (c.lactation || 0) + ')'"></span>
+                                <div class="text-[11px] text-emerald-800 mt-0.5" v-text="(window.t ? window.t('lblExpCalvingPrefix') : 'Очікуваний отел: ') + (c.expected_calving || '-')"></div>
                             </div>
-                            <span class="font-bold text-emerald-700 text-xs" v-text="c.days_to_calving + ' дн.'"></span>
+                            <span class="font-bold text-emerald-700 text-xs" v-text="c.days_to_calving + (window.t ? window.t('lblDaysLeftSuffix') : ' дн.')"></span>
                         </div>
                     </div>
                 </div>
@@ -1093,13 +1093,13 @@
                         <span id="badgeCalvingWatch" v-text="(dashboard.actionLists.calving_watch || []).length" class="bg-blue-100 text-blue-800 text-xs px-2.5 py-0.5 rounded-full font-bold">0</span>
                     </div>
                     <div id="listCalvingWatch" class="space-y-2 max-h-72 overflow-y-auto text-xs">
-                        <p v-if="!dashboard.actionLists.calving_watch || dashboard.actionLists.calving_watch.length === 0" class="p-4 text-center text-slate-400">Немає близьких отелів</p>
+                        <p v-if="!dashboard.actionLists.calving_watch || dashboard.actionLists.calving_watch.length === 0" class="p-4 text-center text-slate-400" data-i18n="lblNoCalvWatch">Немає близьких отелів</p>
                         <div v-for="c in dashboard.actionLists.calving_watch" :key="c.animal_id" class="flex justify-between items-center p-2.5 bg-blue-50 rounded-xl border border-blue-100">
                             <div>
                                 <span class="font-bold text-slate-900" v-text="'№ ' + c.farm_number"></span>
-                                <div class="text-[11px] text-blue-800 mt-0.5" v-text="'Плановий отел: ' + (c.expected_calving || '-')"></div>
+                                <div class="text-[11px] text-blue-800 mt-0.5" v-text="(window.t ? window.t('lblPlanCalvingPrefix') : 'Плановий отел: ') + (c.expected_calving || '-')"></div>
                             </div>
-                            <span class="font-bold text-blue-700 text-xs" v-text="c.days_left + ' дн.'"></span>
+                            <span class="font-bold text-blue-700 text-xs" v-text="c.days_left + (window.t ? window.t('lblDaysLeftSuffix') : ' дн.')"></span>
                         </div>
                     </div>
                 </div>
@@ -1409,27 +1409,27 @@
                     </div>
                     <div class="flex items-center gap-2">
                         <select id="gridWindowFilter" onchange="loadEventGrid()" class="bg-slate-50 border border-slate-300 rounded-xl px-3 py-1.5 text-xs text-slate-700 font-medium">
-                            <optgroup label="Поточні вікна (від сьогодні)">
-                                <option value="7">± 7 днів</option>
-                                <option value="14">± 14 днів</option>
-                                <option value="30">± 30 днів</option>
-                                <option value="60">± 60 днів</option>
+                            <optgroup :label="window.t ? window.t('optGridGroupCurrent') : 'Поточні вікна (від сьогодні)'">
+                                <option value="7" data-i18n="optGrid7d">± 7 днів</option>
+                                <option value="14" data-i18n="optGrid14d">± 14 днів</option>
+                                <option value="30" data-i18n="optGrid30d">± 30 днів</option>
+                                <option value="60" data-i18n="optGrid60d">± 60 днів</option>
                             </optgroup>
-                            <optgroup label="Історичні роки (Uniform-Agri)">
-                                <option value="year-2026" selected>Рік 2026 (Поточний рік)</option>
-                                <option value="year-2025">Рік 2025</option>
-                                <option value="year-2024">Рік 2024</option>
-                                <option value="year-2023">Рік 2023</option>
-                                <option value="year-2022">Рік 2022</option>
-                                <option value="all">Вся історія стада</option>
+                            <optgroup :label="window.t ? window.t('optGridGroupHistory') : 'Історичні роки (Uniform-Agri)'">
+                                <option value="year-2026" selected data-i18n="optGridYear2026">Рік 2026 (Поточний рік)</option>
+                                <option value="year-2025" data-i18n="optGridYear2025">Рік 2025</option>
+                                <option value="year-2024" data-i18n="optGridYear2024">Рік 2024</option>
+                                <option value="year-2023" data-i18n="optGridYear2023">Рік 2023</option>
+                                <option value="year-2022" data-i18n="optGridYear2022">Рік 2022</option>
+                                <option value="all" data-i18n="optGridAllHistory">Вся історія стада</option>
                             </optgroup>
                         </select>
 
                         <select id="gridCatFilter" onchange="loadEventGrid()" class="bg-slate-50 border border-slate-300 rounded-xl px-3 py-1.5 text-xs text-slate-700">
-                            <option value="ALL">Всі категорії</option>
-                            <option value="CALVING_PLAN">Очікуваний отел</option>
-                            <option value="HEALTH">Каренція / Лікування</option>
-                            <option value="REPRODUCTION">Осіменіння / Охота</option>
+                            <option value="ALL" data-i18n="catAllEvents">Всі категорії</option>
+                            <option value="CALVING_PLAN" data-i18n="catExpectedCalving">Очікуваний отел</option>
+                            <option value="HEALTH" data-i18n="catHealth">Каренція / Лікування</option>
+                            <option value="REPRODUCTION" data-i18n="catInsemHeat">Осіменіння / Охота</option>
                         </select>
                         <button onclick="loadEventGrid()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-xl text-xs font-semibold">
                             <i class="fa-solid fa-arrows-rotate"></i>
@@ -1453,16 +1453,16 @@
                         </thead>
                         <tbody id="gridTableBody" class="divide-y divide-slate-100 text-slate-700">
                             <tr v-if="!store.eventsList || store.eventsList.length === 0">
-                                <td colspan="7" class="p-8 text-center text-slate-400">У обраному фільтрі подій не знайдено або завантаження...</td>
+                                <td colspan="7" class="p-8 text-center text-slate-400" data-i18n="lblNoGridEvents">У обраному фільтрі подій не знайдено або завантаження...</td>
                             </tr>
                             <tr v-for="e in store.eventsList" :key="e.id || (e.animal_id + '-' + e.event_date)" class="hover:bg-slate-50/80 transition">
                                 <td class="p-3 font-bold text-slate-900" v-text="e.start_date || e.event_date || '-'"></td>
                                 <td class="p-3 font-extrabold text-emerald-700" v-text="e.farm_number || '-'"></td>
                                 <td class="p-3 text-slate-500 font-mono" v-text="e.official_tag || '-'"></td>
                                 <td class="p-3">
-                                    <span v-if="e.category === 'CALVING_PLAN'" class="bg-amber-100 text-amber-800 font-semibold px-2 py-0.5 rounded text-[10px]">Плановий отел</span>
-                                    <span v-else-if="e.category === 'HEALTH'" class="bg-rose-100 text-rose-800 font-semibold px-2 py-0.5 rounded text-[10px]">Каренція / Лікування</span>
-                                    <span v-else-if="e.category === 'REPRODUCTION'" class="bg-indigo-100 text-indigo-800 font-semibold px-2 py-0.5 rounded text-[10px]">Відтворення</span>
+                                    <span v-if="e.category === 'CALVING_PLAN'" class="bg-amber-100 text-amber-800 font-semibold px-2 py-0.5 rounded text-[10px]" v-text="window.t ? window.t('catCalvingPlan') : 'Плановий отел'"></span>
+                                    <span v-else-if="e.category === 'HEALTH'" class="bg-rose-100 text-rose-800 font-semibold px-2 py-0.5 rounded text-[10px]" v-text="window.t ? window.t('catHealth') : 'Каренція / Лікування'"></span>
+                                    <span v-else-if="e.category === 'REPRODUCTION'" class="bg-indigo-100 text-indigo-800 font-semibold px-2 py-0.5 rounded text-[10px]" v-text="window.t ? window.t('catReproduction') : 'Відтворення'"></span>
                                     <span v-else class="bg-slate-100 text-slate-600 font-medium px-2 py-0.5 rounded text-[10px]" v-text="e.category || '-'"></span>
                                 </td>
                                 <td class="p-3">
@@ -1470,10 +1470,10 @@
                                     <div class="text-[11px] text-slate-500" v-text="e.details || e.event_status || '-'"></div>
                                 </td>
                                 <td class="p-3">
-                                    <span v-if="e.status === 'ACTIVE_WITHHOLDING'" class="bg-rose-50 text-rose-700 border border-rose-200 font-bold px-2 py-0.5 rounded text-[10px] animate-pulse">БРАКЕРАЖ МОЛОКА</span>
-                                    <span v-else-if="e.status === 'DUE_SOON'" class="bg-amber-50 text-amber-700 border border-amber-200 font-bold px-2 py-0.5 rounded text-[10px]">Очікується отел</span>
-                                    <span v-else-if="e.status === 'OVERDUE'" class="bg-red-50 text-red-700 border border-red-200 font-bold px-2 py-0.5 rounded text-[10px]">Прострочено</span>
-                                    <span v-else class="bg-slate-100 text-slate-600 font-medium px-2 py-0.5 rounded text-[10px]">Виконано</span>
+                                    <span v-if="e.status === 'ACTIVE_WITHHOLDING'" class="bg-rose-50 text-rose-700 border border-rose-200 font-bold px-2 py-0.5 rounded text-[10px] animate-pulse" v-text="window.t ? window.t('stActiveWithholding') : 'БРАКЕРАЖ МОЛОКА'"></span>
+                                    <span v-else-if="e.status === 'DUE_SOON'" class="bg-amber-50 text-amber-700 border border-amber-200 font-bold px-2 py-0.5 rounded text-[10px]" v-text="window.t ? window.t('stDueSoon') : 'Очікується отел'"></span>
+                                    <span v-else-if="e.status === 'OVERDUE'" class="bg-red-50 text-red-700 border border-red-200 font-bold px-2 py-0.5 rounded text-[10px]" v-text="window.t ? window.t('stOverdue') : 'Прострочено'"></span>
+                                    <span v-else class="bg-slate-100 text-slate-600 font-medium px-2 py-0.5 rounded text-[10px]" v-text="window.t ? window.t('stCompleted') : 'Виконано'"></span>
                                 </td>
                                 <td class="p-3 text-right">
                                     <button :onclick="'openCow360(\'' + e.animal_id + '\')'" class="text-emerald-600 hover:text-emerald-800 font-semibold text-xs bg-emerald-50 hover:bg-emerald-100 px-2 py-1 rounded-lg">360°</button>
@@ -2358,9 +2358,9 @@
                     <div class="flex justify-between items-center">
                         <span class="font-bold text-slate-800 text-sm" data-i18n="chartEciTrendTitle">Expected Calving Interval (ECI) Trend</span>
                         <div class="flex items-center gap-3 text-[10px]">
-                            <span class="flex items-center gap-1 text-slate-600"><span class="w-2.5 h-0.5 bg-indigo-600 inline-block"></span> ECI (днів)</span>
-                            <span class="flex items-center gap-1 text-rose-600"><span class="w-2.5 h-0.5 bg-rose-500 inline-block"></span> Верхній ліміт (415 дн.)</span>
-                            <span class="flex items-center gap-1 text-emerald-600"><span class="w-2.5 h-0.5 bg-emerald-500 inline-block"></span> Оптимум (380 дн.)</span>
+                            <span class="flex items-center gap-1 text-slate-600"><span class="w-2.5 h-0.5 bg-indigo-600 inline-block"></span> <span data-i18n="fertLegendEci">ECI (днів)</span></span>
+                            <span class="flex items-center gap-1 text-rose-600"><span class="w-2.5 h-0.5 bg-rose-500 inline-block"></span> <span data-i18n="fertLegendUpperLimit">Верхній ліміт (415 дн.)</span></span>
+                            <span class="flex items-center gap-1 text-emerald-600"><span class="w-2.5 h-0.5 bg-emerald-500 inline-block"></span> <span data-i18n="fertLegendOptimum">Оптимум (380 дн.)</span></span>
                         </div>
                     </div>
                     <!-- SVG Chart -->
@@ -2400,47 +2400,47 @@
 
                 <!-- Summary Breakdown Table -->
                 <div class="space-y-2">
-                    <h4 class="font-bold text-slate-800 text-sm">Зведена таблиця параметрів відтворення</h4>
+                    <h4 class="font-bold text-slate-800 text-sm" data-i18n="fertSummaryTitle">Зведена таблиця параметрів відтворення</h4>
                     <div class="overflow-x-auto rounded-xl border border-slate-200">
                         <table class="w-full text-left border-collapse text-xs">
                             <thead>
                                 <tr class="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
-                                    <th class="p-2.5">Показник</th>
-                                    <th class="p-2.5">Поточне значення</th>
-                                    <th class="p-2.5">Цільовий орієнтир</th>
-                                    <th class="p-2.5">Статус</th>
+                                    <th class="p-2.5" data-i18n="thFertIndicator">Показник</th>
+                                    <th class="p-2.5" data-i18n="thFertCurrentVal">Поточне значення</th>
+                                    <th class="p-2.5" data-i18n="thFertTarget">Цільовий орієнтир</th>
+                                    <th class="p-2.5" data-i18n="thFertStatus">Статус</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-100 text-slate-700">
                                 <tr class="hover:bg-slate-50">
-                                    <td class="p-2.5 font-bold">Conception Rate (CR) — заплідненість</td>
+                                    <td class="p-2.5 font-bold" data-i18n="fertIndicatorCr">Conception Rate (CR) — заплідненість</td>
                                     <td class="p-2.5 font-black text-emerald-600">38.5%</td>
                                     <td class="p-2.5 text-slate-500">> 35%</td>
-                                    <td class="p-2.5"><span class="bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded text-[10px]">В нормі</span></td>
+                                    <td class="p-2.5"><span class="bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded text-[10px]" data-i18n="fertStatusNormal">В нормі</span></td>
                                 </tr>
                                 <tr class="hover:bg-slate-50">
-                                    <td class="p-2.5 font-bold">Pregnancy Rate (PR) — рівень тільності</td>
+                                    <td class="p-2.5 font-bold" data-i18n="fertIndicatorPr">Pregnancy Rate (PR) — рівень тільності</td>
                                     <td class="p-2.5 font-black text-emerald-600">21.5%</td>
                                     <td class="p-2.5 text-slate-500">> 20%</td>
-                                    <td class="p-2.5"><span class="bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded text-[10px]">Відмінно</span></td>
+                                    <td class="p-2.5"><span class="bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded text-[10px]" data-i18n="fertStatusExcellent">Відмінно</span></td>
                                 </tr>
                                 <tr class="hover:bg-slate-50">
-                                    <td class="p-2.5 font-bold">Insemination Rate (IR) — охоплення осіменінням</td>
+                                    <td class="p-2.5 font-bold" data-i18n="fertIndicatorIr">Insemination Rate (IR) — охоплення осіменінням</td>
                                     <td class="p-2.5 font-black text-indigo-600">58.5%</td>
                                     <td class="p-2.5 text-slate-500">> 55%</td>
-                                    <td class="p-2.5"><span class="bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded text-[10px]">Стабільно</span></td>
+                                    <td class="p-2.5"><span class="bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded text-[10px]" data-i18n="fertStatusStable">Стабільно</span></td>
                                 </tr>
                                 <tr class="hover:bg-slate-50">
-                                    <td class="p-2.5 font-bold">Expected Calving Interval (ECI) — міжотельний</td>
-                                    <td class="p-2.5 font-black text-slate-800">412 днів</td>
-                                    <td class="p-2.5 text-slate-500">380-410 днів</td>
-                                    <td class="p-2.5"><span class="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded text-[10px]">Під наглядом</span></td>
+                                    <td class="p-2.5 font-bold" data-i18n="fertIndicatorEci">Expected Calving Interval (ECI) — міжотельний</td>
+                                    <td class="p-2.5 font-black text-slate-800">412<span data-i18n="fertDaysSuffix"> днів</span></td>
+                                    <td class="p-2.5 text-slate-500">380-410<span data-i18n="fertDaysSuffix"> днів</span></td>
+                                    <td class="p-2.5"><span class="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded text-[10px]" data-i18n="fertStatusMonitored">Під наглядом</span></td>
                                 </tr>
                                 <tr class="hover:bg-slate-50">
-                                    <td class="p-2.5 font-bold">Average DIM — дні доїння</td>
-                                    <td class="p-2.5 font-black text-slate-800">168 днів</td>
-                                    <td class="p-2.5 text-slate-500">160-180 днів</td>
-                                    <td class="p-2.5"><span class="bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded text-[10px]">Оптимум</span></td>
+                                    <td class="p-2.5 font-bold" data-i18n="fertIndicatorDim">Average DIM — дні доїння</td>
+                                    <td class="p-2.5 font-black text-slate-800">168<span data-i18n="fertDaysSuffix"> днів</span></td>
+                                    <td class="p-2.5 text-slate-500">160-180<span data-i18n="fertDaysSuffix"> днів</span></td>
+                                    <td class="p-2.5"><span class="bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded text-[10px]" data-i18n="fertStatusOptimum">Оптимум</span></td>
                                 </tr>
                             </tbody>
                         </table>

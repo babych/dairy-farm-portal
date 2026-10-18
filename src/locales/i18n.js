@@ -63,4 +63,21 @@ export function applyLanguage(lang) {
         const k = el.getAttribute('data-i18n-ph');
         if (dict[k]) el.setAttribute('placeholder', dict[k]);
     });
+
+    // Update optgroup labels if any
+    const gridWindowFilter = /** @type {HTMLSelectElement | null} */ (document.getElementById('gridWindowFilter'));
+    if (gridWindowFilter) {
+        const optgroups = gridWindowFilter.querySelectorAll('optgroup');
+        if (optgroups[0]) optgroups[0].label = dict.optGridGroupCurrent || optgroups[0].label;
+        if (optgroups[1]) optgroups[1].label = dict.optGridGroupHistory || optgroups[1].label;
+    }
+
+    // Trigger reactive re-render for petite-vue by re-assigning action lists or reloading grid if loaded
+    const win = /** @type {any} */ (typeof window !== 'undefined' ? window : {});
+    if (win.dashboardModule && win.dashboardModule.actionLists) {
+        win.dashboardModule.actionLists = { ...win.dashboardModule.actionLists };
+    }
+    if (win.store && win.store.eventsList) {
+        win.store.eventsList = [ ...win.store.eventsList ];
+    }
 }
