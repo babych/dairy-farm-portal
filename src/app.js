@@ -1237,26 +1237,32 @@
             };
 
             try {
+                const activeFarmId = (window.store && window.store.currentFarmId) || localStorage.getItem("dairy_selected_farm") || null;
+                const endpoint = activeFarmId ? `/api/animals?farm_id=${encodeURIComponent(activeFarmId)}` : '/api/animals';
+
                 if (!navigator.onLine && window.queueOfflineMutation) {
-                    await window.queueOfflineMutation('/api/animals', 'POST', payload);
+                    await window.queueOfflineMutation(endpoint, 'POST', payload);
                     closeModal('addCowModal');
                     showToast("Збережено в чергу офлайн!", "info");
                     return;
                 }
 
-                const res = await fetch(`${API_BASE}/api/animals`, {
+                const res = await fetch(`${API_BASE}${endpoint}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                     body: JSON.stringify(payload)
                 });
-                if (!res.ok) throw new Error("Помилка створення");
+                const resData = await res.json().catch(() => null);
+                if (!res.ok) throw new Error(resData?.detail || resData?.error || "Помилка створення корови");
                 showToast("Корову додано в базу!");
                 closeModal('addCowModal');
                 loadStats();
                 loadAnimals();
             } catch (e) {
                 if (!navigator.onLine && window.queueOfflineMutation) {
-                    await window.queueOfflineMutation('/api/animals', 'POST', payload);
+                    const activeFarmId = (window.store && window.store.currentFarmId) || localStorage.getItem("dairy_selected_farm") || null;
+                    const endpoint = activeFarmId ? `/api/animals?farm_id=${encodeURIComponent(activeFarmId)}` : '/api/animals';
+                    await window.queueOfflineMutation(endpoint, 'POST', payload);
                     closeModal('addCowModal');
                     showToast("Збережено в чергу офлайн!", "info");
                 } else {

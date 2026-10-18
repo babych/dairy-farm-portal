@@ -57,7 +57,13 @@ export function applyLanguage(lang) {
     const dict = dictionaries[lang] || dictionaries.uk;
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const k = el.getAttribute('data-i18n');
-        if (dict[k]) el.textContent = dict[k];
+        if (dict[k]) {
+            if (dict[k].includes('<')) {
+                el.innerHTML = dict[k];
+            } else {
+                el.textContent = dict[k];
+            }
+        }
     });
     document.querySelectorAll('[data-i18n-ph]').forEach(el => {
         const k = el.getAttribute('data-i18n-ph');

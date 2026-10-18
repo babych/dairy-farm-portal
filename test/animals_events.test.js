@@ -313,4 +313,123 @@ describe('Animals API & Clinical Events Suite', () => {
         assert.strictEqual(res.status, 404);
         assert.strictEqual(res.data.detail, 'Animal not found');
     });
+
+    it('successfully updates animal record via PUT /api/animals/:id', async () => {
+        let updateExecuted = false;
+        let selectedId = null;
+
+        const mockAnimal = {
+            id: 'cow-update-1',
+            farm_id: 'farm-1',
+            farm_number: '101',
+            official_tag: 'UA0000000101',
+            name: 'Зірка',
+            current_status: 'Active',
+            lactation_number: 2,
+            birth_date: '2022-01-15',
+            last_calving_date: '2026-05-10',
+            expected_calving_date: null
+        };
+
+        const mockDb = {
+            prepare(sql) {
+                return {
+                    bind(...params) {
+                        return {
+                            async first() {
+                                if (sql.includes('SELECT * FROM animals WHERE id = ?')) {
+                                    selectedId = params[0];
+                                    return mockAnimal;
+                                }
+                                return null;
+                            },
+                            async run() {
+                                if (sql.includes('UPDATE animals SET')) {
+                                    updateExecuted = true;
+                                }
+                                return { success: true };
+                            }
+                        };
+                    }
+                };
+            }
+        };
+
+        const jsonResponse = (data, status = 200) => ({ status, data });
+        const reqBody = {
+            farm_number: '101',
+            official_tag: 'UA0000000101',
+            name: 'Зірка Нова',
+            current_status: 'Pregnant',
+            lactation_number: 2,
+            birth_date: '2022-01-15',
+            last_calving_date: '2026-05-10',
+            expected_calving_date: '2027-02-14'
+        };
+
+        const res = await handleAnimals({
+            path: '/api/animals/cow-update-1',
+            method: 'PUT',
+            request: { json: async () => reqBody },
+            url: new URL('https://test.local/api/animals/cow-update-1'),
+            db: mockDb,
+            jsonResponse,
+            getActiveFarmId: () => 'farm-1'
+        });
+
+        assert.strictEqual(res.status, 200);
+        assert.strictEqual(res.data.status, 'success');
+        assert.strictEqual(updateExecuted, true);
+    });
+
+    it('successfully creates animal record via POST /api/animals', async () => {
+        let insertExecuted = false;
+
+        const mockDb = {
+            prepare(sql) {
+                return {
+                    bind(...params) {
+                        return {
+                            async first() {
+                                if (sql.includes("SELECT id FROM farms")) {
+                                    return { id: 'farm-1' };
+                                }
+                                return null;
+                            },
+                            async run() {
+                                if (sql.includes('INSERT INTO animals')) {
+                                    insertExecuted = true;
+                                }
+                                return { success: true };
+                            }
+                        };
+                    }
+                };
+            }
+        };
+
+        const jsonResponse = (data, status = 200) => ({ status, data });
+        const reqBody = {
+            farm_number: '555',
+            official_tag: 'UA1234567890',
+            name: 'Красуня',
+            current_status: 'Active',
+            lactation_number: 1
+        };
+
+        const res = await handleAnimals({
+            path: '/api/animals',
+            method: 'POST',
+            request: { json: async () => reqBody },
+            url: new URL('https://test.local/api/animals?farm_id=farm-1'),
+            db: mockDb,
+            jsonResponse,
+            getActiveFarmId: () => 'farm-1'
+        });
+
+        assert.strictEqual(res.status, 201);
+        assert.strictEqual(res.data.status, 'success');
+        assert.strictEqual(res.data.inserted_count, 1);
+        assert.strictEqual(insertExecuted, true);
+    });
 });

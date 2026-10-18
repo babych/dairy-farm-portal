@@ -355,10 +355,12 @@ export const en = {
     installModalTitle: "Installation & Offline Usage",
     installModalSubtitle: "Fast offline access directly in the cattle barn",
     installModalDesc: "DairyERP runs as a Progressive Web App (PWA). All pages and livestock catalogs are cached locally on your device, ensuring instant loads even under weak 3G/Edge barn coverage.",
+    installQrTitle: "Quick phone transfer",
+    installQrSubtitle: "Point your smartphone camera at this QR code to open the portal and install a shortcut to your home screen in 5 seconds.",
     installModalHowTo: "How to add an app shortcut:",
-    installModalStepAndroid: "Android / Chrome: Tap 'Install' below or tap the browser menu (3 dots) -> 'Add to Home screen'.",
-    installModalStepIos: "iPhone / Safari: Tap the 'Share' icon (square with arrow) -> 'Add to Home Screen'.",
-    installModalStepDesktop: "Desktop / PC: Click the install icon in your browser address bar (Chrome / Edge).",
+    installModalStepAndroid: "<b>Android / Chrome:</b> Tap \"Install\" below or open browser menu (3 dots) → \"Add to Home screen\".",
+    installModalStepIos: "<b>iPhone / Safari:</b> Tap the \"Share\" icon (square with arrow at the bottom) → \"Add to Home Screen\".",
+    installModalStepDesktop: "<b>Desktop / PC:</b> Click the install icon in your browser address bar (Chrome / Edge).",
     installModalBtnInstall: "Install Now",
 
     // Profile Modal

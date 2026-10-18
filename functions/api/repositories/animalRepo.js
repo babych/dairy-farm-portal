@@ -79,11 +79,27 @@ export class AnimalRepository {
      */
     static async batchInsert(db, items, defaultFarmId = null) {
         let inserted = 0;
-        const fallbackFarmId = defaultFarmId || (await db.prepare("SELECT id FROM farms LIMIT 1").first())?.id;
+        let fallbackFarmId = defaultFarmId;
+        if (!fallbackFarmId) {
+            const queryFirst = async (sql) => {
+                const prep = db.prepare(sql);
+                if (typeof prep.first === 'function') return prep.first();
+                if (typeof prep.bind === 'function') {
+                    const bound = prep.bind();
+                    if (typeof bound.first === 'function') return bound.first();
+                }
+                return null;
+            };
+            const defaultFarm = await queryFirst("SELECT id FROM farms WHERE code = 'DEMO_FARM' OR owner_email = 'demo@dairy-erp.farm' OR owner_email IS NULL ORDER BY created_at ASC LIMIT 1");
+            fallbackFarmId = defaultFarm?.id || (await queryFirst("SELECT id FROM farms LIMIT 1"))?.id;
+        }
 
         for (const item of items) {
             const id = item.id || crypto.randomUUID();
             const farmId = item.farm_id || fallbackFarmId;
+            if (!farmId) {
+                throw new Error("No active farm found to associate with animal");
+            }
             await db.prepare(`
                 INSERT INTO animals (
                     id, farm_id, farm_number, official_tag, name, birth_date,
@@ -98,6 +114,37 @@ export class AnimalRepository {
             inserted++;
         }
         return inserted;
+    }
+
+    /**
+     * Update animal details.
+     */
+    static async updateAnimal(db, animalId, updates) {
+        await db.prepare(`
+            UPDATE animals SET
+                farm_number = ?,
+                official_tag = ?,
+                name = ?,
+                birth_date = ?,
+                lactation_number = ?,
+                current_status = ?,
+                last_calving_date = ?,
+                expected_calving_date = ?,
+                updated_at = datetime('now')
+            WHERE id = ?
+        `).bind(
+            updates.farm_number || "0",
+            updates.official_tag || null,
+            updates.name || null,
+            updates.birth_date || null,
+            updates.lactation_number || 0,
+            updates.current_status || "Active",
+            updates.last_calving_date || null,
+            updates.expected_calving_date || null,
+            animalId
+        ).run();
+
+        return this.getById(db, animalId);
     }
 
     /**

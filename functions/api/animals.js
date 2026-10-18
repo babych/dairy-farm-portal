@@ -45,7 +45,25 @@ export async function handleAnimals({ path, method, request, url, db, jsonRespon
         return jsonResponse({ status: "success", inserted_count: inserted }, 201);
     }
 
-    // 3. DELETE /api/animals/:id
+    // 3. PUT /api/animals/:id (Update existing animal record)
+    if (path.match(/^\/api\/animals\/[^\/]+$/) && method === "PUT") {
+        const animalId = path.split("/")[3];
+        const existing = await AnimalRepository.getById(db, animalId);
+        if (!existing) {
+            return jsonResponse({ detail: "Animal not found" }, 404);
+        }
+
+        const body = await request.json();
+        const v = validateAnimalInput(body);
+        if (!v.isValid) {
+            return jsonResponse({ detail: `Validation failed: ${v.errors.join(', ')}` }, 400);
+        }
+
+        const updated = await AnimalRepository.updateAnimal(db, animalId, v.sanitized);
+        return jsonResponse({ status: "success", animal: updated });
+    }
+
+    // 4. DELETE /api/animals/:id
     if (path.startsWith("/api/animals/") && method === "DELETE") {
         const animalId = path.split("/")[3];
         await AnimalRepository.deleteCascade(db, animalId);
