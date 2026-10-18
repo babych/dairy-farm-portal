@@ -34,7 +34,7 @@ export async function handleFarms({ path, method, request, url, env, db, jsonRes
         const farmId = path.split("/")[4];
         const farm = await FarmRepository.getById(db, farmId);
         if (!farm) {
-            return jsonResponse({ detail: "Ферму не знайдено" }, 404);
+            return jsonResponse({ detail: "Farm not found" }, 404);
         }
 
         const auth = request.headers.get("authorization") || "";

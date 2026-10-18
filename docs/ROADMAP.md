@@ -1,7 +1,18 @@
 # 📋 DairyERP Active Roadmap & Backlog
 
-Поточний реліз: **v2.5.3** (гілка `dev`)  
+Поточний реліз: **v2.5.4** (гілка `dev`)  
 Стан тестів: **52/52 pass** | TypeScript: **0 errors**
+
+---
+
+## ✅ Нещодавно виконано (Completed in Current Sprint)
+- [x] **Єдине джерело правди для статусів тварин (Status Domain Model):**
+  - Створено централізований реєстр `functions/api/models/animalStatuses.js` (`ANIMAL_STATUSES`, `VALID_STATUS_IDS`, `getStatusBadgeClass`).
+  - Підключено до бекенд-валідації (`validation.js`) та фронтенд-модуля (`src/modules/herd.js`).
+  - Додано `data-i18n` до всіх випадних списків вибору статусів у модалках (`newCowStatus`, `mEditStatus`).
+- [x] **Чистка SQL-запитів та локалізація (l10n/i18n):**
+  - Видалено сирий український текст з SQL Event Grid у `functions/api/dashboard.js`, замінено на стандартні enum-коди (`TREATMENT`, `CALVING_PLAN`, `PREGNANT_DUE`).
+  - Стандартизовано тексти помилок API-ендпоінтів та додано ключі перекладів у `uk.js` та `en.js`.
 
 ---
 

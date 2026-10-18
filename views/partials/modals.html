@@ -34,14 +34,18 @@
                         <input id="mEditName" class="font-medium text-slate-900 bg-white border border-slate-300 rounded px-2 py-1 mt-0.5 w-full">
                     </div>
                     <div>
-                        <span class="text-slate-500 block">Статус:</span>
+                        <span class="text-slate-500 block" data-i18n="thStatus">Статус:</span>
                         <select id="mEditStatus" class="font-bold bg-white border border-slate-300 rounded px-2 py-1 mt-0.5 w-full">
-                            <option value="Active">Active</option>
-                            <option value="Pregnant">Pregnant</option>
-                            <option value="Dry">Dry</option>
-                            <option value="Inseminated">Inseminated</option>
-                            <option value="Fresh">Fresh</option>
-                            <option value="Culled">Culled</option>
+                            <option value="Active" data-i18n="optActive">Active</option>
+                            <option value="Heifer" data-i18n="optHeifer">Heifer</option>
+                            <option value="Open" data-i18n="optOpen">Open</option>
+                            <option value="Inseminated" data-i18n="optInseminated">Inseminated</option>
+                            <option value="Pregnant" data-i18n="optPregnant">Pregnant</option>
+                            <option value="Dry" data-i18n="optDry">Dry</option>
+                            <option value="Fresh" data-i18n="optFresh">Fresh</option>
+                            <option value="Sick" data-i18n="optSick">Sick</option>
+                            <option value="Quarantine" data-i18n="optQuarantine">Quarantine</option>
+                            <option value="Culled" data-i18n="optCulled">Culled</option>
                         </select>
                     </div>
                     <div>
@@ -101,43 +105,43 @@
     <div id="reproModal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
             <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                <h3 class="font-bold text-slate-900 text-sm">Подія відтворення</h3>
+                <h3 class="font-bold text-slate-900 text-sm" data-i18n="reproModalTitle">Подія відтворення</h3>
                 <button onclick="closeModal('reproModal')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <form onsubmit="submitReproEvent(event)" class="space-y-3 text-xs">
                 <div>
-                    <label class="block font-semibold text-slate-700 mb-1">Тип події</label>
+                    <label class="block font-semibold text-slate-700 mb-1" data-i18n="reproTypeLabel">Тип події</label>
                     <select id="reproType" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900">
-                        <option value="INSEMINATION">Осіменіння (Insemination)</option>
-                        <option value="PREGNANCY_CHECK">Перевірка тільності (Pregnancy Check)</option>
-                        <option value="HEAT">Охота (Heat / Standing)</option>
-                        <option value="CALVING">Отел (Calving)</option>
-                        <option value="DRY_OFF">Запуск (Dry-off)</option>
+                        <option value="INSEMINATION" data-i18n="reproOptInsem">Осіменіння (Insemination)</option>
+                        <option value="PREGNANCY_CHECK" data-i18n="reproOptCheck">Перевірка тільності (Pregnancy Check)</option>
+                        <option value="HEAT" data-i18n="reproOptHeat">Охота (Heat / Standing)</option>
+                        <option value="CALVING" data-i18n="reproOptCalving">Отел (Calving)</option>
+                        <option value="DRY_OFF" data-i18n="reproOptDryOff">Запуск (Dry-off)</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block font-semibold text-slate-700 mb-1">Дата події</label>
+                    <label class="block font-semibold text-slate-700 mb-1" data-i18n="reproDateLabel">Дата події</label>
                     <input id="reproDate" type="date" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900">
                 </div>
                 <div>
-                    <label class="block font-semibold text-slate-700 mb-1">Код бугая / Спермодоза</label>
+                    <label class="block font-semibold text-slate-700 mb-1" data-i18n="reproBullLabel">Код бугая / Спермодоза</label>
                     <input id="reproBull" type="text" placeholder="UA 10293847 БЕТХОВЕН" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900">
                 </div>
                 <div>
-                    <label class="block font-semibold text-slate-700 mb-1">Результат огляду</label>
+                    <label class="block font-semibold text-slate-700 mb-1" data-i18n="reproResultLabel">Результат огляду</label>
                     <select id="reproResult" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900">
-                        <option value="">Не застосовується</option>
-                        <option value="POSITIVE">Тільна (Positive)</option>
-                        <option value="NEGATIVE">Ялова / Пуста (Negative)</option>
-                        <option value="SUSPICIOUS">Сумнівна (Suspicious)</option>
-                        <option value="TWINS">Двійня (Twins)</option>
+                        <option value="" data-i18n="reproResNA">Не застосовується</option>
+                        <option value="POSITIVE" data-i18n="reproResPos">Тільна (Positive)</option>
+                        <option value="NEGATIVE" data-i18n="reproResNeg">Ялова / Пуста (Negative)</option>
+                        <option value="SUSPICIOUS" data-i18n="reproResSusp">Сумнівна (Suspicious)</option>
+                        <option value="TWINS" data-i18n="reproResTwins">Двійня (Twins)</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block font-semibold text-slate-700 mb-1">Примітки</label>
+                    <label class="block font-semibold text-slate-700 mb-1" data-i18n="reproNotesLabel">Примітки</label>
                     <textarea id="reproNotes" rows="2" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900"></textarea>
                 </div>
-                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-xl shadow-sm">
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-xl shadow-sm" data-i18n="reproSubmitBtn">
                     Зафіксувати подію
                 </button>
             </form>
@@ -311,11 +315,18 @@
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="block font-semibold text-slate-700 mb-1">Статус</label>
+                        <label class="block font-semibold text-slate-700 mb-1" data-i18n="thStatus">Статус</label>
                         <select id="newCowStatus" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900">
-                            <option value="Active">Active (Дійна)</option>
-                            <option value="Pregnant">Pregnant (Тільна)</option>
-                            <option value="Dry">Dry (Сухостій)</option>
+                            <option value="Active" data-i18n="optActive">Active</option>
+                            <option value="Heifer" data-i18n="optHeifer">Heifer</option>
+                            <option value="Open" data-i18n="optOpen">Open</option>
+                            <option value="Inseminated" data-i18n="optInseminated">Inseminated</option>
+                            <option value="Pregnant" data-i18n="optPregnant">Pregnant</option>
+                            <option value="Dry" data-i18n="optDry">Dry</option>
+                            <option value="Fresh" data-i18n="optFresh">Fresh</option>
+                            <option value="Sick" data-i18n="optSick">Sick</option>
+                            <option value="Quarantine" data-i18n="optQuarantine">Quarantine</option>
+                            <option value="Culled" data-i18n="optCulled">Culled</option>
                         </select>
                     </div>
                     <div>

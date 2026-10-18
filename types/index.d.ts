@@ -6,7 +6,7 @@ export interface Animal {
     farm_number: string;
     official_tag?: string | null;
     name?: string | null;
-    current_status: 'Active' | 'Pregnant' | 'Dry' | 'Inseminated' | 'Fresh' | 'Quarantine' | 'Culled';
+    current_status: 'Active' | 'Pregnant' | 'Dry' | 'Inseminated' | 'Fresh' | 'Quarantine' | 'Heifer' | 'Open' | 'Sick' | 'Culled';
     lactation_number?: number | null;
     birth_date?: string | null;
     last_calving_date?: string | null;

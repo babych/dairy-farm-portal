@@ -26,10 +26,13 @@ export const en = {
     cowSearchPlaceholder: "Search by number, ear tag or name...",
     optAllStatuses: "All Statuses",
     optActive: "Active (Lactating)",
+    optHeifer: "Heifer (Young Cow)",
+    optOpen: "Open (Ready to Breed)",
     optPregnant: "Pregnant (Confirmed)",
     optDry: "Dry (Dry-Off)",
     optInseminated: "Inseminated (Bred)",
     optFresh: "Fresh (0-30 DIM)",
+    optSick: "Sick (Under Treatment)",
     optQuarantine: "Quarantine (Withholding)",
     optCulled: "Culled",
     addCowBtn: "Add Animal",
@@ -188,5 +191,31 @@ export const en = {
 
     // Farm Passport
     passCurrentHerdLabel: "Current Livestock in Database:",
-    passCurrentHerdHint: "Calculated automatically from animals registry"
+    passCurrentHerdHint: "Calculated automatically from animals registry",
+
+    // Modals & Repro Events
+    reproModalTitle: "Reproduction Event",
+    reproTypeLabel: "Event Type",
+    reproDateLabel: "Event Date",
+    reproBullLabel: "Bull Code / Semen Batch",
+    reproResultLabel: "Examination Result",
+    reproNotesLabel: "Notes",
+    reproSubmitBtn: "Record Event",
+    reproOptInsem: "Insemination",
+    reproOptCheck: "Pregnancy Check",
+    reproOptHeat: "Heat / Standing",
+    reproOptCalving: "Calving",
+    reproOptDryOff: "Dry-off",
+    reproResNA: "Not Applicable",
+    reproResPos: "Pregnant (Positive)",
+    reproResNeg: "Open / Empty (Negative)",
+    reproResSusp: "Suspicious",
+    reproResTwins: "Twins",
+
+    // Medication Units
+    unitDoses: "doses",
+    unitMl: "ml",
+    unitVials: "vials",
+    unitKg: "kg"
 };
+

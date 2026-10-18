@@ -82,7 +82,7 @@ describe('Veterinary Medications API Suite', () => {
         });
 
         assert.strictEqual(res.status, 400);
-        assert.ok(res.data.detail.includes("обов'язковою"));
+        assert.ok(res.data.detail.toLowerCase().includes("required") || res.data.detail.includes("обов'язковою"));
     });
 
     it('GET /api/medications normalizes milk_days, meat_days and expiry status', async () => {

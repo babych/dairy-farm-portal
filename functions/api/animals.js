@@ -56,7 +56,7 @@ export async function handleAnimals({ path, method, request, url, db, jsonRespon
         const parts = path.split("/");
         const animalId = parts[3];
         const animalData = await AnimalRepository.getAnimal360(db, animalId);
-        if (!animalData) return jsonResponse({ detail: "Корову не знайдено" }, 404);
+        if (!animalData) return jsonResponse({ detail: "Animal not found" }, 404);
 
         return jsonResponse(animalData);
     }

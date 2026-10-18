@@ -31,6 +31,9 @@ export const uk = {
     optInseminated: "Осіменена",
     optFresh: "Новотільна (0-30 дн.)",
     optQuarantine: "Каренція (бракераж молока)",
+    optHeifer: "Нетель / Телиця",
+    optOpen: "Ялова / Готова до осіменіння",
+    optSick: "Хвора / Лікування",
     optCulled: "Брак / Вибула",
     addCowBtn: "Додати корову",
 
@@ -188,5 +191,31 @@ export const uk = {
 
     // Farm Passport
     passCurrentHerdLabel: "Поточне поголів'я в базі:",
-    passCurrentHerdHint: "Розраховується автоматично за реєстром тварин"
+    passCurrentHerdHint: "Розраховується автоматично за реєстром тварин",
+
+    // Modals & Repro Events
+    reproModalTitle: "Подія відтворення",
+    reproTypeLabel: "Тип події",
+    reproDateLabel: "Дата події",
+    reproBullLabel: "Код бугая / Спермодоза",
+    reproResultLabel: "Результат огляду",
+    reproNotesLabel: "Примітки",
+    reproSubmitBtn: "Зафіксувати подію",
+    reproOptInsem: "Осіменіння",
+    reproOptCheck: "Перевірка тільності",
+    reproOptHeat: "Охота",
+    reproOptCalving: "Отел",
+    reproOptDryOff: "Запуск",
+    reproResNA: "Не застосовується",
+    reproResPos: "Тільна (Positive)",
+    reproResNeg: "Ялова / Пуста (Negative)",
+    reproResSusp: "Сумнівна (Suspicious)",
+    reproResTwins: "Двійня (Twins)",
+
+    // Medication Units
+    unitDoses: "дози",
+    unitMl: "мл",
+    unitVials: "флакони",
+    unitKg: "кг"
 };
+

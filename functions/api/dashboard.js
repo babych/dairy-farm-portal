@@ -32,23 +32,23 @@ export async function handleDashboard({ path, method, request, url, db, jsonResp
             ${farmCondition}
             UNION ALL
             SELECT h.id, a.id as animal_id, a.farm_number, a.official_tag,
-                   'HEALTH' as category, 'Лікування' as event_type,
-                   ('Лікування: ' || h.diagnosis || ' №' || a.farm_number) as title,
+                   'HEALTH' as category, 'TREATMENT' as event_type,
+                   h.diagnosis as title,
                    h.event_date as start_date,
                    h.milk_withholding_until as end_date,
                    'ACTIVE_WITHHOLDING' as status,
-                   ('Препарат: ' || COALESCE(h.medication_name, '-') || ' • Каренція до: ' || h.milk_withholding_until) as details
+                   ('MED:' || COALESCE(h.medication_name, '-') || ' • UNTIL:' || COALESCE(h.milk_withholding_until, '-')) as details
             FROM health_events h
             JOIN animals a ON h.animal_id = a.id
             ${farmCondition}
             UNION ALL
             SELECT ('calv_' || a.id) as id, a.id as animal_id, a.farm_number, a.official_tag,
-                   'CALVING_PLAN' as category, 'Плановий отел' as event_type,
-                   ('Очікуваний отел №' || a.farm_number) as title,
+                   'CALVING_PLAN' as category, 'CALVING_PLAN' as event_type,
+                   'CALVING_PLAN' as title,
                    a.expected_calving_date as start_date,
                    a.expected_calving_date as end_date,
                    'DUE_SOON' as status,
-                   ('Статус: Тільна • Очікується отел') as details
+                   'PREGNANT_DUE' as details
             FROM animals a
             WHERE a.expected_calving_date IS NOT NULL AND a.expected_calving_date >= date('now')
             ${farmId ? "AND a.farm_id = ?" : ""}
@@ -89,17 +89,17 @@ export async function handleDashboard({ path, method, request, url, db, jsonResp
             const body = await request.json();
             const name = (body.name || "").trim();
             if (!name) {
-                return jsonResponse({ detail: "Назва препарату є обов'язковою" }, 400);
+                return jsonResponse({ detail: "Medication name is required" }, 400);
             }
 
             const created = await MedicationRepository.create(db, body);
             return jsonResponse({
                 status: "success",
-                message: `Препарат '${created.name}' успішно додано!`,
+                message: `Medication '${created.name}' added successfully!`,
                 id: created.id
             }, 201);
         } catch (err) {
-            return jsonResponse({ detail: `Помилка збереження препарату: ${err.message}` }, 500);
+            return jsonResponse({ detail: `Error saving medication: ${err.message}` }, 500);
         }
     }
 
@@ -108,9 +108,9 @@ export async function handleDashboard({ path, method, request, url, db, jsonResp
         const medId = path.split("/")[3];
         try {
             await MedicationRepository.deleteById(db, medId);
-            return jsonResponse({ status: "success", message: "Препарат видалено" });
+            return jsonResponse({ status: "success", message: "Medication deleted successfully" });
         } catch (err) {
-            return jsonResponse({ detail: `Помилка видалення препарату: ${err.message}` }, 500);
+            return jsonResponse({ detail: `Error deleting medication: ${err.message}` }, 500);
         }
     }
 

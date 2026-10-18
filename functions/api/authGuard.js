@@ -32,13 +32,13 @@ export function getCallerUser(request) {
 export function requireAuth(request, allowedRoles = []) {
     const user = getCallerUser(request);
     if (!user || !user.email) {
-        const err = new Error("Необхідна авторизація");
+        const err = new Error("Authentication required");
         /** @type {any} */ (err).status = 401;
         throw err;
     }
 
     if (allowedRoles.length > 0 && (!user.role || !allowedRoles.includes(user.role))) {
-        const err = new Error("Недостатньо прав для виконання цієї операції");
+        const err = new Error("Forbidden: insufficient permissions for this operation");
         /** @type {any} */ (err).status = 403;
         throw err;
     }

@@ -1,5 +1,6 @@
 // Lightweight, pure JS validation schemas for DairyERP inputs
 // Zero dependencies, fully compatible with Cloudflare Workers / D1
+import { VALID_STATUS_IDS } from './models/animalStatuses.js';
 
 export function validateFarmInput(data) {
     const errors = [];
@@ -55,10 +56,9 @@ export function validateAnimalInput(data) {
         errors.push('Invalid last_calving_date format (must be YYYY-MM-DD)');
     }
 
-    const validStatuses = ['Active', 'Inseminated', 'Pregnant', 'Dry', 'Fresh', 'Culled'];
     const currentStatus = data.current_status || 'Active';
-    if (!validStatuses.includes(currentStatus)) {
-        errors.push(`Invalid animal status '${currentStatus}'. Allowed: ${validStatuses.join(', ')}`);
+    if (!VALID_STATUS_IDS.includes(currentStatus)) {
+        errors.push(`Invalid animal status '${currentStatus}'. Allowed: ${VALID_STATUS_IDS.join(', ')}`);
     }
 
     return {
