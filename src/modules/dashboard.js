@@ -53,6 +53,14 @@ export const dashboardModule = {
         return total > 0 ? Math.round((val / total) * 100) : 0;
     },
 
+    get pctTotal() {
+        return 100;
+    },
+
+    get pctHeifers() {
+        return this.getPct(this.stats.herd_tiles?.heifers || 0);
+    },
+
     get pctOpen() {
         return this.getPct(this.stats.herd_tiles?.open || 0);
     },
@@ -78,14 +86,11 @@ export const dashboardModule = {
     },
 
     formatTileMain(count, pct) {
-        if (store.metricMode === 'percent') {
-            return pct + '%';
-        }
         return (count || 0).toLocaleString();
     },
 
     formatTileSub(count, pct) {
-        if (store.metricMode === 'percent') {
+        if (store.metricMode === 'heads') {
             return (count || 0).toLocaleString() + ' гол';
         }
         return pct + '%';

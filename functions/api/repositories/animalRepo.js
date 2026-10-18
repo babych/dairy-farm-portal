@@ -21,6 +21,10 @@ export class AnimalRepository {
         }
         if (status === "Quarantine") {
             query += " AND id IN (SELECT animal_id FROM health_events WHERE is_active_withholding = 1 OR milk_withholding_until >= date('now'))";
+        } else if (status === "Open") {
+            query += " AND (current_status = 'Open' OR (current_status = 'Active' AND (last_insemination_date IS NULL OR current_status NOT IN ('Pregnant', 'Inseminated'))))";
+        } else if (status === "Heifer") {
+            query += " AND (current_status = 'Heifer' OR (lactation_number = 0 AND current_status NOT IN ('Pregnant', 'Inseminated', 'Dry')))";
         } else if (status !== "ALL") {
             query += " AND current_status = ?";
             params.push(status);

@@ -65,6 +65,8 @@ export const uk = {
     menuSiteMetrics: "Метрики сайту",
     menuDownloadBackup: "Завантажити бекап (JSON)",
 
+    tileTotalTitle: "Все стадо",
+    tileTotalSub: "Всі тварини (скинути)",
     tileOpenTitle: "Готові до осіменіння",
     tileOpenSub: "Охота / Сервіс-період",
     tileInsTitle: "Осіменені",
@@ -75,6 +77,8 @@ export const uk = {
     tileDrySub: "Перед отелом (запуск)",
     tileFreshTitle: "Новотільні",
     tileFreshSub: "0-30 днів після отелу",
+    tileHeifersTitle: "Нетелі / Телиці",
+    tileHeifersSub: "Ремонтний молодняк",
     tileQuarTitle: "Каренція / Бракераж",
     tileQuarSub: "Карантин молока (антибіотики)",
 

@@ -65,6 +65,8 @@ export const en = {
     menuSiteMetrics: "Platform Metrics",
     menuDownloadBackup: "Download Backup (JSON)",
 
+    tileTotalTitle: "Total Herd",
+    tileTotalSub: "All Animals (Reset)",
     tileOpenTitle: "Open (Eligible to Breed)",
     tileOpenSub: "Heat / Ready",
     tileInsTitle: "Inseminated (Bred)",
@@ -75,6 +77,8 @@ export const en = {
     tileDrySub: "Pre-Calving Period",
     tileFreshTitle: "Fresh Cows",
     tileFreshSub: "0-30 Days in Milk",
+    tileHeifersTitle: "Heifers",
+    tileHeifersSub: "Replacement Stock",
     tileQuarTitle: "Withholding / Quarantine",
     tileQuarSub: "Active Antibiotics",
 

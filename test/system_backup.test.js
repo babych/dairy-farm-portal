@@ -121,6 +121,16 @@ describe('System Backup & Restore Integration Suite', () => {
             animals: [
                 { farm_number: '501', official_tag: 'UA50100', name: 'Красуня', current_status: 'Active' },
                 { farm_number: '502', official_tag: 'UA50200', name: 'Берізка', current_status: 'Active' }
+            ],
+            medications: [
+                {
+                    name: 'Окситетрациклін 200',
+                    active_substance: 'Окситетрациклін',
+                    batch_number: 'B-2026-01',
+                    stock_quantity: 15,
+                    milk_withdrawal_days: 7,
+                    meat_withdrawal_days: 28
+                }
             ]
         };
 
@@ -152,6 +162,7 @@ describe('System Backup & Restore Integration Suite', () => {
         const result = await res.json();
         assert.strictEqual(result.status, 'success');
         assert.strictEqual(result.cows_imported, 2);
+        assert.strictEqual(result.medications_imported, 1);
         assert.strictEqual(result.farm_name, 'Відновлена ферма з бекапу');
     });
 });

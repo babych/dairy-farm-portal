@@ -739,7 +739,15 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 sm:gap-2.5">
+            <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-2 sm:gap-2.5">
+                <button @click="filterByStatus('ALL')" id="tileBtnTotal" class="herd-tile-btn text-left bg-slate-100/90 hover:bg-slate-200/90 border border-slate-300 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500">
+                    <div class="flex justify-between items-center w-full">
+                        <span class="text-[9.5px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-800 truncate pr-1" data-i18n="tileTotalTitle">Все стадо</span>
+                        <span id="tileTotalPct" v-text="dashboard.formatTileSub(dashboard.stats.total_cows, dashboard.pctTotal)" class="text-[9.5px] sm:text-[10px] font-semibold text-slate-700 bg-slate-200/80 px-1.5 py-0.2 rounded-full">100%</span>
+                    </div>
+                    <h4 id="tileTotal" v-text="dashboard.formatTileMain(dashboard.stats.total_cows, dashboard.pctTotal)" class="text-xl sm:text-2xl font-black text-slate-900 my-0.5 group-hover:scale-105 transition-transform origin-left">0</h4>
+                    <p class="text-[9.5px] text-slate-600 truncate" data-i18n="tileTotalSub">Всі тварини (скинути)</p>
+                </button>
                 <button @click="filterByStatus('Active')" id="tileBtnOpen" class="herd-tile-btn text-left bg-blue-50/70 hover:bg-blue-100/70 border border-blue-200 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
                     <div class="flex justify-between items-center w-full">
                         <span class="text-[9.5px] sm:text-[10px] font-bold uppercase tracking-wider text-blue-700 truncate pr-1" data-i18n="tileOpenTitle">Готові до осіменіння</span>
@@ -779,6 +787,14 @@
                     </div>
                     <h4 id="tileFresh" v-text="dashboard.formatTileMain(dashboard.stats.herd_tiles?.fresh, dashboard.pctFresh)" class="text-xl sm:text-2xl font-black text-cyan-900 my-0.5 group-hover:scale-105 transition-transform origin-left">0</h4>
                     <p class="text-[9.5px] text-cyan-600 truncate" data-i18n="tileFreshSub">0-30 днів лактації</p>
+                </button>
+                <button @click="filterByStatus('Heifer')" id="tileBtnHeifers" class="herd-tile-btn text-left bg-purple-50/70 hover:bg-purple-100/70 border border-purple-200 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500">
+                    <div class="flex justify-between items-center w-full">
+                        <span class="text-[9.5px] sm:text-[10px] font-bold uppercase tracking-wider text-purple-700 truncate pr-1" data-i18n="tileHeifersTitle">Нетелі / Телиці</span>
+                        <span id="tileHeifersPct" v-text="dashboard.formatTileSub(dashboard.stats.herd_tiles?.heifers, dashboard.pctHeifers)" class="text-[9.5px] sm:text-[10px] font-semibold text-purple-700 bg-purple-100/80 px-1.5 py-0.2 rounded-full">0%</span>
+                    </div>
+                    <h4 id="tileHeifers" v-text="dashboard.formatTileMain(dashboard.stats.herd_tiles?.heifers, dashboard.pctHeifers)" class="text-xl sm:text-2xl font-black text-purple-900 my-0.5 group-hover:scale-105 transition-transform origin-left">0</h4>
+                    <p class="text-[9.5px] text-purple-600 truncate" data-i18n="tileHeifersSub">Ремонтний молодняк</p>
                 </button>
                 <button @click="filterByStatus('Quarantine')" id="tileBtnQuar" class="herd-tile-btn text-left bg-rose-50/70 hover:bg-rose-100/70 border border-rose-200 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500">
                     <div class="flex justify-between items-center w-full">

@@ -649,9 +649,22 @@
             }
         }
 
+        function getActiveSelectedFarm() {
+            const list = (window.store && window.store.farmsList && window.store.farmsList.length > 0)
+                ? window.store.farmsList
+                : farmsList;
+            if (!list || list.length === 0) return null;
+            const selectedId = (window.store && window.store.currentFarmId) || localStorage.getItem("dairy_selected_farm");
+            if (selectedId) {
+                const found = list.find(f => String(f.id) === String(selectedId));
+                if (found) return found;
+            }
+            return list.find(f => f.is_current) || list[0];
+        }
+
         function openFarmPassportModal() {
             const delBtn = document.getElementById('btnDeleteFarmPassport');
-            const currentFarm = (farmsList && farmsList.length > 0) ? (farmsList.find(f => f.is_current) || farmsList[0]) : null;
+            const currentFarm = getActiveSelectedFarm();
 
             if (!currentFarm) {
                 document.getElementById('passFarmNameInput').value = "Моя ферма";
@@ -703,7 +716,7 @@
 
         async function handleSaveFarmPassport(e) {
             e.preventDefault();
-            const currentFarm = (farmsList && farmsList.length > 0) ? (farmsList.find(f => f.is_current) || farmsList[0]) : null;
+            const currentFarm = getActiveSelectedFarm();
             if (!currentFarm) {
                 showToast("Немає активної ферми для оновлення", "error");
                 return;
@@ -772,7 +785,7 @@
         }
 
         async function confirmDeleteCurrentFarm() {
-            const currentFarm = (farmsList && farmsList.length > 0) ? (farmsList.find(f => f.is_current) || farmsList[0]) : null;
+            const currentFarm = getActiveSelectedFarm();
             if (!currentFarm) {
                 showToast("Немає активної ферми для видалення", "error");
                 return;
@@ -791,24 +804,35 @@
                 if (d.access_token) {
                     token = d.access_token;
                     localStorage.setItem("dairy_token", token);
-                }
-
-                // If deleted farm was saved in localStorage, clear it
-                const savedFarmId = localStorage.getItem("dairy_selected_farm");
-                if (savedFarmId === currentFarm.id) {
-                    if (d.next_farm_id) {
-                        localStorage.setItem("dairy_selected_farm", d.next_farm_id);
-                    } else {
-                        localStorage.removeItem("dairy_selected_farm");
+                    if (window.store) {
+                        window.store.setToken(token);
                     }
                 }
 
-                // Reload farms and dashboard
+                // Update active farm state immediately
+                const nextId = d.next_farm_id || null;
+                if (nextId) {
+                    localStorage.setItem("dairy_selected_farm", nextId);
+                    if (window.store) {
+                        window.store.setSelectedFarm(nextId);
+                    }
+                } else {
+                    localStorage.removeItem("dairy_selected_farm");
+                    if (window.store) {
+                        window.store.setSelectedFarm(null);
+                    }
+                }
+
+                // Reload farms across both reactive and legacy stores
+                if (window.farmsModule && typeof window.farmsModule.loadFarms === 'function') {
+                    await window.farmsModule.loadFarms();
+                }
                 await loadFarms();
-                if (d.next_farm_id) {
-                    onFarmDropdownChange(d.next_farm_id, false);
+
+                if (nextId) {
+                    await onFarmDropdownChange(nextId, false);
                 } else if (farmsList.length > 0) {
-                    onFarmDropdownChange(farmsList[0].id, false);
+                    await onFarmDropdownChange(farmsList[0].id, false);
                 } else {
                     loadStats();
                     loadAnimals();
@@ -850,11 +874,15 @@
 
                 // Herd Tiles
                 if (d.herd_tiles) {
-                    document.getElementById('tileOpen').textContent = d.herd_tiles.open.toLocaleString();
-                    document.getElementById('tileIns').textContent = d.herd_tiles.inseminated.toLocaleString();
-                    document.getElementById('tilePreg').textContent = d.herd_tiles.pregnant.toLocaleString();
-                    document.getElementById('tileDry').textContent = d.herd_tiles.dry.toLocaleString();
-                    document.getElementById('tileFresh').textContent = d.herd_tiles.fresh.toLocaleString();
+                    const elTotal = document.getElementById('tileTotal');
+                    if (elTotal) elTotal.textContent = (d.total_cows || 0).toLocaleString();
+                    document.getElementById('tileOpen').textContent = (d.herd_tiles.open || 0).toLocaleString();
+                    document.getElementById('tileIns').textContent = (d.herd_tiles.inseminated || 0).toLocaleString();
+                    document.getElementById('tilePreg').textContent = (d.herd_tiles.pregnant || 0).toLocaleString();
+                    document.getElementById('tileDry').textContent = (d.herd_tiles.dry || 0).toLocaleString();
+                    document.getElementById('tileFresh').textContent = (d.herd_tiles.fresh || 0).toLocaleString();
+                    const elHeifers = document.getElementById('tileHeifers');
+                    if (elHeifers) elHeifers.textContent = (d.herd_tiles.heifers || 0).toLocaleString();
                 }
 
                 // KPIs
@@ -873,6 +901,7 @@
                 const open = d.herd_tiles?.open || 0;
                 const dry = d.herd_tiles?.dry || 0;
                 const fresh = d.herd_tiles?.fresh || 0;
+                const heifers = d.herd_tiles?.heifers || 0;
                 const quar = d.in_quarantine || 0;
 
                 const calcPct = val => total > 0 ? Math.round((val / total) * 100) : 0;
@@ -881,9 +910,12 @@
                 const pctOpen = calcPct(open);
                 const pctDry = calcPct(dry);
                 const pctFresh = calcPct(fresh);
+                const pctHeifers = calcPct(heifers);
                 const pctQuar = calcPct(quar);
 
                 // Update Badges on Top Herd Tiles
+                const bTotal = document.getElementById('tileTotalPct');
+                if (bTotal) bTotal.textContent = `100%`;
                 const bOpen = document.getElementById('tileOpenPct');
                 if (bOpen) bOpen.textContent = `${pctOpen}%`;
                 const bIns = document.getElementById('tileInsPct');
@@ -894,6 +926,8 @@
                 if (bDry) bDry.textContent = `${pctDry}%`;
                 const bFresh = document.getElementById('tileFreshPct');
                 if (bFresh) bFresh.textContent = `${pctFresh}%`;
+                const bHeifers = document.getElementById('tileHeifersPct');
+                if (bHeifers) bHeifers.textContent = `${pctHeifers}%`;
                 const bQuar = document.getElementById('tileQuarPct');
                 if (bQuar) bQuar.textContent = `${pctQuar}%`;
 
@@ -948,7 +982,14 @@
 
         function onStatusFilterDropdownChange() {
             const filterEl = document.getElementById('statusFilter');
-            if (filterEl) updateTileHighlight(filterEl.value);
+            if (filterEl) {
+                updateTileHighlight(filterEl.value);
+                if (window.herdModule) {
+                    window.herdModule.statusFilter = filterEl.value;
+                    window.herdModule.curOffset = 0;
+                    window.herdModule.loadAnimals();
+                }
+            }
             curOffset = 0;
             loadAnimals();
         }

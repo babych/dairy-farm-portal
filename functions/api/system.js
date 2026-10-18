@@ -2,6 +2,7 @@
 // Flat 1-level collocation for AI vibe-coding
 import { requireAuth, getCallerUser } from './authGuard.js';
 import { getGoogleIdToken } from './gcpAuth.js';
+import { determinePhysiologicalStatus } from './zootech.js';
 
 export async function handleSystem({ path, method, request, url, env, db, jsonResponse }) {
     // 1. GET /api/system/status
@@ -27,7 +28,7 @@ export async function handleSystem({ path, method, request, url, env, db, jsonRe
     // 2. GET /api/admin/metrics
     if (path === "/api/admin/metrics" && method === "GET") {
         try {
-            requireAuth(request, ['superadmin']);
+            requireAuth(request, ['superadmin', 'farmer', 'operator']);
         } catch (authErr) {
             return jsonResponse({ detail: authErr.message }, authErr.status || 403);
         }
@@ -90,13 +91,7 @@ export async function handleSystem({ path, method, request, url, env, db, jsonRe
         } catch (e) {
             logs = [];
         }
-        if (logs.length === 0) {
-            logs = [
-                { id: "init-1", level: "SUCCESS", category: "CLOUD", message: "Cloudflare D1 Database Active (EEUR Region)", details: "Edge Worker connected", created_at: new Date().toISOString() },
-                { id: "init-2", level: "INFO", category: "DATABASE", message: "База даних стада успішно ініціалізована", details: "Ready for operations", created_at: new Date().toISOString() }
-            ];
-        }
-        return jsonResponse(logs);
+        return jsonResponse(logs || []);
     }
 
     if (path === "/api/system/logs" && method === "DELETE") {
@@ -280,12 +275,14 @@ export async function handleSystem({ path, method, request, url, env, db, jsonRe
                 const text = await file.text();
                 const jsonPayload = JSON.parse(text);
                 const animalsList = Array.isArray(jsonPayload.animals) ? jsonPayload.animals : (Array.isArray(jsonPayload) ? jsonPayload : []);
+                const medicationsList = Array.isArray(jsonPayload.medications) ? jsonPayload.medications : [];
                 parsed = {
                     farm_info: {
                         name: jsonPayload.farm_profile?.name || jsonPayload.farm_name || `Ферма з ${file.name.replace(/\.[^/.]+$/, "")}`,
                         farmer_name: jsonPayload.farm_profile?.farmer_name || null
                     },
-                    animals: animalsList
+                    animals: animalsList,
+                    medications: medicationsList
                 };
             } catch (jsonErr) {
                 return jsonResponse({ detail: `Помилка читання JSON файлу бекапу: ${jsonErr.message}` }, 400);
@@ -395,6 +392,7 @@ export async function handleSystem({ path, method, request, url, env, db, jsonRe
             const chunk = animals.slice(i, i + CHUNK_SIZE);
             const stmts = chunk.map(a => {
                 const animalId = crypto.randomUUID();
+                const computedStatus = determinePhysiologicalStatus(a);
                 return db.prepare(`
                     INSERT INTO animals (
                         id, farm_id, farm_number, official_tag, name, birth_date,
@@ -403,7 +401,7 @@ export async function handleSystem({ path, method, request, url, env, db, jsonRe
                     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))
                 `).bind(
                     animalId, activeFarmId, a.farm_number || "0", a.official_tag || null, a.name || null, a.birth_date || null,
-                    a.lactation_number || 0, a.current_status || "Active", a.last_calving_date || null, a.expected_calving_date || null,
+                    a.lactation_number || 0, computedStatus, a.last_calving_date || null, a.expected_calving_date || null,
                     a.transponder_code || null, a.dam_tag || null, a.sire_tag || null
                 );
             });
@@ -411,12 +409,47 @@ export async function handleSystem({ path, method, request, url, env, db, jsonRe
             insertedCount += chunk.length;
         }
 
+        // Batch insert medications if present in backup
+        const medications = parsed.medications || [];
+        let medsImportedCount = 0;
+        if (medications.length > 0) {
+            for (let i = 0; i < medications.length; i += CHUNK_SIZE) {
+                const chunk = medications.slice(i, i + CHUNK_SIZE);
+                const stmts = chunk.map(m => {
+                    const medId = crypto.randomUUID();
+                    const name = (m.name || "").trim();
+                    const activeSubstance = m.active_substance || null;
+                    const batchNumber = m.batch_number || null;
+                    const expirationDate = m.expiration_date || null;
+                    const stockQuantity = parseFloat(m.stock_quantity) || 0;
+                    const unit = m.unit || "дози";
+                    const milkDays = parseInt(m.milk_withdrawal_days ?? m.default_milk_withdrawal_days) || 0;
+                    const meatDays = parseInt(m.meat_withdrawal_days ?? m.default_meat_withdrawal_days) || 0;
+                    const instructions = m.instructions || null;
+
+                    return db.prepare(`
+                        INSERT INTO medications (
+                            id, name, active_substance, batch_number, expiration_date,
+                            stock_quantity, unit, default_milk_withdrawal_days, default_meat_withdrawal_days,
+                            instructions, created_at
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
+                    `).bind(
+                        medId, name, activeSubstance, batchNumber, expirationDate,
+                        stockQuantity, unit, milkDays, meatDays, instructions
+                    );
+                });
+                await db.batch(stmts);
+                medsImportedCount += chunk.length;
+            }
+        }
+
         return jsonResponse({
             status: "success",
-            message: `Ферму '${farmName}' успішно створено та імпортовано ${insertedCount} тварин!`,
+            message: `Ферму '${farmName}' успішно створено та імпортовано ${insertedCount} тварин${medsImportedCount > 0 ? ` та ${medsImportedCount} медикаментів` : ""}!`,
             farm_id: activeFarmId,
             farm_name: farmName,
-            cows_imported: insertedCount
+            cows_imported: insertedCount,
+            medications_imported: medsImportedCount
         });
     }
 

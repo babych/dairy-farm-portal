@@ -52,6 +52,11 @@ export function initApp() {
             if (typeof updateTileHighlight === 'function') {
                 updateTileHighlight(herdModule.statusFilter);
             }
+            const win = /** @type {any} */ (window);
+            if (typeof win.loadAnimals === 'function') {
+                win.curOffset = 0;
+                win.loadAnimals();
+            }
             const active = /** @type {HTMLElement | null} */ (document.activeElement);
             if (active && typeof active.blur === 'function') {
                 active.blur();
