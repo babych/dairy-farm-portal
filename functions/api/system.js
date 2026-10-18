@@ -452,11 +452,13 @@ export async function handleSystem({ path, method, request, url, env, db, jsonRe
                     INSERT INTO animals (
                         id, farm_id, farm_number, official_tag, name, birth_date,
                         lactation_number, current_status, last_calving_date, expected_calving_date,
+                        last_insemination_date, days_pregnant,
                         transponder_code, dam_tag, sire_tag, created_at, updated_at
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))
                 `).bind(
                     animalId, activeFarmId, a.farm_number || "0", a.official_tag || null, a.name || null, a.birth_date || null,
                     a.lactation_number || 0, computedStatus, a.last_calving_date || null, a.expected_calving_date || null,
+                    a.last_insemination_date || null, a.days_pregnant || 0,
                     a.transponder_code || null, a.dam_tag || null, a.sire_tag || null
                 );
             });
