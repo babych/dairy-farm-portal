@@ -1083,9 +1083,22 @@
                         <h4 class="font-bold text-rose-700 flex items-center gap-2">
                             <i class="fa-solid fa-ban"></i> <span data-i18n="actionMilkWithhold">Бракераж молока (Каренція антибіотиків)</span>
                         </h4>
-                        <span id="badgeQuarantine" class="bg-rose-100 text-rose-800 text-xs px-2.5 py-0.5 rounded-full font-bold">0</span>
+                        <span id="badgeQuarantine" v-text="(dashboard.actionLists.quarantine_milk || []).length" class="bg-rose-100 text-rose-800 text-xs px-2.5 py-0.5 rounded-full font-bold">0</span>
                     </div>
-                    <div id="listQuarantine" class="space-y-2 max-h-72 overflow-y-auto text-xs"></div>
+                    <div id="listQuarantine" class="space-y-2 max-h-72 overflow-y-auto text-xs">
+                        <p v-if="!dashboard.actionLists.quarantine_milk || dashboard.actionLists.quarantine_milk.length === 0" class="p-4 text-center text-slate-400">Немає корів під каренцією</p>
+                        <div v-for="q in dashboard.actionLists.quarantine_milk" :key="q.id" class="flex justify-between items-center p-2.5 bg-rose-50 rounded-xl border border-rose-100">
+                            <div>
+                                <span class="font-bold text-slate-900" v-text="'№ ' + q.farm_number"></span>
+                                <span class="text-slate-500" v-text="'(' + (q.official_tag || '') + ')'"></span>
+                                <div class="text-[11px] text-rose-700 mt-0.5" v-text="'Лікування: ' + q.diagnosis + (q.medication ? ' • ' + q.medication : '')"></div>
+                            </div>
+                            <div class="text-right">
+                                <span class="font-bold text-rose-700" v-text="'до ' + q.withholding_until"></span>
+                                <div class="text-[10px] text-slate-400" v-text="'залишилось ' + q.days_left + ' дн.'"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- 2. Перевірка на тільність -->
@@ -1094,9 +1107,20 @@
                         <h4 class="font-bold text-amber-700 flex items-center gap-2">
                             <i class="fa-solid fa-stethoscope"></i> <span data-i18n="actionPregCheck">Перевірка на тільність (35-60 днів)</span>
                         </h4>
-                        <span id="badgePregnancy" class="bg-amber-100 text-amber-800 text-xs px-2.5 py-0.5 rounded-full font-bold">0</span>
+                        <span id="badgePregnancy" v-text="(dashboard.actionLists.pregnancy_check || []).length" class="bg-amber-100 text-amber-800 text-xs px-2.5 py-0.5 rounded-full font-bold">0</span>
                     </div>
-                    <div id="listPregnancy" class="space-y-2 max-h-72 overflow-y-auto text-xs"></div>
+                    <div id="listPregnancy" class="space-y-2 max-h-72 overflow-y-auto text-xs">
+                        <p v-if="!dashboard.actionLists.pregnancy_check || dashboard.actionLists.pregnancy_check.length === 0" class="p-4 text-center text-slate-400">Немає корів на перевірку</p>
+                        <div v-for="p in dashboard.actionLists.pregnancy_check" :key="p.animal_id" class="flex justify-between items-center p-2.5 bg-amber-50 rounded-xl border border-amber-100">
+                            <div>
+                                <span class="font-bold text-slate-900" v-text="'№ ' + p.farm_number"></span>
+                                <div class="text-[11px] text-amber-800 mt-0.5" v-text="'Осіменена: ' + p.insemination_date + ' (' + p.days_since_ins + ' дн. тому)'"></div>
+                            </div>
+                            <button @click="herd.openCow360(p.animal_id)" :onclick="'openCow360(\'' + p.animal_id + '\')'" class="bg-amber-600 text-white px-2 py-1 rounded-lg text-[10px] font-bold">
+                                Оглянути
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- 3. Кандидати на запуск -->
@@ -1105,9 +1129,19 @@
                         <h4 class="font-bold text-emerald-700 flex items-center gap-2">
                             <i class="fa-solid fa-shield-halved"></i> <span data-i18n="actionDryOff">Кандидати на запуск (Сухостій)</span>
                         </h4>
-                        <span id="badgeDryOff" class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-0.5 rounded-full font-bold">0</span>
+                        <span id="badgeDryOff" v-text="(dashboard.actionLists.dry_off_candidates || []).length" class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-0.5 rounded-full font-bold">0</span>
                     </div>
-                    <div id="listDryOff" class="space-y-2 max-h-72 overflow-y-auto text-xs"></div>
+                    <div id="listDryOff" class="space-y-2 max-h-72 overflow-y-auto text-xs">
+                        <p v-if="!dashboard.actionLists.dry_off_candidates || dashboard.actionLists.dry_off_candidates.length === 0" class="p-4 text-center text-slate-400">Немає кандидатів на запуск</p>
+                        <div v-for="c in dashboard.actionLists.dry_off_candidates" :key="c.animal_id" class="flex justify-between items-center p-2.5 bg-emerald-50 rounded-xl border border-emerald-100">
+                            <div>
+                                <span class="font-bold text-slate-900" v-text="'№ ' + c.farm_number"></span>
+                                <span class="text-slate-500" v-text="' (лактація ' + (c.lactation || 0) + ')'"></span>
+                                <div class="text-[11px] text-emerald-800 mt-0.5" v-text="'Очікуваний отел: ' + (c.expected_calving || '-')"></div>
+                            </div>
+                            <span class="font-bold text-emerald-700 text-xs" v-text="c.days_to_calving + ' дн.'"></span>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- 4. Очікуваний отел -->
@@ -1116,9 +1150,18 @@
                         <h4 class="font-bold text-blue-700 flex items-center gap-2">
                             <i class="fa-solid fa-baby-carriage"></i> <span data-i18n="actionExpectedCalv">Очікуваний отел (до 14 днів)</span>
                         </h4>
-                        <span id="badgeCalvingWatch" class="bg-blue-100 text-blue-800 text-xs px-2.5 py-0.5 rounded-full font-bold">0</span>
+                        <span id="badgeCalvingWatch" v-text="(dashboard.actionLists.calving_watch || []).length" class="bg-blue-100 text-blue-800 text-xs px-2.5 py-0.5 rounded-full font-bold">0</span>
                     </div>
-                    <div id="listCalvingWatch" class="space-y-2 max-h-72 overflow-y-auto text-xs"></div>
+                    <div id="listCalvingWatch" class="space-y-2 max-h-72 overflow-y-auto text-xs">
+                        <p v-if="!dashboard.actionLists.calving_watch || dashboard.actionLists.calving_watch.length === 0" class="p-4 text-center text-slate-400">Немає близьких отелів</p>
+                        <div v-for="c in dashboard.actionLists.calving_watch" :key="c.animal_id" class="flex justify-between items-center p-2.5 bg-blue-50 rounded-xl border border-blue-100">
+                            <div>
+                                <span class="font-bold text-slate-900" v-text="'№ ' + c.farm_number"></span>
+                                <div class="text-[11px] text-blue-800 mt-0.5" v-text="'Плановий отел: ' + (c.expected_calving || '-')"></div>
+                            </div>
+                            <span class="font-bold text-blue-700 text-xs" v-text="c.days_left + ' дн.'"></span>
+                        </div>
+                    </div>
                 </div>
 
             </div>

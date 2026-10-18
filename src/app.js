@@ -1067,142 +1067,51 @@
         function debounceSearch() {
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => {
-                curOffset = 0;
-                loadAnimals();
+                const searchEl = document.getElementById('cowSearchInput');
+                if (window.herdModule) {
+                    window.herdModule.searchQuery = searchEl ? searchEl.value : '';
+                    window.herdModule.curOffset = 0;
+                    window.herdModule.loadAnimals();
+                }
             }, 300);
         }
 
         async function loadAnimals() {
-            const q = document.getElementById('cowSearchInput').value;
-            const status = document.getElementById('statusFilter').value;
-            const tb = document.getElementById('animalsTableBody');
-            tb.innerHTML = `<tr><td colspan="9" class="p-8 text-center text-slate-400"><i class="fa-solid fa-spinner fa-spin"></i> Завантаження...</td></tr>`;
-
-            try {
-                const activeFarm = (window.store && window.store.currentFarmId) || localStorage.getItem("dairy_selected_farm");
-                let url = `${API_BASE}/api/animals?limit=${PAGE_LIMIT}&offset=${curOffset}`;
-                if (activeFarm) url += `&farm_id=${encodeURIComponent(activeFarm)}`;
-                if (q) url += `&q=${encodeURIComponent(q)}`;
-                if (status && status !== 'ALL') url += `&status=${encodeURIComponent(status)}`;
-
-                const res = await fetch(url, { headers: { 'Authorization': `Bearer ${token}` } });
-                if (res.status === 401) {
-                    console.warn("[Auth] Session expired or invalid on /api/animals, logging out");
-                    logout();
-                    return;
+            if (window.herdModule && typeof window.herdModule.loadAnimals === 'function') {
+                const searchEl = document.getElementById('cowSearchInput');
+                const statusEl = document.getElementById('statusFilter');
+                if (searchEl && window.herdModule.searchQuery !== searchEl.value) {
+                    window.herdModule.searchQuery = searchEl.value;
                 }
-                const data = await res.json();
-                
-                if (!data.items || data.items.length === 0) {
-                    tb.innerHTML = `<tr><td colspan="9" class="p-8 text-center text-slate-400">Корів не знайдено</td></tr>`;
-                    document.getElementById('animalsCountLabel').textContent = `Показано 0 із ${data.total}`;
-                    return;
+                if (statusEl && statusEl.value) {
+                    window.herdModule.statusFilter = statusEl.value;
                 }
-
-                const formatDateCell = (d) => {
-                    if (!d || d === 'null' || d === 'undefined') return '';
-                    return d;
-                };
-
-                tb.innerHTML = data.items.map(a => `
-                    <tr class="hover:bg-slate-50 transition border-b border-slate-100">
-                        <td class="p-3 font-bold text-slate-900">${a.farm_number}</td>
-                        <td class="p-3 font-mono text-slate-500">${a.official_tag || '-'}</td>
-                        <td class="p-3 font-medium text-slate-800">${a.name || '-'}</td>
-                        <td class="p-3 font-semibold text-slate-700">${a.lactation_number || 0}</td>
-                        <td class="p-3">
-                            <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${getStatusBadgeClass(a.current_status)}">
-                                ${a.current_status}
-                            </span>
-                        </td>
-                        <td class="p-3 text-slate-600 font-mono text-xs">${formatDateCell(a.last_calving_date)}</td>
-                        <td class="p-3 text-slate-600 font-mono text-xs">${formatDateCell(a.expected_calving_date)}</td>
-                        <td class="p-3 text-slate-500">${a.group_name || 'Група 1'}</td>
-                        <td class="p-3 text-right">
-                            <button onclick="openCow360('${a.id}')" class="bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 px-2.5 py-1.5 rounded-lg font-semibold transition">
-                                <i class="fa-regular fa-folder-open"></i> Картка 360°
-                            </button>
-                        </td>
-                    </tr>
-                `).join('');
-
-                const fromNum = data.total > 0 ? (curOffset + 1) : 0;
-                const toNum = Math.min(curOffset + data.items.length, data.total);
-                const currentPage = Math.floor(curOffset / PAGE_LIMIT) + 1;
-                const totalPages = Math.max(1, Math.ceil(data.total / PAGE_LIMIT));
-
-                document.getElementById('animalsCountLabel').textContent = `Сторінка ${currentPage} з ${totalPages}`;
-                const badgeEl = document.getElementById('animalsRangeBadge');
-                if (badgeEl) {
-                    badgeEl.textContent = `${fromNum}–${toNum} із ${data.total}`;
-                }
-
-                document.getElementById('prevPageBtn').disabled = curOffset === 0;
-                document.getElementById('nextPageBtn').disabled = curOffset + PAGE_LIMIT >= data.total;
-
-                // Render numbered page buttons (e.g. 1, 2, 3 ... or near current page)
-                renderPageButtons(currentPage, totalPages);
-
-            } catch (err) {
-                console.error(err);
-                tb.innerHTML = `<tr><td colspan="9" class="p-8 text-center text-rose-500">Помилка завантаження даних</td></tr>`;
+                return await window.herdModule.loadAnimals();
             }
-        }
-
-        function renderPageButtons(current, total) {
-            const container = document.getElementById('paginationPagesList');
-            if (!container) return;
-            if (total <= 1) {
-                container.innerHTML = '';
-                return;
-            }
-
-            const pages = [];
-            if (total <= 6) {
-                for (let i = 1; i <= total; i++) pages.push(i);
-            } else {
-                pages.push(1);
-                if (current > 3) pages.push('...');
-                const start = Math.max(2, current - 1);
-                const end = Math.min(total - 1, current + 1);
-                for (let i = start; i <= end; i++) {
-                    if (!pages.includes(i)) pages.push(i);
-                }
-                if (current < total - 2) pages.push('...');
-                if (!pages.includes(total)) pages.push(total);
-            }
-
-            container.innerHTML = pages.map(p => {
-                if (p === '...') {
-                    return `<span class="px-1 text-slate-400 text-xs">…</span>`;
-                }
-                const isActive = p === current;
-                return `
-                    <button onclick="goToPage(${p})" class="w-7 h-7 rounded-lg text-xs font-semibold transition flex items-center justify-center ${isActive ? 'bg-emerald-600 text-white shadow-sm' : 'border border-slate-200 text-slate-700 hover:bg-slate-100'}">
-                        ${p}
-                    </button>
-                `;
-            }).join('');
         }
 
         function goToPage(pageNum) {
-            curOffset = (pageNum - 1) * PAGE_LIMIT;
-            loadAnimals();
+            if (window.herdModule && typeof window.herdModule.goToPage === 'function') {
+                window.herdModule.goToPage(pageNum);
+            }
         }
 
         function prevPage() {
-            if (curOffset >= PAGE_LIMIT) {
-                curOffset -= PAGE_LIMIT;
-                loadAnimals();
+            if (window.herdModule && typeof window.herdModule.prevPage === 'function') {
+                window.herdModule.prevPage();
             }
         }
 
         function nextPage() {
-            curOffset += PAGE_LIMIT;
-            loadAnimals();
+            if (window.herdModule && typeof window.herdModule.nextPage === 'function') {
+                window.herdModule.nextPage();
+            }
         }
 
         function getStatusBadgeClass(status) {
+            if (window.herdModule && typeof window.herdModule.getStatusBadgeClass === 'function') {
+                return window.herdModule.getStatusBadgeClass(status);
+            }
             switch(status) {
                 case 'Active': return 'bg-emerald-50 text-emerald-700 border border-emerald-200';
                 case 'Pregnant': return 'bg-indigo-50 text-indigo-700 border border-indigo-200';
@@ -1216,66 +1125,11 @@
         // 7. Smart Action Lists
         async function loadActionLists() {
             try {
-                const res = await fetch(`${API_BASE}/api/dashboard/action-lists`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                const d = await res.json();
-
-                // 1. Quarantine
-                document.getElementById('badgeQuarantine').textContent = d.quarantine_milk.length;
-                document.getElementById('listQuarantine').innerHTML = d.quarantine_milk.length ? d.quarantine_milk.map(q => `
-                    <div class="flex justify-between items-center p-2.5 bg-rose-50 rounded-xl border border-rose-100">
-                        <div>
-                            <span class="font-bold text-slate-900">№ ${q.farm_number}</span> 
-                            <span class="text-slate-500">(${q.official_tag || ''})</span>
-                            <div class="text-[11px] text-rose-700 mt-0.5">Лікування: ${q.diagnosis} • ${q.medication || ''}</div>
-                        </div>
-                        <div class="text-right">
-                            <span class="font-bold text-rose-700">до ${q.withholding_until}</span>
-                            <div class="text-[10px] text-slate-400">залишилось ${q.days_left} дн.</div>
-                        </div>
-                    </div>
-                `).join('') : `<p class="p-4 text-center text-slate-400">Немає корів під каренцією</p>`;
-
-                // 2. Pregnancy Check
-                document.getElementById('badgePregnancy').textContent = d.pregnancy_check.length;
-                document.getElementById('listPregnancy').innerHTML = d.pregnancy_check.length ? d.pregnancy_check.map(p => `
-                    <div class="flex justify-between items-center p-2.5 bg-amber-50 rounded-xl border border-amber-100">
-                        <div>
-                            <span class="font-bold text-slate-900">№ ${p.farm_number}</span>
-                            <div class="text-[11px] text-amber-800 mt-0.5">Осіменена: ${p.insemination_date} (${p.days_since_ins} дн. тому)</div>
-                        </div>
-                        <button onclick="openCow360('${p.animal_id}')" class="bg-amber-600 text-white px-2 py-1 rounded-lg text-[10px] font-bold">
-                            Оглянути
-                        </button>
-                    </div>
-                `).join('') : `<p class="p-4 text-center text-slate-400">Немає корів на перевірку</p>`;
-
-                // 3. Dry-Off
-                document.getElementById('badgeDryOff').textContent = d.dry_off_candidates.length;
-                document.getElementById('listDryOff').innerHTML = d.dry_off_candidates.length ? d.dry_off_candidates.map(c => `
-                    <div class="flex justify-between items-center p-2.5 bg-emerald-50 rounded-xl border border-emerald-100">
-                        <div>
-                            <span class="font-bold text-slate-900">№ ${c.farm_number}</span> (лактація ${c.lactation})
-                            <div class="text-[11px] text-emerald-800 mt-0.5">Очікуваний отел: ${c.expected_calving}</div>
-                        </div>
-                        <span class="font-bold text-emerald-700 text-xs">${c.days_to_calving} дн.</span>
-                    </div>
-                `).join('') : `<p class="p-4 text-center text-slate-400">Немає кандидатів на запуск</p>`;
-
-                // 4. Calving Watch
-                document.getElementById('badgeCalvingWatch').textContent = d.calving_watch.length;
-                document.getElementById('listCalvingWatch').innerHTML = d.calving_watch.length ? d.calving_watch.map(c => `
-                    <div class="flex justify-between items-center p-2.5 bg-blue-50 rounded-xl border border-blue-100">
-                        <div>
-                            <span class="font-bold text-slate-900">№ ${c.farm_number}</span>
-                            <div class="text-[11px] text-blue-800 mt-0.5">Плановий отел: ${c.expected_calving}</div>
-                        </div>
-                        <span class="font-bold text-blue-700 text-xs">${c.days_left} дн.</span>
-                    </div>
-                `).join('') : `<p class="p-4 text-center text-slate-400">Немає близьких отелів</p>`;
-
-            } catch (e) { console.error(e); }
+                if (window.dashboardModule && typeof window.dashboardModule.loadActionLists === 'function') {
+                    await window.dashboardModule.loadActionLists();
+                    return;
+                }
+            } catch (e) { console.error("Error loading action lists:", e); }
         }
 
         // 8. Cow 360° Profile Logic

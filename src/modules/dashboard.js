@@ -12,7 +12,8 @@ export const dashboardModule = {
     actionLists: {
         quarantine_milk: [],
         pregnancy_check: [],
-        dry_off_candidates: []
+        dry_off_candidates: [],
+        calving_watch: []
     },
 
     async loadStats() {
@@ -40,7 +41,8 @@ export const dashboardModule = {
                 this.actionLists = {
                     quarantine_milk: data.quarantine_milk || data.milk_quarantine || [],
                     pregnancy_check: data.pregnancy_check || data.pregnancy_check_due || [],
-                    dry_off_candidates: data.dry_off_candidates || []
+                    dry_off_candidates: data.dry_off_candidates || [],
+                    calving_watch: data.calving_watch || data.expected_calving || []
                 };
             }
         } catch (e) {
