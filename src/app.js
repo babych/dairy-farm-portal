@@ -443,7 +443,8 @@
                     loadStats(),
                     loadAnimals(),
                     loadActionLists(),
-                    loadMedications()
+                    loadMedications(),
+                    loadMedsCatalog()
                 ]);
 
                 if (currentUser?.role === 'superadmin') {
@@ -1690,6 +1691,7 @@
                 console.error('loadMedsCatalog error:', err);
             }
         }
+        window.loadMedsCatalog = loadMedsCatalog;
 
         function openAddMedModal() {
             document.getElementById('addMedModal').classList.remove('hidden');

@@ -747,7 +747,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-5 md:grid-cols-10 gap-2 sm:gap-2.5">
+            <div class="grid grid-cols-2 sm:grid-cols-5 md:grid-cols-5 gap-2 sm:gap-2.5">
                 <button v-for="t in dashboard.tiles" :key="t.key"
                         @click="filterByStatus(t.key)"
                         :id="t.id"
@@ -2463,10 +2463,17 @@
         import { farmsModule } from './src/modules/farms.js';
         import { dashboardModule } from './src/modules/dashboard.js';
 
-        // Initialize Petite-Vue Reactive Tree
-        document.addEventListener('DOMContentLoaded', () => {
+        // Expose initApp globally
+        window.initApp = initApp;
+
+        // Initialize Petite-Vue Reactive Tree immediately or on DOMContentLoaded
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                initApp();
+            });
+        } else {
             initApp();
-        });
+        }
     </script>
 
     <!-- MAIN JAVASCRIPT LOGIC (Extracted to src/app.js) -->

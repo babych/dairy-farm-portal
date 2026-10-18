@@ -97,11 +97,14 @@ export const dashboardModule = reactive({
     },
 
     formatTileMain(count, pct) {
+        if (store.metricMode === 'percent') {
+            return pct + '%';
+        }
         return (count || 0).toLocaleString();
     },
 
     formatTileSub(count, pct) {
-        if (store.metricMode === 'heads') {
+        if (store.metricMode === 'percent') {
             return (count || 0).toLocaleString() + ' гол';
         }
         return pct + '%';

@@ -89,10 +89,13 @@ export function initApp() {
             if (store.token) {
                 try {
                     await farmsModule.loadFarms();
+                    const win = /** @type {any} */ (typeof window !== 'undefined' ? window : {});
+                    const medPromise = typeof win.loadMedsCatalog === 'function' ? win.loadMedsCatalog() : Promise.resolve();
                     await Promise.allSettled([
                         dashboardModule.loadStats(),
                         herdModule.loadAnimals(),
-                        dashboardModule.loadActionLists()
+                        dashboardModule.loadActionLists(),
+                        medPromise
                     ]);
                 } catch (e) {
                     console.warn("[Petite-Vue] Initial load error:", e);

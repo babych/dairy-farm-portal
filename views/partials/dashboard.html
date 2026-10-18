@@ -187,7 +187,7 @@
         </div>
 
         <!-- Панель статусу стада (Herd Summary Tiles / Interactive Filters) -->
-        <div class="grid grid-cols-2 sm:grid-cols-5 md:grid-cols-10 gap-2 sm:gap-2.5">
+        <div class="grid grid-cols-2 sm:grid-cols-5 md:grid-cols-5 gap-2 sm:gap-2.5">
             <button v-for="t in dashboard.tiles" :key="t.key"
                     @click="filterByStatus(t.key)"
                     :id="t.id"
