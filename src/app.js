@@ -1759,10 +1759,13 @@
                 if (!res.ok) throw new Error(d.detail || "Помилка аналізу файлу");
 
                 const diff = d.diff;
+                if (!diff) {
+                    throw new Error(d.message || d.detail || "Сервер не повернув даних порівняння (diff)");
+                }
                 document.getElementById('diffAddedCount').textContent = `+${diff.added_count || 0}`;
                 document.getElementById('diffModifiedCount').textContent = `Δ ${diff.modified_count || 0}`;
                 document.getElementById('diffUnchangedCount').textContent = `= ${diff.unchanged_count || 0}`;
-                document.getElementById('diffSubtitle').textContent = `Ферма: ${d.farm_name} • Файл: ${selectedFile.name} (Всього у файлі: ${diff.total_in_backup})`;
+                document.getElementById('diffSubtitle').textContent = `Ферма: ${d.farm_name || 'Невідомо'} • Файл: ${selectedFile.name} (Всього у файлі: ${diff.total_in_backup || 0})`;
 
                 const tb = document.getElementById('diffModifiedTableBody');
                 if (!diff.sample_modified || diff.sample_modified.length === 0) {
