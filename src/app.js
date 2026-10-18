@@ -1609,8 +1609,16 @@
                 showToast(d.message || "Базу успішно імпортовано!");
                 setTimeout(() => closeModal('importModal'), 600);
                 
+                if (d.access_token) {
+                    token = d.access_token;
+                    localStorage.setItem("dairy_jwt_token", token);
+                    if (window.store && typeof window.store.setToken === 'function') {
+                        window.store.setToken(d.access_token);
+                    }
+                }
+                
                 await loadFarms();
-                if (d.farm_id) onFarmDropdownChange(d.farm_id);
+                if (d.farm_id) await onFarmDropdownChange(d.farm_id);
             } catch (err) {
                 showImportModalError(err.message);
             } finally {

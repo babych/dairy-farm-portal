@@ -3,6 +3,7 @@
 import { requireAuth, getCallerUser } from './authGuard.js';
 import { getGoogleIdToken } from './gcpAuth.js';
 import { determinePhysiologicalStatus } from './zootech.js';
+import { signJWT } from './crypto.js';
 
 export async function handleSystem({ path, method, request, url, env, db, jsonResponse }) {
     // 1. GET /api/system/status
@@ -552,6 +553,20 @@ export async function handleSystem({ path, method, request, url, env, db, jsonRe
             ? `Синхронізовано ферму '${farmName}': додано ${insertedCount}, оновлено ${updatedCount} тварин`
             : `Ферму '${farmName}' успішно імпортовано: ${insertedCount} тварин`;
 
+        let updatedAccessToken = null;
+        if (reqUserEmail) {
+            try {
+                await db.prepare("UPDATE users SET farm_id = ? WHERE email = ?").bind(activeFarmId, reqUserEmail).run();
+                const jwtSecret = env?.JWT_SECRET_KEY || "ephemeral_local_dev_token_key_change_in_prod";
+                const userRow = await db.prepare("SELECT role FROM users WHERE email = ?").bind(reqUserEmail).first();
+                const role = userRow?.role || "farmer";
+                const payload = { sub: reqUserEmail, role, farm_id: activeFarmId, exp: Math.floor(Date.now() / 1000) + 86400 * 7 };
+                updatedAccessToken = await signJWT(payload, jwtSecret);
+            } catch (authErr) {
+                console.warn("[Import] Failed to refresh token for imported farm", authErr);
+            }
+        }
+
         return jsonResponse({
             status: "success",
             message: `${actionText}${medsImportedCount > 0 ? ` та ${medsImportedCount} медикаментів` : ""}!`,
@@ -559,7 +574,8 @@ export async function handleSystem({ path, method, request, url, env, db, jsonRe
             farm_name: farmName,
             cows_imported: insertedCount,
             cows_updated: updatedCount,
-            medications_imported: medsImportedCount
+            medications_imported: medsImportedCount,
+            access_token: updatedAccessToken
         });
     }
 

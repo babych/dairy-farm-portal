@@ -104,5 +104,38 @@ export const dashboardModule = {
             return (count || 0).toLocaleString() + ' гол';
         }
         return pct + '%';
-    }
+    },
+
+    getTileCount(statusKey) {
+        if (statusKey === 'ALL') return this.stats.total_cows || 0;
+        if (statusKey === 'Quarantine') return this.stats.in_quarantine || 0;
+        if (statusKey === 'Active') return this.stats.herd_tiles?.active_herd || 0;
+        if (statusKey === 'Culled') return this.stats.herd_tiles?.culled || 0;
+        if (statusKey === 'Open') return this.stats.herd_tiles?.open || 0;
+        if (statusKey === 'Inseminated') return this.stats.herd_tiles?.inseminated || 0;
+        if (statusKey === 'Pregnant') return this.stats.herd_tiles?.pregnant || 0;
+        if (statusKey === 'Dry') return this.stats.herd_tiles?.dry || 0;
+        if (statusKey === 'Fresh') return this.stats.herd_tiles?.fresh || 0;
+        if (statusKey === 'Heifer') return this.stats.herd_tiles?.heifers || 0;
+        return 0;
+    },
+
+    getTilePct(statusKey) {
+        if (statusKey === 'ALL') return 100;
+        const count = this.getTileCount(statusKey);
+        return this.getPct(count);
+    },
+
+    tiles: [
+        { key: 'ALL', id: 'tileBtnTotal', titleKey: 'tileTotalTitle', subKey: 'tileTotalSub', bg: 'bg-slate-100/90 hover:bg-slate-200/90 border-slate-300 text-slate-800' },
+        { key: 'Active', id: 'tileBtnActive', titleKey: 'tileActiveTitle', subKey: 'tileActiveSub', bg: 'bg-emerald-50/80 hover:bg-emerald-100/80 border-emerald-300 text-emerald-800' },
+        { key: 'Culled', id: 'tileBtnCulled', titleKey: 'tileCulledTitle', subKey: 'tileCulledSub', bg: 'bg-zinc-100/90 hover:bg-zinc-200/90 border-zinc-300 text-zinc-700' },
+        { key: 'Open', id: 'tileBtnOpen', titleKey: 'tileOpenTitle', subKey: 'tileOpenSub', bg: 'bg-blue-50/70 hover:bg-blue-100/70 border-blue-200 text-blue-700' },
+        { key: 'Inseminated', id: 'tileBtnIns', titleKey: 'tileInsTitle', subKey: 'tileInsSub', bg: 'bg-amber-50/70 hover:bg-amber-100/70 border-amber-200 text-amber-700' },
+        { key: 'Pregnant', id: 'tileBtnPreg', titleKey: 'tilePregTitle', subKey: 'tilePregSub', bg: 'bg-emerald-50/70 hover:bg-emerald-100/70 border-emerald-200 text-emerald-700' },
+        { key: 'Dry', id: 'tileBtnDry', titleKey: 'tileDryTitle', subKey: 'tileDrySub', bg: 'bg-orange-50/70 hover:bg-orange-100/70 border-orange-200 text-orange-700' },
+        { key: 'Fresh', id: 'tileBtnFresh', titleKey: 'tileFreshTitle', subKey: 'tileFreshSub', bg: 'bg-cyan-50/70 hover:bg-cyan-100/70 border-cyan-200 text-cyan-700' },
+        { key: 'Heifer', id: 'tileBtnHeifers', titleKey: 'tileHeifersTitle', subKey: 'tileHeifersSub', bg: 'bg-purple-50/70 hover:bg-purple-100/70 border-purple-200 text-purple-700' },
+        { key: 'Quarantine', id: 'tileBtnQuar', titleKey: 'tileQuarTitle', subKey: 'tileQuarSub', bg: 'bg-rose-50/70 hover:bg-rose-100/70 border-rose-200 text-rose-700' }
+    ]
 };
