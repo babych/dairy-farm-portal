@@ -429,16 +429,17 @@
                         </button>
                     </div>
                 </div>
-                <div class="flex items-center gap-2 flex-shrink-0 self-end sm:self-auto relative">
+                <div class="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto relative">
                     <button onclick="openImportModal()" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shadow-sm">
                         <i class="fa-solid fa-file-import"></i> <span data-i18n="navImport">Імпорт Uniform</span>
                     </button>
                     
-                    <!-- ⚙️ Шестерня (Технічні інструменти: Паспорт, Логи, Метрики, Бекап) -->
-                    <div class="relative">
-                        <button @click="store.toggleTechMenu()" title="Сервісні налаштування & Інструменти" class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 w-8 h-8 rounded-xl flex items-center justify-center transition shadow-2xs cursor-pointer">
-                            <i class="fa-solid fa-gear text-slate-600 text-xs"></i>
-                        </button>
+                    <div class="flex items-center gap-2">
+                        <!-- ⚙️ Шестерня (Технічні інструменти: Паспорт, Логи, Метрики, Бекап) -->
+                        <div class="relative">
+                            <button @click="store.toggleTechMenu()" title="Сервісні налаштування & Інструменти" class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 w-8 h-8 rounded-xl flex items-center justify-center transition shadow-2xs cursor-pointer">
+                                <i class="fa-solid fa-gear text-slate-600 text-xs"></i>
+                            </button>
 
                         <!-- Dropdown Menu -->
                         <div v-if="store.techMenuOpen" @click.outside="store.closeTechMenu()" class="absolute right-0 mt-1.5 w-56 bg-white border border-slate-200 rounded-2xl shadow-xl py-1.5 z-50 text-xs divide-y divide-slate-100">
@@ -464,11 +465,10 @@
                                 </button>
                             </div>
                         </div>
+                        <button onclick="logout()" class="bg-slate-100 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 text-slate-600 border border-slate-200 px-3 py-1.5 rounded-xl text-xs font-semibold transition">
+                            <span data-i18n="logoutBtn">Вийти</span>
+                        </button>
                     </div>
-
-                    <button onclick="logout()" class="bg-slate-100 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 text-slate-600 border border-slate-200 px-3 py-1.5 rounded-xl text-xs font-semibold transition">
-                        <span data-i18n="logoutBtn">Вийти</span>
-                    </button>
                 </div>
             </div>
 
@@ -607,8 +607,8 @@
 
         <!-- TAB 1: TAB ANIMALS (Default) -->
         <div id="tabContentAnimals" class="tab-pane space-y-4">
-            <!-- INTERACTIVE ANALYTICS CHARTS (Uniform-Agri Graphic Cards) -->
-            <div id="dashboardAnalyticsChartsCard" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <!-- INTERACTIVE ANALYTICS CHARTS (Uniform-Agri Graphic Cards: Collapsed by default) -->
+            <div id="dashboardAnalyticsChartsCard" class="hidden grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <!-- 1. Expected Calving Interval (ECI) Trend Chart -->
                 <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-sm space-y-3">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
