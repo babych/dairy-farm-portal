@@ -59,6 +59,13 @@ export async function handleFarms({ path, method, request, url, env, db, jsonRes
             } catch (e) {}
         }
 
+        // Access check: Only superadmin or farm owner can switch to private farms
+        const isDemoFarm = farm.code === "DEMO_FARM" || farm.owner_email === "demo@dairy-erp.farm" || farm.owner_email === null || farm.id === "demo-farm-test-01";
+        const isOwner = farm.owner_email && userEmail && farm.owner_email.toLowerCase() === userEmail.toLowerCase();
+        if (userRole !== "superadmin" && !isOwner && !isDemoFarm) {
+            return jsonResponse({ detail: "Доступ заборонено: ця ферма є приватною" }, 403);
+        }
+
         // Issue updated token scoped to selected farm
         const jwtSecret = env?.JWT_SECRET_KEY || "ephemeral_local_dev_token_key_change_in_prod";
         const payload = {

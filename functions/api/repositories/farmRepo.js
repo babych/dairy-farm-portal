@@ -15,13 +15,13 @@ export class FarmRepository {
         const params = [];
         if (userRole === "superadmin") {
             // superadmin sees all farms
-        } else if (userEmail) {
-            // Users see farms they own, farms without explicit owner (global/demo), or all farms if authorized
-            query += " WHERE (f.owner_email = ? OR f.owner_email IS NULL)";
+        } else if (userEmail && userRole !== "guest") {
+            // Authenticated users see their own farms and public/demo farms
+            query += " WHERE (f.owner_email = ? OR f.owner_email IS NULL OR f.owner_email = 'demo@dairy-erp.farm' OR f.code = 'DEMO_FARM')";
             params.push(userEmail);
         } else {
-            // Unauthenticated guest sees default/unassigned farms, or all farms in read-only demo mode
-            // (prevents UI freeze when all farms have owners)
+            // Unauthenticated guests and demo users ONLY see public demo farms
+            query += " WHERE (f.owner_email IS NULL OR f.owner_email = 'demo@dairy-erp.farm' OR f.code = 'DEMO_FARM' OR f.id = 'demo-farm-test-01')";
         }
         query += " GROUP BY f.id ORDER BY f.created_at ASC";
 

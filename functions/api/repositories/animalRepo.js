@@ -9,15 +9,9 @@ export class AnimalRepository {
         const safeLimit = Math.max(1, Math.min(Number(limit) || 50, 100));
         const safeOffset = Math.max(0, Number(offset) || 0);
         let activeFarmId = farmId;
-        if (activeFarmId) {
-            const currentFarmCount = await db.prepare("SELECT count(*) as c FROM animals WHERE farm_id = ?").bind(activeFarmId).first();
-            if (!currentFarmCount || currentFarmCount.c === 0) {
-                const populatedFarm = await db.prepare("SELECT id FROM farms WHERE (SELECT count(*) FROM animals WHERE farm_id = farms.id) > 0 ORDER BY imported_at DESC, created_at DESC LIMIT 1").first();
-                if (populatedFarm) activeFarmId = populatedFarm.id;
-            }
-        } else {
-            const firstFarm = await db.prepare("SELECT id FROM farms WHERE (SELECT count(*) FROM animals WHERE farm_id = farms.id) > 0 ORDER BY imported_at DESC, created_at DESC LIMIT 1").first();
-            if (firstFarm) activeFarmId = firstFarm.id;
+        if (!activeFarmId) {
+            const defaultFarm = await db.prepare("SELECT id FROM farms WHERE code = 'DEMO_FARM' OR owner_email = 'demo@dairy-erp.farm' OR owner_email IS NULL ORDER BY created_at ASC LIMIT 1").first();
+            if (defaultFarm) activeFarmId = defaultFarm.id;
         }
 
         let query = "SELECT * FROM animals WHERE 1=1";
