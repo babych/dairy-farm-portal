@@ -307,28 +307,28 @@
                 <div class="w-14 h-14 mx-auto rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl font-bold">
                     🚀
                 </div>
-                <h2 class="text-2xl font-bold text-slate-900">Початкове налаштування</h2>
-                <p class="text-xs text-slate-500">Створіть головний обліковий запис адміністратора ферми</p>
+                <h2 class="text-2xl font-bold text-slate-900" data-i18n="obTitle">Initial Farm Setup</h2>
+                <p class="text-xs text-slate-500" data-i18n="obSubtitle">Create the primary administrator account for your farm</p>
             </div>
 
             <form onsubmit="handleFirstRunSetup(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">Назва господарства</label>
-                    <input id="obFarmName" type="text" value="Головна молочна ферма" required
+                    <label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="obFarmNameLabel">Farm / Enterprise Name</label>
+                    <input id="obFarmName" type="text" value="Main Dairy Farm" required
                            class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">ПІБ Адміністратора (Зоотехнік / Власник)</label>
-                    <input id="obAdminName" type="text" placeholder="Головний Зоотехнік" required
+                    <label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="obAdminNameLabel">Admin Full Name (Vet / Zootech)</label>
+                    <input id="obAdminName" type="text" placeholder="Chief Zootechnician" required
                            class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">Email адміністратора</label>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="obAdminEmailLabel">Administrator Email</label>
                     <input id="obAdminEmail" type="email" placeholder="admin@dairy-erp.farm" required
                            class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">Пароль (Bcrypt захищений)</label>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1" data-i18n="obAdminPassLabel">Password (Bcrypt Encrypted)</label>
                     <input id="obAdminPassword" type="password" placeholder="••••••••••••" required minlength="6"
                            class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition">
                 </div>
@@ -336,7 +336,7 @@
                 <div id="obError" class="hidden text-xs text-rose-600 font-medium p-3 bg-rose-50 border border-rose-200 rounded-xl"></div>
 
                 <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl transition shadow-md shadow-emerald-600/20 flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-flag-checkered"></i> Ініціалізувати систему та увійти
+                    <i class="fa-solid fa-flag-checkered"></i> <span data-i18n="obSubmitBtn">Complete Setup & Sign In</span>
                 </button>
             </form>
         </div>

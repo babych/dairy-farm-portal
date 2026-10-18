@@ -22,19 +22,19 @@
                 <!-- Info cards -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs bg-slate-50 p-4 rounded-2xl border border-slate-200">
                     <div>
-                        <span class="text-slate-500 block">Робочий номер:</span>
+                        <span class="text-slate-500 block" data-i18n="mCowWorkNumber">Working Number:</span>
                         <input id="mEditNumber" class="font-bold text-slate-900 bg-white border border-slate-300 rounded px-2 py-1 mt-0.5 w-full">
                     </div>
                     <div>
-                        <span class="text-slate-500 block">Офіційна бирка:</span>
+                        <span class="text-slate-500 block" data-i18n="mCowOfficialTag">Official Ear Tag:</span>
                         <input id="mEditTag" class="font-medium text-slate-900 bg-white border border-slate-300 rounded px-2 py-1 mt-0.5 w-full">
                     </div>
                     <div>
-                        <span class="text-slate-500 block">Кличка:</span>
+                        <span class="text-slate-500 block" data-i18n="mCowNickname">Name / Nickname:</span>
                         <input id="mEditName" class="font-medium text-slate-900 bg-white border border-slate-300 rounded px-2 py-1 mt-0.5 w-full">
                     </div>
                     <div>
-                        <span class="text-slate-500 block" data-i18n="thStatus">Статус:</span>
+                        <span class="text-slate-500 block" data-i18n="thStatus">Status:</span>
                         <select id="mEditStatus" class="font-bold bg-white border border-slate-300 rounded px-2 py-1 mt-0.5 w-full">
                             <option value="Active" data-i18n="optActive">Active</option>
                             <option value="Heifer" data-i18n="optHeifer">Heifer</option>
@@ -49,43 +49,43 @@
                         </select>
                     </div>
                     <div>
-                        <span class="text-slate-500 block">Номер лактації:</span>
+                        <span class="text-slate-500 block" data-i18n="mCowLactNumber">Lactation Number:</span>
                         <input id="mEditLactation" type="number" class="font-bold text-slate-900 bg-white border border-slate-300 rounded px-2 py-1 mt-0.5 w-full">
                     </div>
                     <div>
-                        <span class="text-slate-500 block">Дата народження:</span>
+                        <span class="text-slate-500 block" data-i18n="mCowBirthDate">Date of Birth:</span>
                         <input id="mEditBirth" type="date" class="font-medium text-slate-900 bg-white border border-slate-300 rounded px-2 py-1 mt-0.5 w-full">
                     </div>
                     <div>
-                        <span class="text-slate-500 block">Останній отел:</span>
+                        <span class="text-slate-500 block" data-i18n="mCowLastCalv">Last Calving:</span>
                         <input id="mEditLastCalv" type="date" class="font-medium text-slate-900 bg-white border border-slate-300 rounded px-2 py-1 mt-0.5 w-full">
                     </div>
                     <div>
-                        <span class="text-slate-500 block">Очікуваний отел:</span>
+                        <span class="text-slate-500 block" data-i18n="mCowExpCalv">Expected Calving:</span>
                         <input id="mEditExpCalv" type="date" class="font-medium text-slate-900 bg-white border border-slate-300 rounded px-2 py-1 mt-0.5 w-full">
                     </div>
                 </div>
 
                 <div class="flex justify-end gap-2">
-                    <button onclick="saveCowEdits()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-sm">
-                        <i class="fa-solid fa-floppy-disk"></i> Зберегти зміни
+                    <button onclick="saveCowEdits()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-sm flex items-center gap-1.5">
+                        <i class="fa-solid fa-floppy-disk"></i> <span data-i18n="mCowSaveEdits">Save Changes</span>
                     </button>
                 </div>
 
                 <!-- Action buttons: Add Treatment or Repro Event -->
                 <div class="flex gap-3 border-t border-slate-200 pt-4">
                     <button onclick="openAddReproModal()" class="flex-1 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-venus-mars"></i> Зафіксувати подію відтворення
+                        <i class="fa-solid fa-venus-mars"></i> <span data-i18n="mCowAddReproBtn">Record Reproduction Event</span>
                     </button>
                     <button onclick="openAddHealthModal()" class="flex-1 bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-200 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-syringe"></i> Додати лікування / каренцію
+                        <i class="fa-solid fa-syringe"></i> <span data-i18n="mCowAddHealthBtn">Add Treatment / Withholding</span>
                     </button>
                 </div>
 
                 <!-- Reproduction history -->
                 <div class="space-y-2">
                     <h4 class="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-2">
-                        <i class="fa-solid fa-timeline"></i> Історія відтворення
+                        <i class="fa-solid fa-timeline"></i> <span data-i18n="mCowReproHistory">Reproduction History</span>
                     </h4>
                     <div id="mReproTimeline" class="space-y-2 text-xs"></div>
                 </div>
@@ -93,7 +93,7 @@
                 <!-- Health history -->
                 <div class="space-y-2">
                     <h4 class="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-2">
-                        <i class="fa-solid fa-notes-medical"></i> Ветеринарна історія та каренція
+                        <i class="fa-solid fa-notes-medical"></i> <span data-i18n="mCowHealthHistory">Veterinary History & Withholding</span>
                     </h4>
                     <div id="mHealthTimeline" class="space-y-2 text-xs"></div>
                 </div>
@@ -152,41 +152,41 @@
     <div id="healthModal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
             <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                <h3 class="font-bold text-slate-900 text-sm">Ветеринарне лікування та каренція</h3>
+                <h3 class="font-bold text-slate-900 text-sm" data-i18n="healthModalTitle">Veterinary Treatment & Withholding</h3>
                 <button onclick="closeModal('healthModal')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <form onsubmit="submitHealthEvent(event)" class="space-y-3 text-xs">
                 <div>
-                    <label class="block font-semibold text-slate-700 mb-1">Дата лікування</label>
+                    <label class="block font-semibold text-slate-700 mb-1" data-i18n="healthDateLabel">Treatment Start Date</label>
                     <input id="healthDate" type="date" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900">
                 </div>
                 <div>
-                    <label class="block font-semibold text-slate-700 mb-1">Діагноз</label>
-                    <input id="healthDiagnosis" type="text" placeholder="Мастит, Ендометрит, Парез..." required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900">
+                    <label class="block font-semibold text-slate-700 mb-1" data-i18n="healthDiagnosisLabel">Diagnosis / Reason</label>
+                    <input id="healthDiagnosis" type="text" placeholder="Mastitis, Endometritis, Paresis..." required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900">
                 </div>
                 <div>
-                    <label class="block font-semibold text-slate-700 mb-1">Препарат / Медикамент</label>
+                    <label class="block font-semibold text-slate-700 mb-1" data-i18n="healthMedLabel">Medication / Drug</label>
                     <select id="healthMedSelect" onchange="autoFillWithholding()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900">
-                        <option value="">Оберіть зі списку або введіть вручну...</option>
+                        <option value="" data-i18n="healthMedSelectPlaceholder">Choose from pharmacy or enter new...</option>
                     </select>
-                    <input id="healthMedName" type="text" placeholder="Назва препарату" class="mt-1 w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900">
+                    <input id="healthMedName" type="text" placeholder="Product name" class="mt-1 w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900">
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="block font-semibold text-slate-700 mb-1">Каренція молока (днів)</label>
+                        <label class="block font-semibold text-slate-700 mb-1" data-i18n="healthMilkDaysLabel">Milk Withholding (Days)</label>
                         <input id="healthMilkDays" type="number" value="0" min="0" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 font-bold text-rose-600">
                     </div>
                     <div>
-                        <label class="block font-semibold text-slate-700 mb-1">Каренція м'яса (днів)</label>
+                        <label class="block font-semibold text-slate-700 mb-1" data-i18n="healthMeatDaysLabel">Meat Withholding (Days)</label>
                         <input id="healthMeatDays" type="number" value="0" min="0" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900">
                     </div>
                 </div>
                 <div>
-                    <label class="block font-semibold text-slate-700 mb-1">Дозування & Примітки</label>
-                    <textarea id="healthNotes" rows="2" placeholder="20 мл внутрішньом'язово..." class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900"></textarea>
+                    <label class="block font-semibold text-slate-700 mb-1" data-i18n="healthNotesLabel">Vet Notes</label>
+                    <textarea id="healthNotes" rows="2" placeholder="20 ml intramuscularly..." class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900"></textarea>
                 </div>
-                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-xl shadow-sm">
-                    Зберегти лікування & активувати каренцію
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-xl shadow-sm" data-i18n="healthSubmitBtn">
+                    Save Treatment
                 </button>
             </form>
         </div>
@@ -196,59 +196,59 @@
     <div id="addMedModal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
             <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                <h3 class="font-bold text-slate-900 text-sm">Додати препарат у ветеринарну аптечку</h3>
+                <h3 class="font-bold text-slate-900 text-sm" data-i18n="addMedModalTitle">Add Medication to Pharmacy</h3>
                 <button onclick="closeModal('addMedModal')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <form onsubmit="submitNewMedication(event)" class="space-y-3 text-xs">
                 <div>
-                    <label class="block font-semibold text-slate-700 mb-1">Назва препарату *</label>
-                    <input id="newMedName" type="text" placeholder="Амоксицилін 15%, Кетлмастер..." required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 font-bold">
+                    <label class="block font-semibold text-slate-700 mb-1" data-i18n="addMedNameLabel">Commercial Product Name *</label>
+                    <input id="newMedName" type="text" placeholder="Amoxicillin 15%, CattleMaster..." required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 font-bold">
                 </div>
                 <div>
-                    <label class="block font-semibold text-slate-700 mb-1">Діюча речовина</label>
-                    <input id="newMedSubstance" type="text" placeholder="Амоксициліну тригідрат" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900">
+                    <label class="block font-semibold text-slate-700 mb-1" data-i18n="addMedActiveLabel">Active Ingredient / Batch</label>
+                    <input id="newMedSubstance" type="text" placeholder="Amoxicillin trihydrate" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900">
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="block font-semibold text-slate-700 mb-1">Номер партії</label>
+                        <label class="block font-semibold text-slate-700 mb-1">Batch Number</label>
                         <input id="newMedBatch" type="text" placeholder="LOT-2026-A" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900">
                     </div>
                     <div>
-                        <label class="block font-semibold text-slate-700 mb-1">Термін придатності</label>
+                        <label class="block font-semibold text-slate-700 mb-1" data-i18n="addMedExpiryLabel">Expiry Date</label>
                         <input id="newMedExp" type="date" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900">
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="block font-semibold text-slate-700 mb-1">Кількість залишку</label>
+                        <label class="block font-semibold text-slate-700 mb-1" data-i18n="addMedStockLabel">Initial Stock</label>
                         <input id="newMedStock" type="number" step="0.1" value="10" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900">
                     </div>
                     <div>
-                        <label class="block font-semibold text-slate-700 mb-1">Одиниця</label>
+                        <label class="block font-semibold text-slate-700 mb-1" data-i18n="addMedUnitLabel">Unit of Measurement</label>
                         <select id="newMedUnit" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900">
-                            <option value="дози">дози</option>
-                            <option value="мл">мл</option>
-                            <option value="флакони">флакони</option>
-                            <option value="кг">кг</option>
+                            <option value="дози" data-i18n="unitDoses">doses</option>
+                            <option value="мл" data-i18n="unitMl">ml</option>
+                            <option value="флакони" data-i18n="unitVials">vials</option>
+                            <option value="кг" data-i18n="unitKg">kg</option>
                         </select>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="block font-semibold text-slate-700 mb-1">Каренція молока (днів)</label>
+                        <label class="block font-semibold text-slate-700 mb-1" data-i18n="healthMilkDaysLabel">Milk Withholding (Days)</label>
                         <input id="newMedMilk" type="number" value="0" min="0" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 font-bold text-rose-600">
                     </div>
                     <div>
-                        <label class="block font-semibold text-slate-700 mb-1">Каренція м'яса (днів)</label>
+                        <label class="block font-semibold text-slate-700 mb-1" data-i18n="healthMeatDaysLabel">Meat Withholding (Days)</label>
                         <input id="newMedMeat" type="number" value="0" min="0" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900">
                     </div>
                 </div>
                 <div>
-                    <label class="block font-semibold text-slate-700 mb-1">Інструкції / Показання</label>
-                    <textarea id="newMedInstructions" rows="2" placeholder="Застосовувати підшкірно або внутрішньом'язово..." class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900"></textarea>
+                    <label class="block font-semibold text-slate-700 mb-1">Instructions / Indication</label>
+                    <textarea id="newMedInstructions" rows="2" placeholder="Subcutaneous or intramuscular..." class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900"></textarea>
                 </div>
-                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-xl shadow-sm">
-                    Зберегти в аптечку
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-xl shadow-sm" data-i18n="addMedSubmitBtn">
+                    Save Medication
                 </button>
             </form>
         </div>
@@ -258,36 +258,36 @@
     <div id="addUserModal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
             <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                <h3 class="font-bold text-slate-900 text-sm">Новий користувач системи</h3>
+                <h3 class="font-bold text-slate-900 text-sm">New System User</h3>
                 <button onclick="closeModal('addUserModal')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <form onsubmit="submitNewUser(event)" class="space-y-3 text-xs">
                 <div>
-                    <label class="block font-semibold text-slate-700 mb-1">ПІБ</label>
-                    <input id="newUserName" type="text" placeholder="Іванов Іван" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900">
+                    <label class="block font-semibold text-slate-700 mb-1" data-i18n="thUserName">Full Name</label>
+                    <input id="newUserName" type="text" placeholder="John Doe" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900">
                 </div>
                 <div>
-                    <label class="block font-semibold text-slate-700 mb-1">Email</label>
+                    <label class="block font-semibold text-slate-700 mb-1" data-i18n="thUserEmail">Email</label>
                     <input id="newUserEmail" type="email" placeholder="user@dairy-erp.farm" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900">
                 </div>
                 <div>
-                    <label class="block font-semibold text-slate-700 mb-1">Пароль</label>
+                    <label class="block font-semibold text-slate-700 mb-1">Password</label>
                     <input id="newUserPassword" type="password" placeholder="••••••••" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900">
                 </div>
                 <div>
-                    <label class="block font-semibold text-slate-700 mb-1">Роль</label>
+                    <label class="block font-semibold text-slate-700 mb-1" data-i18n="thUserRole">Role</label>
                     <select id="newUserRole" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900">
-                        <option value="operator">Оператор / Дояр</option>
-                        <option value="veterinarian">Ветеринарний лікар</option>
-                        <option value="superadmin">Адміністратор ферми</option>
+                        <option value="operator">Operator / Milker</option>
+                        <option value="veterinarian">Veterinarian</option>
+                        <option value="superadmin">Farm Administrator</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block font-semibold text-slate-700 mb-1">Прив'язка Google Email (опціонально)</label>
+                    <label class="block font-semibold text-slate-700 mb-1">Google Email Link (optional)</label>
                     <input id="newUserGoogleSub" type="email" placeholder="google.account@gmail.com" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900">
                 </div>
                 <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-xl shadow-sm">
-                    Створити користувача
+                    Create User
                 </button>
             </form>
         </div>
@@ -297,25 +297,25 @@
     <div id="addCowModal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
             <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                <h3 class="font-bold text-slate-900 text-sm">Додати нову корову</h3>
+                <h3 class="font-bold text-slate-900 text-sm" data-i18n="addCowModalTitle">Add Cow to Herd</h3>
                 <button onclick="closeModal('addCowModal')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <form onsubmit="submitNewCow(event)" class="space-y-3 text-xs">
                 <div>
-                    <label class="block font-semibold text-slate-700 mb-1">Робочий номер *</label>
+                    <label class="block font-semibold text-slate-700 mb-1" data-i18n="mCowWorkNumber">Working Number *</label>
                     <input id="newCowNumber" type="text" placeholder="1042" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 font-bold">
                 </div>
                 <div>
-                    <label class="block font-semibold text-slate-700 mb-1">Офіційна вушна бирка</label>
+                    <label class="block font-semibold text-slate-700 mb-1" data-i18n="mCowOfficialTag">Official Ear Tag</label>
                     <input id="newCowTag" type="text" placeholder="UA 8000123456" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900">
                 </div>
                 <div>
-                    <label class="block font-semibold text-slate-700 mb-1">Кличка</label>
-                    <input id="newCowName" type="text" placeholder="Зірка" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900">
+                    <label class="block font-semibold text-slate-700 mb-1" data-i18n="mCowNickname">Name / Nickname</label>
+                    <input id="newCowName" type="text" placeholder="Star" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900">
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="block font-semibold text-slate-700 mb-1" data-i18n="thStatus">Статус</label>
+                        <label class="block font-semibold text-slate-700 mb-1" data-i18n="thStatus">Status</label>
                         <select id="newCowStatus" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900">
                             <option value="Active" data-i18n="optActive">Active</option>
                             <option value="Heifer" data-i18n="optHeifer">Heifer</option>
@@ -330,12 +330,12 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block font-semibold text-slate-700 mb-1">Лактація</label>
+                        <label class="block font-semibold text-slate-700 mb-1" data-i18n="mCowLactNumber">Lactation Number</label>
                         <input id="newCowLactation" type="number" value="1" min="0" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900">
                     </div>
                 </div>
-                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-xl shadow-sm">
-                    Зберегти в базу даних
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-xl shadow-sm" data-i18n="addCowSubmitBtn">
+                    Save to Database
                 </button>
             </form>
         </div>

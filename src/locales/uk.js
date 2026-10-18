@@ -280,6 +280,61 @@ export const uk = {
     unitDoses: "дози",
     unitMl: "мл",
     unitVials: "флакони",
-    unitKg: "кг"
+    unitKg: "кг",
+
+    // Cow 360 Modal
+    mCowWorkNumber: "Робочий номер:",
+    mCowOfficialTag: "Офіційна бирка:",
+    mCowNickname: "Кличка:",
+    mCowLactNumber: "Номер лактації:",
+    mCowBirthDate: "Дата народження:",
+    mCowLastCalv: "Останній отел:",
+    mCowExpCalv: "Очікуваний отел:",
+    mCowSaveEdits: "Зберегти зміни",
+    mCowAddReproBtn: "Зафіксувати подію відтворення",
+    mCowAddHealthBtn: "Додати лікування / каренцію",
+    mCowReproHistory: "Історія відтворення",
+    mCowHealthHistory: "Ветеринарна історія та каренція",
+
+    // Health Treatment Modal
+    healthModalTitle: "Ветеринарне лікування та каренція",
+    healthDateLabel: "Дата початку лікування",
+    healthDiagnosisLabel: "Діагноз / Причина",
+    healthMedLabel: "Медикамент / Препарат",
+    healthMedSelectPlaceholder: "Оберіть зі списку або введіть новий...",
+    healthDoseLabel: "Доза / Кількість",
+    healthMilkDaysLabel: "Каренція молоко (днів)",
+    healthMeatDaysLabel: "Каренція м'ясо (днів)",
+    healthNotesLabel: "Примітки лікаря",
+    healthSubmitBtn: "Зберегти лікування",
+
+    // Add Cow Modal
+    addCowModalTitle: "Додати тварину в стадо",
+    addCowSubmitBtn: "Зберегти в базу даних",
+
+    // Add Medication Modal
+    addMedModalTitle: "Додати препарат в аптечку",
+    addMedNameLabel: "Комерційна назва препарату",
+    addMedActiveLabel: "Діюча речовина / Партія",
+    addMedExpiryLabel: "Термін придатності",
+    addMedStockLabel: "Початковий залишок",
+    addMedUnitLabel: "Одиниця виміру",
+    addMedSubmitBtn: "Зберегти препарат",
+
+    // Onboarding Setup
+    obTitle: "Початкове налаштування",
+    obSubtitle: "Створіть головний обліковий запис адміністратора ферми",
+    obFarmNameLabel: "Назва господарства",
+    obAdminNameLabel: "ПІБ Адміністратора (Зоотехнік / Ветлікар)",
+    obAdminEmailLabel: "Email адміністратора",
+    obAdminPassLabel: "Пароль (Bcrypt захищений)",
+    obSubmitBtn: "Завершити налаштування та увійти",
+
+    // Toasts
+    toastSaved: "Зміни успішно збережено!",
+    toastDemoLogin: "Вхід у демо-режим виконано!",
+    toastLoginSuccess: "Успішний вхід у систему!",
+    toastEventSaved: "Подію успішно зафіксовано!",
+    toastCowAdded: "Корову успішно додано до стада!"
 };
 

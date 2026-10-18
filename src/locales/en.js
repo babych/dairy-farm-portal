@@ -280,6 +280,61 @@ export const en = {
     unitDoses: "doses",
     unitMl: "ml",
     unitVials: "vials",
-    unitKg: "kg"
+    unitKg: "kg",
+
+    // Cow 360 Modal
+    mCowWorkNumber: "Working Number:",
+    mCowOfficialTag: "Official Ear Tag:",
+    mCowNickname: "Name / Nickname:",
+    mCowLactNumber: "Lactation Number:",
+    mCowBirthDate: "Date of Birth:",
+    mCowLastCalv: "Last Calving:",
+    mCowExpCalv: "Expected Calving:",
+    mCowSaveEdits: "Save Changes",
+    mCowAddReproBtn: "Record Reproduction Event",
+    mCowAddHealthBtn: "Add Treatment / Withholding",
+    mCowReproHistory: "Reproduction History",
+    mCowHealthHistory: "Veterinary History & Withholding",
+
+    // Health Treatment Modal
+    healthModalTitle: "Veterinary Treatment & Withholding",
+    healthDateLabel: "Treatment Start Date",
+    healthDiagnosisLabel: "Diagnosis / Reason",
+    healthMedLabel: "Medication / Drug",
+    healthMedSelectPlaceholder: "Choose from pharmacy or enter new...",
+    healthDoseLabel: "Dosage / Amount",
+    healthMilkDaysLabel: "Milk Withholding (Days)",
+    healthMeatDaysLabel: "Meat Withholding (Days)",
+    healthNotesLabel: "Vet Notes",
+    healthSubmitBtn: "Save Treatment",
+
+    // Add Cow Modal
+    addCowModalTitle: "Add Cow to Herd",
+    addCowSubmitBtn: "Save to Database",
+
+    // Add Medication Modal
+    addMedModalTitle: "Add Medication to Pharmacy",
+    addMedNameLabel: "Commercial Product Name",
+    addMedActiveLabel: "Active Ingredient / Batch",
+    addMedExpiryLabel: "Expiry Date",
+    addMedStockLabel: "Initial Stock",
+    addMedUnitLabel: "Unit of Measurement",
+    addMedSubmitBtn: "Save Medication",
+
+    // Onboarding Setup
+    obTitle: "Initial Farm Setup",
+    obSubtitle: "Create the primary administrator account for your farm",
+    obFarmNameLabel: "Farm / Enterprise Name",
+    obAdminNameLabel: "Admin Full Name (Vet / Zootech)",
+    obAdminEmailLabel: "Administrator Email",
+    obAdminPassLabel: "Password (Bcrypt Encrypted)",
+    obSubmitBtn: "Complete Setup & Sign In",
+
+    // Toasts
+    toastSaved: "Changes saved successfully!",
+    toastDemoLogin: "Demo mode activated!",
+    toastLoginSuccess: "Signed in successfully!",
+    toastEventSaved: "Event recorded successfully!",
+    toastCowAdded: "Animal added to herd successfully!"
 };
 
