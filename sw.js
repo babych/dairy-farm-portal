@@ -1,5 +1,5 @@
 // DairyERP Service Worker (PWA Offline & Instant Cache)
-const CACHE_VERSION = 'dairy-erp-vbba9148-mvdmta8l';
+const CACHE_VERSION = 'dairy-erp-v4baee2f-' + Date.now().toString(36);
 
 const PRECACHE_ASSETS = [
   '/',
@@ -113,7 +113,24 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Other Static Assets (CSS, JS, Fonts, Images): Cache-First
+  // Local Application Scripts (/src/*): Network-First to immediately reflect code deployments
+  if (url.origin === self.location.origin && url.pathname.startsWith('/src/')) {
+    event.respondWith(
+      fetch(req).then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200 && !networkResponse.redirected) {
+          const clone = networkResponse.clone();
+          caches.open(CACHE_VERSION).then((cache) => cache.put(req, clone));
+        }
+        return networkResponse;
+      }).catch(async () => {
+        const cache = await caches.open(CACHE_VERSION);
+        return await cache.match(req);
+      })
+    );
+    return;
+  }
+
+  // Other Static Assets (CSS, Fonts, Images, External CDNs): Cache-First
   event.respondWith(
     caches.match(req).then((cachedResponse) => {
       if (cachedResponse) {
