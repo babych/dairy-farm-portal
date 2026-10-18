@@ -440,30 +440,68 @@ export async function handleSystem({ path, method, request, url, env, db, jsonRe
             } catch (e) {}
         }
 
-        // Batch insert animals into D1
+        // Smart Upsert: query existing animals on this farm to update existing or insert new without duplicates
+        const existingRows = (await db.prepare("SELECT id, farm_number FROM animals WHERE farm_id = ?").bind(activeFarmId).all()).results || [];
+        const existingMap = new Map();
+        for (const row of existingRows) {
+            if (row.farm_number) existingMap.set(String(row.farm_number).trim(), row.id);
+        }
+
         let insertedCount = 0;
+        let updatedCount = 0;
         const CHUNK_SIZE = 50;
+
         for (let i = 0; i < animals.length; i += CHUNK_SIZE) {
             const chunk = animals.slice(i, i + CHUNK_SIZE);
             const stmts = chunk.map(a => {
-                const animalId = crypto.randomUUID();
+                const key = String(a.farm_number || "0").trim();
+                const existingId = existingMap.get(key);
                 const computedStatus = determinePhysiologicalStatus(a);
-                return db.prepare(`
-                    INSERT INTO animals (
-                        id, farm_id, farm_number, official_tag, name, birth_date,
-                        lactation_number, current_status, last_calving_date, expected_calving_date,
-                        last_insemination_date, days_pregnant,
-                        transponder_code, dam_tag, sire_tag, created_at, updated_at
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))
-                `).bind(
-                    animalId, activeFarmId, a.farm_number || "0", a.official_tag || null, a.name || null, a.birth_date || null,
-                    a.lactation_number || 0, computedStatus, a.last_calving_date || null, a.expected_calving_date || null,
-                    a.last_insemination_date || null, a.days_pregnant || 0,
-                    a.transponder_code || null, a.dam_tag || null, a.sire_tag || null
-                );
+
+                if (existingId) {
+                    updatedCount++;
+                    return db.prepare(`
+                        UPDATE animals SET
+                            official_tag = COALESCE(?, official_tag),
+                            name = COALESCE(?, name),
+                            birth_date = COALESCE(?, birth_date),
+                            lactation_number = ?,
+                            current_status = ?,
+                            last_calving_date = ?,
+                            expected_calving_date = ?,
+                            last_insemination_date = ?,
+                            days_pregnant = ?,
+                            transponder_code = COALESCE(?, transponder_code),
+                            dam_tag = COALESCE(?, dam_tag),
+                            sire_tag = COALESCE(?, sire_tag),
+                            updated_at = datetime('now')
+                        WHERE id = ? AND farm_id = ?
+                    `).bind(
+                        a.official_tag || null, a.name || null, a.birth_date || null,
+                        a.lactation_number || 0, computedStatus, a.last_calving_date || null, a.expected_calving_date || null,
+                        a.last_insemination_date || null, a.days_pregnant || 0,
+                        a.transponder_code || null, a.dam_tag || null, a.sire_tag || null,
+                        existingId, activeFarmId
+                    );
+                } else {
+                    insertedCount++;
+                    const animalId = crypto.randomUUID();
+                    return db.prepare(`
+                        INSERT INTO animals (
+                            id, farm_id, farm_number, official_tag, name, birth_date,
+                            lactation_number, current_status, last_calving_date, expected_calving_date,
+                            last_insemination_date, days_pregnant,
+                            transponder_code, dam_tag, sire_tag, created_at, updated_at
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))
+                    `).bind(
+                        animalId, activeFarmId, a.farm_number || "0", a.official_tag || null, a.name || null, a.birth_date || null,
+                        a.lactation_number || 0, computedStatus, a.last_calving_date || null, a.expected_calving_date || null,
+                        a.last_insemination_date || null, a.days_pregnant || 0,
+                        a.transponder_code || null, a.dam_tag || null, a.sire_tag || null
+                    );
+                }
             });
             await db.batch(stmts);
-            insertedCount += chunk.length;
         }
 
         // Batch insert medications if present in backup
@@ -500,12 +538,17 @@ export async function handleSystem({ path, method, request, url, env, db, jsonRe
             }
         }
 
+        const actionText = updatedCount > 0 
+            ? `Синхронізовано ферму '${farmName}': додано ${insertedCount}, оновлено ${updatedCount} тварин`
+            : `Ферму '${farmName}' успішно імпортовано: ${insertedCount} тварин`;
+
         return jsonResponse({
             status: "success",
-            message: `Ферму '${farmName}' успішно створено та імпортовано ${insertedCount} тварин${medsImportedCount > 0 ? ` та ${medsImportedCount} медикаментів` : ""}!`,
+            message: `${actionText}${medsImportedCount > 0 ? ` та ${medsImportedCount} медикаментів` : ""}!`,
             farm_id: activeFarmId,
             farm_name: farmName,
             cows_imported: insertedCount,
+            cows_updated: updatedCount,
             medications_imported: medsImportedCount
         });
     }

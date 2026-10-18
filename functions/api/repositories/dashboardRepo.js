@@ -14,8 +14,14 @@ export class DashboardRepository {
      * @param {number|string|null} [farmId]
      */
     async getHerdStats(farmId = null) {
-        let fFilter = farmId ? "WHERE farm_id = ?" : "";
-        let fParams = farmId ? [farmId] : [];
+        let activeId = farmId;
+        if (!activeId) {
+            const firstFarm = await this.db.prepare("SELECT id FROM farms WHERE (SELECT count(*) FROM animals WHERE farm_id = farms.id) > 0 ORDER BY imported_at DESC, created_at DESC LIMIT 1").first();
+            if (firstFarm) activeId = firstFarm.id;
+        }
+
+        let fFilter = activeId ? "WHERE farm_id = ?" : "";
+        let fParams = activeId ? [activeId] : [];
 
         // Single-Pass Aggregation Query
         const aggQuery = `
