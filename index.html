@@ -513,15 +513,16 @@
         <!-- Верхня панель користувача & Навігація (Організована поверхами без горизонтального скролу) -->
         <div class="bg-white border border-slate-200 p-3 sm:p-5 rounded-2xl shadow-sm space-y-3">
             <!-- 1-й поверх: Привітання, ферма, роль та шестерня сервісу -->
-            <div class="flex items-start sm:items-center justify-between gap-2.5 border-b border-slate-100 pb-3">
-                <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 min-w-0 flex-1">
-                    <div class="flex items-center gap-2 flex-wrap min-w-0">
-                        <h2 class="text-base sm:text-xl font-bold text-slate-900 flex items-center gap-1.5 mr-1 truncate">
-                            <span data-i18n="greeting">Вітаємо,</span> <span id="userNameDisplay" v-text="store.currentUser ? (store.currentUser.name || store.currentUser.email) : ''" class="text-emerald-600"></span>! 👋
-                        </h2>
-                        <span id="userRoleBadge" v-text="store.currentUser ? store.currentUser.role : 'guest'" class="bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-lg text-[11px] font-semibold">superadmin</span>
-                    </div>
-                    
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-2 flex-wrap min-w-0">
+                    <h2 class="text-base sm:text-xl font-bold text-slate-900 flex items-center gap-1.5 mr-1 truncate">
+                        <span data-i18n="greeting">Вітаємо,</span> <span id="userNameDisplay" v-text="store.currentUser ? (store.currentUser.name || store.currentUser.email) : ''" class="text-emerald-600"></span>! 👋
+                    </h2>
+                    <span id="userRoleBadge" v-text="store.currentUser ? store.currentUser.role : 'guest'" class="bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-lg text-[11px] font-semibold">superadmin</span>
+                </div>
+
+                <!-- Блок вибору ферми та шестерня сервісних налаштувань -->
+                <div class="flex items-center gap-2 min-w-0 flex-shrink-0">
                     <!-- Селектор активної ферми з захистом від переповнення контейнера -->
                     <div class="flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-2.5 py-1 rounded-xl max-w-full sm:max-w-fit min-w-0">
                         <span class="text-[11px] text-slate-500 font-medium whitespace-nowrap" data-i18n="activeFarmLabel">Ферма:</span>
@@ -535,12 +536,10 @@
                             <i class="fa-solid fa-circle-plus"></i>
                         </button>
                     </div>
-                </div>
 
-                <div class="flex items-center flex-shrink-0 pt-0.5">
-                    <!-- ⚙️ Шестерня (Сервіс, Профіль, Імпорт, Паспорт, Логи, Метрики, Бекап, Вихід) -->
+                    <!-- ⚙️ Шестерня (Одразу після селектора ферми) -->
                     <div class="relative">
-                        <button @click="store.toggleTechMenu()" title="Сервісні налаштування & Інструменти" class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 w-9 h-9 rounded-xl flex items-center justify-center transition shadow-2xs cursor-pointer">
+                        <button @click="store.toggleTechMenu()" title="Сервісні налаштування & Інструменти" class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 w-8.5 h-8.5 rounded-xl flex items-center justify-center transition shadow-2xs cursor-pointer">
                             <i class="fa-solid fa-gear text-slate-600 text-sm"></i>
                         </button>
 
