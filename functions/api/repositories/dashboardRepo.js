@@ -23,17 +23,17 @@ export class DashboardRepository {
         let fFilter = activeId ? "WHERE farm_id = ?" : "";
         let fParams = activeId ? [activeId] : [];
 
-        // Single-Pass Aggregation Query
+        // Single-Pass Aggregation Query (strictly excluding Culled/archived animals from active tiles)
         const aggQuery = `
             SELECT 
                 count(*) as total,
-                SUM(CASE WHEN current_status IN ('Active', 'Fresh') THEN 1 ELSE 0 END) as lactating,
-                SUM(CASE WHEN current_status = 'Dry' THEN 1 ELSE 0 END) as dry,
-                SUM(CASE WHEN current_status = 'Pregnant' THEN 1 ELSE 0 END) as pregnant,
-                SUM(CASE WHEN current_status = 'Fresh' THEN 1 ELSE 0 END) as fresh,
-                SUM(CASE WHEN current_status = 'Inseminated' THEN 1 ELSE 0 END) as inseminated,
-                SUM(CASE WHEN current_status = 'Open' OR (current_status = 'Active' AND (last_insemination_date IS NULL OR current_status NOT IN ('Pregnant', 'Inseminated'))) THEN 1 ELSE 0 END) as open,
-                SUM(CASE WHEN current_status = 'Heifer' OR (lactation_number = 0 AND current_status NOT IN ('Pregnant', 'Inseminated', 'Dry')) THEN 1 ELSE 0 END) as heifers
+                SUM(CASE WHEN current_status != 'Culled' AND current_status IN ('Active', 'Fresh') THEN 1 ELSE 0 END) as lactating,
+                SUM(CASE WHEN current_status != 'Culled' AND current_status = 'Dry' THEN 1 ELSE 0 END) as dry,
+                SUM(CASE WHEN current_status != 'Culled' AND current_status = 'Pregnant' THEN 1 ELSE 0 END) as pregnant,
+                SUM(CASE WHEN current_status != 'Culled' AND current_status = 'Fresh' THEN 1 ELSE 0 END) as fresh,
+                SUM(CASE WHEN current_status != 'Culled' AND current_status = 'Inseminated' THEN 1 ELSE 0 END) as inseminated,
+                SUM(CASE WHEN current_status != 'Culled' AND lactation_number > 0 AND (current_status = 'Open' OR (current_status = 'Active' AND (last_insemination_date IS NULL OR current_status NOT IN ('Pregnant', 'Inseminated')))) THEN 1 ELSE 0 END) as open,
+                SUM(CASE WHEN current_status != 'Culled' AND (current_status = 'Heifer' OR (lactation_number = 0 AND current_status NOT IN ('Pregnant', 'Inseminated', 'Dry'))) THEN 1 ELSE 0 END) as heifers
             FROM animals ${fFilter}
         `;
         const agg = (await this.db.prepare(aggQuery).bind(...fParams).first()) || {};
