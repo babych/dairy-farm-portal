@@ -7,8 +7,8 @@ This repository hosts the public Edge portal and Progressive Web App (PWA) for D
 ## 🏛️ Architecture & Stack
 
 - **Platform:** Cloudflare Pages + Pages Functions (V8 Edge Workers) + Cloudflare D1 (SQLite).
-- **Frontend:** Single-Page Vanilla ES6+ Web App (`portal.html` & `index.html`), Tailwind CSS, native WebCrypto API.
-- **PWA:** Service Worker (`sw.js`) with build-time cache busting (`scripts/stamp-sw.js`) and offline barn outbox.
+- **Frontend:** Single-Page App with Petite-Vue reactive modules (`src/modules/*`), central reactive store (`src/state/store.js`), declarative templates (`index.html`), Tailwind CSS, native WebCrypto API.
+- **PWA:** Service Worker (`sw.js`) with build-time cache stamping (`scripts/stamp-sw.js`), `controllerchange` auto-reload, and offline IndexedDB outbox.
 - **Backend Service:** Stateless Firebird parser on Google Cloud Run (`POST /api/convert/uniform`).
 
 ---
@@ -55,6 +55,6 @@ For cattle barn operations without internet:
 
 ```bash
 npm run typecheck # Static TypeScript type integrity (validates module schemas, method calls, properties)
-npm test          # All 49 zootech, domain models & security tests must pass
+npm test          # All 67 zootech, clinical events, domain models & security tests must pass
 npm run build     # Runs typecheck, stamps sw.js version and compiles Cloudflare Worker bundle
 ```

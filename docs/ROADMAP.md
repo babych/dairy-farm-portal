@@ -1,11 +1,24 @@
 # 📋 DairyERP Active Roadmap & Backlog
 
-Поточний реліз: **v2.5.4** (гілка `dev`)  
-Стан тестів: **52/52 pass** | TypeScript: **0 errors**
+Поточний реліз: **v2.6.0** (гілки `main` та `dev`)  
+Стан тестів: **67/67 pass** | TypeScript: **0 errors**
 
 ---
 
 ## ✅ Нещодавно виконано (Completed in Current Sprint)
+- [x] **Декларативні плитки дашборду (Declarative Herd Status Tiles):**
+  - Видалено понад 80 рядків дубльованої розмітки кнопок фільтрів з `index.html` та `views/partials/dashboard.html`.
+  - Впроваджено єдиний `v-for="t in dashboard.tiles"` з централізованим розрахунком `getTileCount()` та `getTilePct()`.
+  - Покриття тестами: `test/tiles_integrity.test.js` перевіряє унікальність усіх 10 плиток і відсутність застарілих ID.
+- [x] **Реактивність Petite-Vue без затримок:**
+  - `dashboardModule`, `herdModule` та `farmsModule` обгорнуто у `reactive()` для негайної синхронізації DOM при асинхронному завантаженні даних.
+  - Виправлено відображення початкових нулів при переході між статусами та перемиканні режиму «голів / %».
+- [x] **Auto-fallback та безпека вибірки порожніх ферм:**
+  - У `AnimalRepository.searchAnimals` додано автоматичне визначення наповненої ферми (1 179 голів) у разі порожнього або застарілого `farm_id`.
+  - Узгоджено фільтр `Active`: `WHERE current_status != 'Culled'`.
+- [x] **Автоматична інвалідація кешу Service Worker:**
+  - Створено білд-штампувальник версії кешу `scripts/stamp-sw.js` з хешем коміту git.
+  - Додано слухач `controllerchange` у `src/app.js` для безшовного авто-перезавантаження клієнта на нову версію.
 - [x] **Єдине джерело правди для статусів тварин (Status Domain Model):**
   - Створено централізований реєстр `functions/api/models/animalStatuses.js` (`ANIMAL_STATUSES`, `VALID_STATUS_IDS`, `getStatusBadgeClass`).
   - Підключено до бекенд-валідації (`validation.js`) та фронтенд-модуля (`src/modules/herd.js`).
