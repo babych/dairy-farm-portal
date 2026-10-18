@@ -642,7 +642,7 @@
                     ? farmsList.find(f => f.id === savedFarmId) 
                     : (farmsList.find(f => f.is_current) || farmsList[0]);
 
-                if (currentFarm && savedFarmId !== currentFarm.id) {
+                if (currentFarm) {
                     localStorage.setItem("dairy_selected_farm", currentFarm.id);
                     if (window.store) {
                         window.store.setSelectedFarm(currentFarm.id);
@@ -883,7 +883,18 @@
                     return;
                 }
                 const d = await res.json();
-                document.getElementById('statQuarantine').textContent = d.in_quarantine.toLocaleString();
+
+                if (window.dashboardModule) {
+                    window.dashboardModule.stats = {
+                        total_cows: d.total_cows || 0,
+                        in_quarantine: d.in_quarantine || 0,
+                        herd_tiles: d.herd_tiles || { open: 0, inseminated: 0, pregnant: 0, dry: 0, fresh: 0, active_herd: 0, culled: 0, heifers: 0 },
+                        kpis: d.kpis || { avg_dim: 0, conception_rate: 0, pregnancy_rate: 0, insemination_rate: 0, calving_interval_days: 0 }
+                    };
+                }
+
+                const elStatQuar = document.getElementById('statQuarantine');
+                if (elStatQuar) elStatQuar.textContent = (d.in_quarantine || 0).toLocaleString();
 
                 // Herd Tiles
                 if (d.herd_tiles) {

@@ -6,7 +6,7 @@ export const dashboardModule = {
     stats: {
         total_cows: 0,
         in_quarantine: 0,
-        herd_tiles: { open: 0, inseminated: 0, pregnant: 0, dry: 0, fresh: 0 },
+        herd_tiles: { open: 0, inseminated: 0, pregnant: 0, dry: 0, fresh: 0, active_herd: 0, culled: 0, heifers: 0 },
         kpis: { avg_dim: 0, conception_rate: 0, pregnancy_rate: 0, insemination_rate: 0, calving_interval_days: 0 }
     },
     actionLists: {
@@ -23,7 +23,7 @@ export const dashboardModule = {
                 this.stats = {
                     total_cows: data.total_cows || 0,
                     in_quarantine: data.in_quarantine || 0,
-                    herd_tiles: data.herd_tiles || { open: 0, inseminated: 0, pregnant: 0, dry: 0, fresh: 0 },
+                    herd_tiles: data.herd_tiles || { open: 0, inseminated: 0, pregnant: 0, dry: 0, fresh: 0, active_herd: 0, culled: 0, heifers: 0 },
                     kpis: data.kpis || { avg_dim: 0, conception_rate: 0, pregnancy_rate: 0, insemination_rate: 0, calving_interval_days: 0 }
                 };
             }
