@@ -219,14 +219,33 @@
             color: #991b1b;
         }
 
-        /* Clean active state for herd status tiles */
+        /* Clean active & focus state for navigation buttons & herd status tiles */
+        .nav-tab-btn {
+            outline: none !important;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .nav-tab-btn.active,
+        .nav-tab-btn.active:hover,
+        .nav-tab-btn.active:focus,
+        .nav-tab-btn.active:active {
+            background-color: #059669 !important; /* emerald-600 */
+            color: #ffffff !important;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+            opacity: 1 !important;
+        }
+
         .herd-tile-btn {
             outline: none !important;
             -webkit-tap-highlight-color: transparent;
         }
-        .herd-tile-btn.active-filter {
-            box-shadow: 0 0 0 2px #16a34a, 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+        .herd-tile-btn.active-filter,
+        .herd-tile-btn.active-filter:hover,
+        .herd-tile-btn.active-filter:focus,
+        .herd-tile-btn.active-filter:active {
+            box-shadow: 0 0 0 2px #059669, 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+            border-color: #059669 !important;
             transform: translateY(-1px);
+            opacity: 1 !important;
         }
     </style>
 <body id="petiteAppRoot" v-scope class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans selection:bg-emerald-500 selection:text-white antialiased">
@@ -465,11 +484,12 @@
                                 </button>
                             </div>
                         </div>
-                        <button onclick="logout()" class="bg-slate-100 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 text-slate-600 border border-slate-200 px-3 py-1.5 rounded-xl text-xs font-semibold transition">
-                            <span data-i18n="logoutBtn">Вийти</span>
-                        </button>
                     </div>
+                    <button onclick="logout()" class="bg-slate-100 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 text-slate-600 border border-slate-200 px-3 py-1.5 rounded-xl text-xs font-semibold transition">
+                        <span data-i18n="logoutBtn">Вийти</span>
+                    </button>
                 </div>
+            </div>
             </div>
 
             <!-- 2-й поверх: Основні робочі розділи системи -->
@@ -2540,7 +2560,7 @@
         // Tabs
         function switchTab(tabId) {
             document.querySelectorAll('.nav-tab-btn').forEach(b => {
-                b.classList.remove('bg-emerald-600', 'text-white', 'shadow-sm');
+                b.classList.remove('active', 'bg-emerald-600', 'text-white', 'shadow-sm');
                 b.classList.add('bg-slate-100', 'text-slate-700');
             });
             document.querySelectorAll('.tab-pane').forEach(p => p.classList.add('hidden'));
@@ -2557,7 +2577,7 @@
 
             const targetBtn = document.getElementById(tabBtnMap[tabId]);
             if (targetBtn) {
-                targetBtn.classList.add('bg-emerald-600', 'text-white', 'shadow-sm');
+                targetBtn.classList.add('active', 'bg-emerald-600', 'text-white', 'shadow-sm');
                 targetBtn.classList.remove('bg-slate-100', 'text-slate-700');
             }
 
@@ -3168,8 +3188,12 @@
             if (!card) return;
             const isHidden = card.classList.contains('hidden');
             if (isHidden) {
+                switchTab('animals');
                 card.classList.remove('hidden');
                 if (btn) btn.className = "bg-indigo-600 text-white border border-indigo-700 px-3 py-1.5 rounded-xl font-semibold flex items-center gap-1.5 transition shadow-sm";
+                setTimeout(() => {
+                    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 50);
             } else {
                 card.classList.add('hidden');
                 if (btn) btn.className = "bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 px-3 py-1.5 rounded-xl font-semibold flex items-center gap-1.5 transition";

@@ -31,34 +31,8 @@ export function initApp() {
         // Top Navigation
         switchTab(tabName) {
             store.currentTab = tabName;
-            const contents = ['tabAnimals', 'tabGrid', 'tabActions', 'tabMeds', 'tabUsers', 'tabMetrics', 'tabLogs'];
-            contents.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.classList.add('hidden');
-            });
-
-            const tabMap = {
-                'animals': 'tabAnimals',
-                'grid': 'tabGrid',
-                'actions': 'tabActions',
-                'meds': 'tabMeds',
-                'users': 'tabUsers',
-                'metrics': 'tabMetrics',
-                'logs': 'tabLogs'
-            };
-
-            const targetId = tabMap[tabName];
-            const targetEl = document.getElementById(targetId);
-            if (targetEl) targetEl.classList.remove('hidden');
-
-            document.querySelectorAll('.nav-tab-btn').forEach(b => {
-                b.classList.remove('active', 'bg-emerald-600', 'text-white', 'shadow-sm');
-                b.classList.add('bg-slate-100', 'text-slate-700');
-            });
-            const activeBtn = document.querySelector(`[onclick*="switchTab('${tabName}')"]`);
-            if (activeBtn) {
-                activeBtn.classList.add('active', 'bg-emerald-600', 'text-white', 'shadow-sm');
-                activeBtn.classList.remove('bg-slate-100', 'text-slate-700');
+            if (typeof window.switchTab === 'function') {
+                window.switchTab(tabName);
             }
         },
 
