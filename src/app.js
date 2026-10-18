@@ -384,8 +384,10 @@
                 document.getElementById('headerBackupBtn')?.classList.add('flex');
             }
 
-            document.getElementById('userNameDisplay').textContent = currentUser?.full_name || "Користувач";
-            document.getElementById('userRoleBadge').textContent = isGuest ? "Гість (Демо)" : (currentUser?.role || "operator");
+            const userNameEl = document.getElementById('userNameDisplay');
+            if (userNameEl) userNameEl.textContent = currentUser?.full_name || "Користувач";
+            const roleEl = document.getElementById('userRoleBadge');
+            if (roleEl) roleEl.textContent = isGuest ? "Гість (Демо)" : (currentUser?.role || "operator");
             if (window.store && currentUser) {
                 window.store.setCurrentUser(currentUser);
             }
