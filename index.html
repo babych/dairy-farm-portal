@@ -539,12 +539,12 @@
 
                     <!-- ⚙️ Шестерня (Одразу після селектора ферми) -->
                     <div class="relative" id="techMenuDropdownContainer">
-                        <button id="techMenuGearBtn" @click="store.toggleTechMenu()" onclick="if(window.store) window.store.toggleTechMenu()" title="Сервісні налаштування & Інструменти" class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 w-8.5 h-8.5 rounded-xl flex items-center justify-center transition shadow-2xs cursor-pointer">
-                            <i class="fa-solid fa-gear text-slate-600 text-sm"></i>
+                        <button id="techMenuGearBtn" type="button" onclick="window.toggleTechMenu(event)" title="Сервісні налаштування & Інструменти" class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 w-8.5 h-8.5 rounded-xl flex items-center justify-center transition shadow-2xs cursor-pointer">
+                            <i class="fa-solid fa-gear text-slate-600 text-sm pointer-events-none"></i>
                         </button>
 
                         <!-- Dropdown Menu -->
-                        <div v-if="store.techMenuOpen" class="absolute right-0 mt-1.5 w-60 bg-white border border-slate-200 rounded-2xl shadow-xl py-1.5 z-50 text-xs divide-y divide-slate-100">
+                        <div id="techMenuDropdown" class="hidden absolute right-0 mt-1.5 w-60 bg-white border border-slate-200 rounded-2xl shadow-xl py-1.5 z-50 text-xs divide-y divide-slate-100">
                             <!-- 1. Профіль користувача -->
                             <div class="px-3.5 py-2.5 bg-slate-50/70">
                                 <div class="flex items-center gap-2.5">
@@ -556,7 +556,7 @@
                                         <p class="text-[10px] text-slate-500 truncate" v-text="store.currentUser ? store.currentUser.email : ''"></p>
                                     </div>
                                 </div>
-                                <button onclick="openProfileModal(); store.closeTechMenu()" class="mt-2 w-full text-center bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 rounded-lg py-1 text-[11px] font-semibold transition cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs">
+                                <button onclick="openProfileModal(); window.closeTechMenu()" class="mt-2 w-full text-center bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 rounded-lg py-1 text-[11px] font-semibold transition cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs">
                                     <i class="fa-solid fa-id-badge text-emerald-600"></i>
                                     <span data-i18n="menuProfile">Мій акаунт & Профіль</span>
                                 </button>
@@ -564,23 +564,23 @@
 
                             <!-- 2. Основні інструменти -->
                             <div class="py-1">
-                                <button onclick="openImportModal(); store.closeTechMenu()" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center gap-2 text-indigo-700 font-semibold transition cursor-pointer">
+                                <button onclick="openImportModal(); window.closeTechMenu()" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center gap-2 text-indigo-700 font-semibold transition cursor-pointer">
                                     <i class="fa-solid fa-file-import text-indigo-600 w-4 text-center"></i>
                                     <span data-i18n="menuImportUniform">Імпорт Uniform (.FDB / .ZIP)</span>
                                 </button>
-                                <button onclick="openFarmPassportModal(); store.closeTechMenu()" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center gap-2 text-slate-700 font-medium transition cursor-pointer">
+                                <button onclick="openFarmPassportModal(); window.closeTechMenu()" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center gap-2 text-slate-700 font-medium transition cursor-pointer">
                                     <i class="fa-solid fa-id-card text-emerald-600 w-4 text-center"></i>
                                     <span data-i18n="menuFarmPassport">Паспорт господарства</span>
                                 </button>
-                                <button onclick="switchTab('logs'); store.closeTechMenu()" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center gap-2 text-slate-700 font-medium transition cursor-pointer">
+                                <button onclick="switchTab('logs'); window.closeTechMenu()" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center gap-2 text-slate-700 font-medium transition cursor-pointer">
                                     <i class="fa-solid fa-clock-rotate-left text-slate-500 w-4 text-center"></i>
                                     <span data-i18n="menuEventLogs">Логи подій & Аудит</span>
                                 </button>
-                                <button onclick="switchTab('metrics'); store.closeTechMenu()" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center gap-2 text-slate-700 font-medium transition cursor-pointer">
+                                <button onclick="switchTab('metrics'); window.closeTechMenu()" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center gap-2 text-slate-700 font-medium transition cursor-pointer">
                                     <i class="fa-solid fa-chart-line text-purple-600 w-4 text-center"></i>
                                     <span data-i18n="menuSiteMetrics">Метрики сайту</span>
                                 </button>
-                                <button onclick="downloadBackup(); store.closeTechMenu()" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center gap-2 text-slate-700 font-medium transition cursor-pointer">
+                                <button onclick="downloadBackup(); window.closeTechMenu()" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center gap-2 text-slate-700 font-medium transition cursor-pointer">
                                     <i class="fa-solid fa-download text-emerald-600 w-4 text-center"></i>
                                     <span data-i18n="menuDownloadBackup">Завантажити бекап (JSON)</span>
                                 </button>
@@ -588,7 +588,7 @@
 
                             <!-- 3. Вихід -->
                             <div class="py-1">
-                                <button onclick="logout(); store.closeTechMenu()" class="w-full text-left px-3.5 py-2 hover:bg-rose-50 text-rose-600 font-medium transition cursor-pointer flex items-center gap-2">
+                                <button onclick="logout(); window.closeTechMenu()" class="w-full text-left px-3.5 py-2 hover:bg-rose-50 text-rose-600 font-medium transition cursor-pointer flex items-center gap-2">
                                     <i class="fa-solid fa-arrow-right-from-bracket text-rose-500 w-4 text-center"></i>
                                     <span data-i18n="logoutBtn">Вийти</span>
                                 </button>

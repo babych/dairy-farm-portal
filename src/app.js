@@ -2482,13 +2482,42 @@
                 }
             }, { passive: true });
 
+            // Technical Settings Dropdown Helpers
+            window.toggleTechMenu = function(e) {
+                if (e) {
+                    if (typeof e.stopPropagation === 'function') e.stopPropagation();
+                }
+                const menu = document.getElementById('techMenuDropdown');
+                const isCurrentlyOpen = window.store ? !!window.store.techMenuOpen : (menu ? !menu.classList.contains('hidden') : false);
+                const targetState = !isCurrentlyOpen;
+
+                if (window.store) {
+                    window.store.techMenuOpen = targetState;
+                }
+                if (menu) {
+                    if (targetState) {
+                        menu.classList.remove('hidden');
+                    } else {
+                        menu.classList.add('hidden');
+                    }
+                }
+            };
+
+            window.closeTechMenu = function() {
+                if (window.store) {
+                    window.store.techMenuOpen = false;
+                }
+                const menu = document.getElementById('techMenuDropdown');
+                if (menu) {
+                    menu.classList.add('hidden');
+                }
+            };
+
             // Global Click-Outside handler for Technical Settings Dropdown
             document.addEventListener('click', (event) => {
                 const container = document.getElementById('techMenuDropdownContainer');
-                if (container && window.store && window.store.techMenuOpen) {
-                    if (!container.contains(event.target)) {
-                        window.store.closeTechMenu();
-                    }
+                if (container && !container.contains(/** @type {Node} */ (event.target))) {
+                    window.closeTechMenu();
                 }
             });
         })();

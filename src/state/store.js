@@ -41,10 +41,20 @@ export const store = reactive({
     // Technical Settings & Tools dropdown menu state
     techMenuOpen: false,
     toggleTechMenu() {
-        this.techMenuOpen = !this.techMenuOpen;
+        const win = typeof window !== "undefined" ? /** @type {any} */ (window) : null;
+        if (win && typeof win.toggleTechMenu === "function") {
+            win.toggleTechMenu();
+        } else {
+            this.techMenuOpen = !this.techMenuOpen;
+        }
     },
     closeTechMenu() {
-        this.techMenuOpen = false;
+        const win = typeof window !== "undefined" ? /** @type {any} */ (window) : null;
+        if (win && typeof win.closeTechMenu === "function") {
+            win.closeTechMenu();
+        } else {
+            this.techMenuOpen = false;
+        }
     },
 
     // Toasts
