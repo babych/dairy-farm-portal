@@ -41,7 +41,7 @@ test('Security & Crypto Suite', async (t) => {
     });
 
     await t.test('4. hashPassword and verifyPassword using PBKDF2 with salt', async () => {
-        const plainPassword = 'CorrectHorseBatteryStaple2026!';
+        const plainPassword = 'k9#Vm8$xL2!zQ5@wR7^yP4*tN1~bC6';
         const hash = await hashPassword(plainPassword);
 
         assert.ok(hash.startsWith('pbkdf2_sha256$100000$'));

@@ -417,18 +417,20 @@
         
         <!-- Верхня панель користувача & Навігація (Організована поверхами без горизонтального скролу) -->
         <div class="bg-white border border-slate-200 p-3 sm:p-5 rounded-2xl shadow-sm space-y-3">
-            <!-- 1-й поверх: Привітання, ферма, роль та вихід -->
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-100 pb-3">
-                <div class="flex flex-wrap items-center gap-2 sm:gap-3 min-w-0">
-                    <h2 class="text-base sm:text-xl font-bold text-slate-900 flex items-center gap-1.5 mr-1 truncate">
-                        <span data-i18n="greeting">Вітаємо,</span> <span id="userNameDisplay" v-text="store.currentUser ? (store.currentUser.name || store.currentUser.email) : ''" class="text-emerald-600"></span>! 👋
-                    </h2>
-                    <span id="userRoleBadge" v-text="store.currentUser ? store.currentUser.role : 'guest'" class="bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-lg text-[11px] font-semibold">superadmin</span>
+            <!-- 1-й поверх: Привітання, ферма, роль та шестерня сервісу -->
+            <div class="flex items-start sm:items-center justify-between gap-2.5 border-b border-slate-100 pb-3">
+                <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 min-w-0 flex-1">
+                    <div class="flex items-center gap-2 flex-wrap min-w-0">
+                        <h2 class="text-base sm:text-xl font-bold text-slate-900 flex items-center gap-1.5 mr-1 truncate">
+                            <span data-i18n="greeting">Вітаємо,</span> <span id="userNameDisplay" v-text="store.currentUser ? (store.currentUser.name || store.currentUser.email) : ''" class="text-emerald-600"></span>! 👋
+                        </h2>
+                        <span id="userRoleBadge" v-text="store.currentUser ? store.currentUser.role : 'guest'" class="bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-lg text-[11px] font-semibold">superadmin</span>
+                    </div>
                     
                     <!-- Селектор активної ферми з захистом від переповнення контейнера -->
-                    <div class="flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-2.5 py-1 rounded-xl max-w-full min-w-0">
+                    <div class="flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-2.5 py-1 rounded-xl max-w-full sm:max-w-fit min-w-0">
                         <span class="text-[11px] text-slate-500 font-medium whitespace-nowrap" data-i18n="activeFarmLabel">Ферма:</span>
-                        <div class="relative min-w-0 flex-1 max-w-[150px] sm:max-w-[260px]">
+                        <div class="relative min-w-0 flex-1 max-w-[170px] sm:max-w-[260px]">
                             <select id="farmSelectDropdown" v-model="store.currentFarmId" @change="farms.switchFarm($event.target.value)" onchange="onFarmDropdownChange(this.value)" class="w-full bg-transparent text-xs font-bold text-slate-800 cursor-pointer focus:outline-none focus:ring-0 truncate pr-4">
                                 <option v-if="!store.farmsList || store.farmsList.length === 0" value="" data-i18n="loadingFarms">Завантаження ферм...</option>
                                 <option v-for="f in store.farmsList" :key="f.id" :value="f.id" v-text="f.name + (f.role ? ' (' + f.role + ')' : '')"></option>
@@ -439,7 +441,8 @@
                         </button>
                     </div>
                 </div>
-                <div class="flex items-center justify-end gap-2 relative">
+
+                <div class="flex items-center flex-shrink-0 pt-0.5">
                     <!-- ⚙️ Шестерня (Сервіс, Профіль, Імпорт, Паспорт, Логи, Метрики, Бекап, Вихід) -->
                     <div class="relative">
                         <button @click="store.toggleTechMenu()" title="Сервісні налаштування & Інструменти" class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 w-9 h-9 rounded-xl flex items-center justify-center transition shadow-2xs cursor-pointer">
@@ -540,54 +543,54 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
-                <button @click="filterByStatus('Active')" onclick="filterByHerdStatus('Active')" id="tileBtnOpen" class="herd-tile-btn text-left bg-blue-50/70 hover:bg-blue-100/70 border border-blue-200 rounded-2xl p-4 shadow-sm transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 sm:gap-2.5">
+                <button @click="filterByStatus('Active')" onclick="filterByHerdStatus('Active')" id="tileBtnOpen" class="herd-tile-btn text-left bg-blue-50/70 hover:bg-blue-100/70 border border-blue-200 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
                     <div class="flex justify-between items-center w-full">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-blue-700" data-i18n="tileOpenTitle">Готові до осіменіння</span>
-                        <span id="tileOpenPct" v-text="dashboard.formatTileSub(dashboard.stats.herd_tiles?.open, dashboard.pctOpen)" class="text-[10px] font-semibold text-blue-600 bg-blue-100/80 px-1.5 py-0.5 rounded-full">0%</span>
+                        <span class="text-[9.5px] sm:text-[10px] font-bold uppercase tracking-wider text-blue-700 truncate pr-1" data-i18n="tileOpenTitle">Готові до осіменіння</span>
+                        <span id="tileOpenPct" v-text="dashboard.formatTileSub(dashboard.stats.herd_tiles?.open, dashboard.pctOpen)" class="text-[9.5px] sm:text-[10px] font-semibold text-blue-600 bg-blue-100/80 px-1.5 py-0.2 rounded-full">0%</span>
                     </div>
-                    <h4 id="tileOpen" v-text="dashboard.formatTileMain(dashboard.stats.herd_tiles?.open, dashboard.pctOpen)" class="text-2xl font-black text-blue-900 my-1 group-hover:scale-105 transition-transform origin-left">0</h4>
-                    <p class="text-[10px] text-blue-600" data-i18n="tileOpenSub">Охота / Сервіс-період</p>
+                    <h4 id="tileOpen" v-text="dashboard.formatTileMain(dashboard.stats.herd_tiles?.open, dashboard.pctOpen)" class="text-xl sm:text-2xl font-black text-blue-900 my-0.5 group-hover:scale-105 transition-transform origin-left">0</h4>
+                    <p class="text-[9.5px] text-blue-600 truncate" data-i18n="tileOpenSub">Охота / Сервіс-період</p>
                 </button>
-                <button @click="filterByStatus('Inseminated')" onclick="filterByHerdStatus('Inseminated')" id="tileBtnIns" class="herd-tile-btn text-left bg-amber-50/70 hover:bg-amber-100/70 border border-amber-200 rounded-2xl p-4 shadow-sm transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500">
+                <button @click="filterByStatus('Inseminated')" onclick="filterByHerdStatus('Inseminated')" id="tileBtnIns" class="herd-tile-btn text-left bg-amber-50/70 hover:bg-amber-100/70 border border-amber-200 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500">
                     <div class="flex justify-between items-center w-full">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-amber-700" data-i18n="tileInsTitle">Осімененi</span>
-                        <span id="tileInsPct" v-text="dashboard.formatTileSub(dashboard.stats.herd_tiles?.inseminated, dashboard.pctIns)" class="text-[10px] font-semibold text-amber-700 bg-amber-100/80 px-1.5 py-0.5 rounded-full">0%</span>
+                        <span class="text-[9.5px] sm:text-[10px] font-bold uppercase tracking-wider text-amber-700 truncate pr-1" data-i18n="tileInsTitle">Осімененi</span>
+                        <span id="tileInsPct" v-text="dashboard.formatTileSub(dashboard.stats.herd_tiles?.inseminated, dashboard.pctIns)" class="text-[9.5px] sm:text-[10px] font-semibold text-amber-700 bg-amber-100/80 px-1.5 py-0.2 rounded-full">0%</span>
                     </div>
-                    <h4 id="tileIns" v-text="dashboard.formatTileMain(dashboard.stats.herd_tiles?.inseminated, dashboard.pctIns)" class="text-2xl font-black text-amber-900 my-1 group-hover:scale-105 transition-transform origin-left">0</h4>
-                    <p class="text-[10px] text-amber-600" data-i18n="tileInsSub">Очікують УЗД</p>
+                    <h4 id="tileIns" v-text="dashboard.formatTileMain(dashboard.stats.herd_tiles?.inseminated, dashboard.pctIns)" class="text-xl sm:text-2xl font-black text-amber-900 my-0.5 group-hover:scale-105 transition-transform origin-left">0</h4>
+                    <p class="text-[9.5px] text-amber-600 truncate" data-i18n="tileInsSub">Очікують УЗД</p>
                 </button>
-                <button @click="filterByStatus('Pregnant')" onclick="filterByHerdStatus('Pregnant')" id="tileBtnPreg" class="herd-tile-btn text-left bg-emerald-50/70 hover:bg-emerald-100/70 border border-emerald-200 rounded-2xl p-4 shadow-sm transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500">
+                <button @click="filterByStatus('Pregnant')" onclick="filterByHerdStatus('Pregnant')" id="tileBtnPreg" class="herd-tile-btn text-left bg-emerald-50/70 hover:bg-emerald-100/70 border border-emerald-200 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500">
                     <div class="flex justify-between items-center w-full">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700" data-i18n="tilePregTitle">Тільні</span>
-                        <span id="tilePregPct" v-text="dashboard.formatTileSub(dashboard.stats.herd_tiles?.pregnant, dashboard.pctPreg)" class="text-[10px] font-semibold text-emerald-700 bg-emerald-100/80 px-1.5 py-0.5 rounded-full">0%</span>
+                        <span class="text-[9.5px] sm:text-[10px] font-bold uppercase tracking-wider text-emerald-700 truncate pr-1" data-i18n="tilePregTitle">Тільні</span>
+                        <span id="tilePregPct" v-text="dashboard.formatTileSub(dashboard.stats.herd_tiles?.pregnant, dashboard.pctPreg)" class="text-[9.5px] sm:text-[10px] font-semibold text-emerald-700 bg-emerald-100/80 px-1.5 py-0.2 rounded-full">0%</span>
                     </div>
-                    <h4 id="tilePreg" v-text="dashboard.formatTileMain(dashboard.stats.herd_tiles?.pregnant, dashboard.pctPreg)" class="text-2xl font-black text-emerald-900 my-1 group-hover:scale-105 transition-transform origin-left">0</h4>
-                    <p class="text-[10px] text-emerald-600" data-i18n="tilePregSub">Підтверджено</p>
+                    <h4 id="tilePreg" v-text="dashboard.formatTileMain(dashboard.stats.herd_tiles?.pregnant, dashboard.pctPreg)" class="text-xl sm:text-2xl font-black text-emerald-900 my-0.5 group-hover:scale-105 transition-transform origin-left">0</h4>
+                    <p class="text-[9.5px] text-emerald-600 truncate" data-i18n="tilePregSub">Підтверджено</p>
                 </button>
-                <button @click="filterByStatus('Dry')" onclick="filterByHerdStatus('Dry')" id="tileBtnDry" class="herd-tile-btn text-left bg-orange-50/70 hover:bg-orange-100/70 border border-orange-200 rounded-2xl p-4 shadow-sm transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
+                <button @click="filterByStatus('Dry')" onclick="filterByHerdStatus('Dry')" id="tileBtnDry" class="herd-tile-btn text-left bg-orange-50/70 hover:bg-orange-100/70 border border-orange-200 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
                     <div class="flex justify-between items-center w-full">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-orange-700" data-i18n="tileDryTitle">Сухостійні</span>
-                        <span id="tileDryPct" v-text="dashboard.formatTileSub(dashboard.stats.herd_tiles?.dry, dashboard.pctDry)" class="text-[10px] font-semibold text-orange-700 bg-orange-100/80 px-1.5 py-0.5 rounded-full">0%</span>
+                        <span class="text-[9.5px] sm:text-[10px] font-bold uppercase tracking-wider text-orange-700 truncate pr-1" data-i18n="tileDryTitle">Сухостійні</span>
+                        <span id="tileDryPct" v-text="dashboard.formatTileSub(dashboard.stats.herd_tiles?.dry, dashboard.pctDry)" class="text-[9.5px] sm:text-[10px] font-semibold text-orange-700 bg-orange-100/80 px-1.5 py-0.2 rounded-full">0%</span>
                     </div>
-                    <h4 id="tileDry" v-text="dashboard.formatTileMain(dashboard.stats.herd_tiles?.dry, dashboard.pctDry)" class="text-2xl font-black text-orange-900 my-1 group-hover:scale-105 transition-transform origin-left">0</h4>
-                    <p class="text-[10px] text-orange-600" data-i18n="tileDrySub">Перед отелом</p>
+                    <h4 id="tileDry" v-text="dashboard.formatTileMain(dashboard.stats.herd_tiles?.dry, dashboard.pctDry)" class="text-xl sm:text-2xl font-black text-orange-900 my-0.5 group-hover:scale-105 transition-transform origin-left">0</h4>
+                    <p class="text-[9.5px] text-orange-600 truncate" data-i18n="tileDrySub">Перед отелом</p>
                 </button>
-                <button @click="filterByStatus('Fresh')" onclick="filterByHerdStatus('Fresh')" id="tileBtnFresh" class="herd-tile-btn text-left bg-cyan-50/70 hover:bg-cyan-100/70 border border-cyan-200 rounded-2xl p-4 shadow-sm transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500">
+                <button @click="filterByStatus('Fresh')" onclick="filterByHerdStatus('Fresh')" id="tileBtnFresh" class="herd-tile-btn text-left bg-cyan-50/70 hover:bg-cyan-100/70 border border-cyan-200 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500">
                     <div class="flex justify-between items-center w-full">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-cyan-700" data-i18n="tileFreshTitle">Новотільні</span>
-                        <span id="tileFreshPct" v-text="dashboard.formatTileSub(dashboard.stats.herd_tiles?.fresh, dashboard.pctFresh)" class="text-[10px] font-semibold text-cyan-700 bg-cyan-100/80 px-1.5 py-0.5 rounded-full">0%</span>
+                        <span class="text-[9.5px] sm:text-[10px] font-bold uppercase tracking-wider text-cyan-700 truncate pr-1" data-i18n="tileFreshTitle">Новотільні</span>
+                        <span id="tileFreshPct" v-text="dashboard.formatTileSub(dashboard.stats.herd_tiles?.fresh, dashboard.pctFresh)" class="text-[9.5px] sm:text-[10px] font-semibold text-cyan-700 bg-cyan-100/80 px-1.5 py-0.2 rounded-full">0%</span>
                     </div>
-                    <h4 id="tileFresh" v-text="dashboard.formatTileMain(dashboard.stats.herd_tiles?.fresh, dashboard.pctFresh)" class="text-2xl font-black text-cyan-900 my-1 group-hover:scale-105 transition-transform origin-left">0</h4>
-                    <p class="text-[10px] text-cyan-600" data-i18n="tileFreshSub">0-30 днів лактації</p>
+                    <h4 id="tileFresh" v-text="dashboard.formatTileMain(dashboard.stats.herd_tiles?.fresh, dashboard.pctFresh)" class="text-xl sm:text-2xl font-black text-cyan-900 my-0.5 group-hover:scale-105 transition-transform origin-left">0</h4>
+                    <p class="text-[9.5px] text-cyan-600 truncate" data-i18n="tileFreshSub">0-30 днів лактації</p>
                 </button>
-                <button @click="filterByStatus('Quarantine')" onclick="filterByHerdStatus('Quarantine')" id="tileBtnQuar" class="herd-tile-btn text-left bg-rose-50/70 hover:bg-rose-100/70 border border-rose-200 rounded-2xl p-4 shadow-sm transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500">
+                <button @click="filterByStatus('Quarantine')" onclick="filterByHerdStatus('Quarantine')" id="tileBtnQuar" class="herd-tile-btn text-left bg-rose-50/70 hover:bg-rose-100/70 border border-rose-200 rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500">
                     <div class="flex justify-between items-center w-full">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-rose-700" data-i18n="tileQuarTitle">Каренція</span>
-                        <span id="tileQuarPct" v-text="dashboard.formatTileSub(dashboard.stats.in_quarantine, dashboard.pctQuar)" class="text-[10px] font-semibold text-rose-700 bg-rose-100/80 px-1.5 py-0.5 rounded-full">0%</span>
+                        <span class="text-[9.5px] sm:text-[10px] font-bold uppercase tracking-wider text-rose-700 truncate pr-1" data-i18n="tileQuarTitle">Каренція</span>
+                        <span id="tileQuarPct" v-text="dashboard.formatTileSub(dashboard.stats.in_quarantine, dashboard.pctQuar)" class="text-[9.5px] sm:text-[10px] font-semibold text-rose-700 bg-rose-100/80 px-1.5 py-0.2 rounded-full">0%</span>
                     </div>
-                    <h4 id="statQuarantine" v-text="dashboard.formatTileMain(dashboard.stats.in_quarantine, dashboard.pctQuar)" class="text-2xl font-black text-rose-900 my-1 group-hover:scale-105 transition-transform origin-left">0</h4>
-                    <p class="text-[10px] text-rose-600 font-semibold" data-i18n="tileQuarSub">Антибіотики</p>
+                    <h4 id="statQuarantine" v-text="dashboard.formatTileMain(dashboard.stats.in_quarantine, dashboard.pctQuar)" class="text-xl sm:text-2xl font-black text-rose-900 my-0.5 group-hover:scale-105 transition-transform origin-left">0</h4>
+                    <p class="text-[9.5px] text-rose-600 font-semibold truncate" data-i18n="tileQuarSub">Антибіотики</p>
                 </button>
             </div>
         </div>
