@@ -187,40 +187,17 @@
         </div>
 
         <!-- Панель статусу стада (Herd Summary Tiles / Interactive Filters) -->
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
-            <button @click="filterByStatus('Open')" onclick="filterByHerdStatus('Open')" id="tileBtnOpen" class="herd-tile-btn text-left bg-blue-50/70 hover:bg-blue-100/70 border border-blue-200 rounded-2xl p-4 shadow-sm transition hover:shadow-md cursor-pointer flex flex-col justify-between group">
+        <div class="grid grid-cols-2 sm:grid-cols-5 md:grid-cols-10 gap-2 sm:gap-2.5">
+            <button v-for="t in dashboard.tiles" :key="t.key"
+                    @click="filterByStatus(t.key)"
+                    :id="t.id"
+                    :class="[t.bg, { 'active-filter': herd.statusFilter === t.key }]"
+                    class="herd-tile-btn text-left border rounded-xl p-2.5 sm:p-3 shadow-xs transition hover:shadow-md cursor-pointer flex flex-col justify-between group focus:outline-none">
                 <div class="flex justify-between items-center w-full">
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-blue-700" data-i18n="tileOpenTitle">Готові до осіменіння</span>
-                    <span id="tileOpenPct" v-text="dashboard.pctOpen + '%'" class="text-[10px] font-semibold text-blue-600 bg-blue-100/80 px-1.5 py-0.5 rounded-full">0%</span>
+                    <span class="text-[9.5px] sm:text-[10px] font-bold uppercase tracking-wider truncate pr-1" :data-i18n="t.titleKey" v-text="t.titleKey ? (window.t ? window.t(t.titleKey) : '') : ''"></span>
+                    <span :id="t.id + 'Pct'" v-text="dashboard.formatTileSub(dashboard.getTileCount(t.key), dashboard.getTilePct(t.key))" class="text-[9.5px] sm:text-[10px] font-semibold bg-white/60 px-1.5 py-0.2 rounded-full">0%</span>
                 </div>
-                <h4 id="tileOpen" v-text="(dashboard.stats.herd_tiles?.open || 0).toLocaleString()" class="text-2xl font-black text-blue-900 my-1 group-hover:scale-105 transition-transform origin-left">0</h4>
-                <p class="text-[10px] text-blue-600" data-i18n="tileOpenSub">Охота / Сервіс-період</p>
+                <h4 :id="t.id.replace('Btn', '')" v-text="dashboard.formatTileMain(dashboard.getTileCount(t.key), dashboard.getTilePct(t.key))" class="text-xl sm:text-2xl font-black text-slate-900 my-0.5 group-hover:scale-105 transition-transform origin-left">0</h4>
+                <p class="text-[9.5px] text-slate-500 truncate" :data-i18n="t.subKey" v-text="t.subKey ? (window.t ? window.t(t.subKey) : '') : ''"></p>
             </button>
-            <button @click="filterByStatus('Inseminated')" onclick="filterByHerdStatus('Inseminated')" id="tileBtnIns" class="herd-tile-btn text-left bg-amber-50/70 hover:bg-amber-100/70 border border-amber-200 rounded-2xl p-4 shadow-sm transition hover:shadow-md cursor-pointer flex flex-col justify-between group">
-                <div class="flex justify-between items-center w-full">
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-amber-700" data-i18n="tileInsTitle">Осімененi</span>
-                    <span id="tileInsPct" v-text="dashboard.pctIns + '%'" class="text-[10px] font-semibold text-amber-700 bg-amber-100/80 px-1.5 py-0.5 rounded-full">0%</span>
-                </div>
-                <h4 id="tileIns" v-text="(dashboard.stats.herd_tiles?.inseminated || 0).toLocaleString()" class="text-2xl font-black text-amber-900 my-1 group-hover:scale-105 transition-transform origin-left">0</h4>
-                <p class="text-[10px] text-amber-600" data-i18n="tileInsSub">Очікують УЗД</p>
-            </button>
-            <button @click="filterByStatus('Pregnant')" onclick="filterByHerdStatus('Pregnant')" id="tileBtnPreg" class="herd-tile-btn text-left bg-emerald-50/70 hover:bg-emerald-100/70 border border-emerald-200 rounded-2xl p-4 shadow-sm transition hover:shadow-md cursor-pointer flex flex-col justify-between group">
-                <div class="flex justify-between items-center w-full">
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700" data-i18n="tilePregTitle">Тільні</span>
-                    <span id="tilePregPct" v-text="dashboard.pctPreg + '%'" class="text-[10px] font-semibold text-emerald-700 bg-emerald-100/80 px-1.5 py-0.5 rounded-full">0%</span>
-                </div>
-                <h4 id="tilePreg" v-text="(dashboard.stats.herd_tiles?.pregnant || 0).toLocaleString()" class="text-2xl font-black text-emerald-900 my-1 group-hover:scale-105 transition-transform origin-left">0</h4>
-                <p class="text-[10px] text-emerald-600" data-i18n="tilePregSub">Підтверджено</p>
-            </button>
-            <button @click="filterByStatus('Dry')" onclick="filterByHerdStatus('Dry')" id="tileBtnDry" class="herd-tile-btn text-left bg-orange-50/70 hover:bg-orange-100/70 border border-orange-200 rounded-2xl p-4 shadow-sm transition hover:shadow-md cursor-pointer flex flex-col justify-between group">
-                <div class="flex justify-between items-center w-full">
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-orange-700" data-i18n="tileDryTitle">Сухостійні</span>
-                    <span id="tileDryPct" v-text="dashboard.pctDry + '%'" class="text-[10px] font-semibold text-orange-700 bg-orange-100/80 px-1.5 py-0.5 rounded-full">0%</span>
-                </div>
-                <h4 id="tileDry" v-text="(dashboard.stats.herd_tiles?.dry || 0).toLocaleString()" class="text-2xl font-black text-orange-900 my-1 group-hover:scale-105 transition-transform origin-left">0</h4>
-                <p class="text-[10px] text-orange-600" data-i18n="tileDrySub">Перед отелом</p>
-            </button>
-            <button @click="filterByStatus('Fresh')" onclick="filterByHerdStatus('Fresh')" id="tileBtnFresh" class="herd-tile-btn text-left bg-cyan-50/70 hover:bg-cyan-100/70 border border-cyan-200 rounded-2xl p-4 shadow-sm transition hover:shadow-md cursor-pointer flex flex-col justify-between group">
-                <div class="flex justify-between items-center w-full">
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-cyan-700" data-i18n="tileFreshTitle">Новотільні</span>
-                    <span id="tileFreshPct" v-text="dashboard.pctFresh + '%'" class="text-[10px] font-semibold text-cyan-700 bg-cyan-100/80 px-1.5 py-0.5 rounded-full">0%</span>
+        </div>
