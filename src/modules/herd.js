@@ -1,6 +1,5 @@
 import { store } from '../state/store.js';
 import { apiRequest, cacheFarmAnimals } from '../api/client.js';
-import { getStatusBadgeClass, ANIMAL_STATUSES } from '../../functions/api/models/animalStatuses.js';
 
 export const herdModule = {
     animals: [],
@@ -135,11 +134,19 @@ export const herdModule = {
     },
 
     getStatusBadgeClass(status) {
-        return getStatusBadgeClass(status);
-    },
-
-    getAvailableStatuses() {
-        return Object.values(ANIMAL_STATUSES);
+        switch(status) {
+            case 'Active': return 'bg-emerald-50 text-emerald-700 border border-emerald-200';
+            case 'Heifer': return 'bg-teal-50 text-teal-700 border border-teal-200';
+            case 'Open': return 'bg-blue-50 text-blue-700 border border-blue-200';
+            case 'Inseminated': return 'bg-purple-50 text-purple-700 border border-purple-200';
+            case 'Pregnant': return 'bg-indigo-50 text-indigo-700 border border-indigo-200';
+            case 'Dry': return 'bg-amber-50 text-amber-700 border border-amber-200';
+            case 'Fresh': return 'bg-cyan-50 text-cyan-700 border border-cyan-200';
+            case 'Sick': return 'bg-red-50 text-red-700 border border-red-200';
+            case 'Quarantine': return 'bg-rose-50 text-rose-700 border border-rose-200';
+            case 'Culled': return 'bg-slate-100 text-slate-500 border border-slate-200';
+            default: return 'bg-slate-50 text-slate-600 border border-slate-200';
+        }
     }
 };
 
