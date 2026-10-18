@@ -70,11 +70,18 @@ describe('Domain Models Suite', () => {
             assert.strictEqual(animal.dim, null);
         });
 
-        it('serializes to predictable JSON schema', () => {
-            const animal = new Animal({ farm_number: '99', current_status: 'Dry' });
+        it('serializes to predictable JSON schema including reproduction fields', () => {
+            const animal = new Animal({
+                farm_number: '99',
+                current_status: 'Pregnant',
+                last_insemination_date: '2026-08-15',
+                days_pregnant: 64
+            });
             const json = animal.toJSON();
             assert.strictEqual(json.farm_number, '99');
-            assert.strictEqual(json.current_status, 'Dry');
+            assert.strictEqual(json.current_status, 'Pregnant');
+            assert.strictEqual(json.last_insemination_date, '2026-08-15');
+            assert.strictEqual(json.days_pregnant, 64);
             assert.strictEqual(json.group_name, 'Група 1');
             assert.strictEqual(json.dim, null);
         });
