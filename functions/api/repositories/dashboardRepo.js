@@ -15,7 +15,13 @@ export class DashboardRepository {
      */
     async getHerdStats(farmId = null) {
         let activeId = farmId;
-        if (!activeId) {
+        if (activeId) {
+            const currentFarmCount = await this.db.prepare("SELECT count(*) as c FROM animals WHERE farm_id = ?").bind(activeId).first();
+            if (!currentFarmCount || currentFarmCount.c === 0) {
+                const populatedFarm = await this.db.prepare("SELECT id FROM farms WHERE (SELECT count(*) FROM animals WHERE farm_id = farms.id) > 0 ORDER BY imported_at DESC, created_at DESC LIMIT 1").first();
+                if (populatedFarm) activeId = populatedFarm.id;
+            }
+        } else {
             const firstFarm = await this.db.prepare("SELECT id FROM farms WHERE (SELECT count(*) FROM animals WHERE farm_id = farms.id) > 0 ORDER BY imported_at DESC, created_at DESC LIMIT 1").first();
             if (firstFarm) activeId = firstFarm.id;
         }

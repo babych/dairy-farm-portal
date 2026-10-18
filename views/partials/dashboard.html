@@ -188,7 +188,7 @@
 
         <!-- Панель статусу стада (Herd Summary Tiles / Interactive Filters) -->
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
-            <button @click="filterByStatus('Active')" onclick="filterByHerdStatus('Active')" id="tileBtnOpen" class="herd-tile-btn text-left bg-blue-50/70 hover:bg-blue-100/70 border border-blue-200 rounded-2xl p-4 shadow-sm transition hover:shadow-md cursor-pointer flex flex-col justify-between group">
+            <button @click="filterByStatus('Open')" onclick="filterByHerdStatus('Open')" id="tileBtnOpen" class="herd-tile-btn text-left bg-blue-50/70 hover:bg-blue-100/70 border border-blue-200 rounded-2xl p-4 shadow-sm transition hover:shadow-md cursor-pointer flex flex-col justify-between group">
                 <div class="flex justify-between items-center w-full">
                     <span class="text-[10px] font-bold uppercase tracking-wider text-blue-700" data-i18n="tileOpenTitle">Готові до осіменіння</span>
                     <span id="tileOpenPct" v-text="dashboard.pctOpen + '%'" class="text-[10px] font-semibold text-blue-600 bg-blue-100/80 px-1.5 py-0.5 rounded-full">0%</span>

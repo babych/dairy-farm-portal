@@ -931,19 +931,23 @@
 
         function updateTileHighlight(currentFilter) {
             const tileMap = {
-                'Active': 'tileBtnOpen',
+                'ALL': 'tileBtnTotal',
+                'Active': 'tileBtnActive',
+                'Culled': 'tileBtnCulled',
+                'Open': 'tileBtnOpen',
                 'Inseminated': 'tileBtnIns',
                 'Pregnant': 'tileBtnPreg',
                 'Dry': 'tileBtnDry',
                 'Fresh': 'tileBtnFresh',
+                'Heifer': 'tileBtnHeifers',
                 'Quarantine': 'tileBtnQuar'
             };
 
             document.querySelectorAll('.herd-tile-btn').forEach(b => {
-                b.classList.remove('active-filter', 'ring-2', 'ring-indigo-600', 'ring-offset-2', 'bg-emerald-600', 'text-white', 'shadow-md');
+                b.classList.remove('active-filter');
             });
 
-            if (currentFilter && currentFilter !== 'ALL' && tileMap[currentFilter]) {
+            if (currentFilter && tileMap[currentFilter]) {
                 const targetBtn = document.getElementById(tileMap[currentFilter]);
                 if (targetBtn) {
                     targetBtn.classList.add('active-filter');
