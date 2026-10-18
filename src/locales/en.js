@@ -51,7 +51,18 @@ export const en = {
     btnPrev: "Previous",
     btnNext: "Next",
 
-    // Herd Status Tiles
+    // Herd Status Tiles & Summary
+    herdStatusTitle: "Herd Status",
+    herdStatusFilterSub: "| Quick Herd Filtering",
+    metricModeViewLabel: "View:",
+    metricModeHeads: "Heads",
+    metricModePct: "%",
+    menuServiceTitle: "Service & Settings",
+    menuFarmPassport: "Farm Passport",
+    menuEventLogs: "Event Logs & Audit",
+    menuSiteMetrics: "Platform Metrics",
+    menuDownloadBackup: "Download Backup (JSON)",
+
     tileOpenTitle: "Open (Eligible to Breed)",
     tileOpenSub: "Heat / Ready",
     tileInsTitle: "Inseminated (Bred)",

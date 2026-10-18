@@ -442,25 +442,25 @@
 
                         <!-- Dropdown Menu -->
                         <div v-if="store.techMenuOpen" @click.outside="store.closeTechMenu()" class="absolute right-0 mt-1.5 w-56 bg-white border border-slate-200 rounded-2xl shadow-xl py-1.5 z-50 text-xs divide-y divide-slate-100">
-                            <div class="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                            <div class="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider" data-i18n="menuServiceTitle">
                                 Сервіс & Налаштування
                             </div>
                             <div class="py-1">
                                 <button onclick="openFarmPassportModal(); store.closeTechMenu()" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center gap-2 text-slate-700 font-medium transition cursor-pointer">
                                     <i class="fa-solid fa-id-card text-indigo-600 w-4 text-center"></i>
-                                    <span>Паспорт господарства</span>
+                                    <span data-i18n="menuFarmPassport">Паспорт господарства</span>
                                 </button>
                                 <button onclick="switchTab('logs'); store.closeTechMenu()" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center gap-2 text-slate-700 font-medium transition cursor-pointer">
                                     <i class="fa-solid fa-clock-rotate-left text-slate-500 w-4 text-center"></i>
-                                    <span>Логи подій & Аудит</span>
+                                    <span data-i18n="menuEventLogs">Логи подій & Аудит</span>
                                 </button>
                                 <button onclick="switchTab('metrics'); store.closeTechMenu()" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center gap-2 text-slate-700 font-medium transition cursor-pointer">
                                     <i class="fa-solid fa-chart-line text-purple-600 w-4 text-center"></i>
-                                    <span>Метрики сайту</span>
+                                    <span data-i18n="menuSiteMetrics">Метрики сайту</span>
                                 </button>
                                 <button onclick="downloadBackup(); store.closeTechMenu()" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center gap-2 text-slate-700 font-medium transition cursor-pointer">
                                     <i class="fa-solid fa-download text-emerald-600 w-4 text-center"></i>
-                                    <span>Завантажити бекап (JSON)</span>
+                                    <span data-i18n="menuDownloadBackup">Завантажити бекап (JSON)</span>
                                 </button>
                             </div>
                         </div>
@@ -496,16 +496,16 @@
         <div class="space-y-2.5">
             <div class="flex items-center justify-between px-1">
                 <div class="flex items-center gap-2">
-                    <span class="text-xs font-bold text-slate-800 tracking-wide uppercase">Статус стада</span>
-                    <span class="text-[11px] text-slate-500 font-medium">| Швидка фільтрація тварин</span>
+                    <span class="text-xs font-bold text-slate-800 tracking-wide uppercase" data-i18n="herdStatusTitle">Статус стада</span>
+                    <span class="text-[11px] text-slate-500 font-medium" data-i18n="herdStatusFilterSub">| Швидка фільтрація тварин</span>
                 </div>
                 <!-- Metric Display Toggle (% vs Голови) біля блоків -->
                 <div class="flex items-center gap-1.5 bg-slate-100/90 border border-slate-200/90 px-1.5 py-1 rounded-xl text-xs font-semibold text-slate-600 shadow-2xs">
-                    <span class="text-[10px] text-slate-500 font-medium pl-1 hidden sm:inline">Вигляд:</span>
+                    <span class="text-[10px] text-slate-500 font-medium pl-1 hidden sm:inline" data-i18n="metricModeViewLabel">Вигляд:</span>
                     <button @click="store.toggleMetricMode()" title="Перемикач відображення метрик (% чи кількість голів)" class="flex items-center gap-1 cursor-pointer hover:opacity-90">
-                        <span :class="store.metricMode === 'heads' ? 'text-emerald-700 bg-white font-bold px-2 py-0.5 rounded-lg shadow-xs' : 'text-slate-400 px-1.5 font-medium'">Гол</span>
+                        <span :class="store.metricMode === 'heads' ? 'text-emerald-700 bg-white font-bold px-2 py-0.5 rounded-lg shadow-xs' : 'text-slate-400 px-1.5 font-medium'" data-i18n="metricModeHeads">Гол</span>
                         <span class="text-slate-300">/</span>
-                        <span :class="store.metricMode === 'percent' ? 'text-emerald-700 bg-white font-bold px-2 py-0.5 rounded-lg shadow-xs' : 'text-slate-400 px-1.5 font-medium'">%</span>
+                        <span :class="store.metricMode === 'percent' ? 'text-emerald-700 bg-white font-bold px-2 py-0.5 rounded-lg shadow-xs' : 'text-slate-400 px-1.5 font-medium'" data-i18n="metricModePct">%</span>
                     </button>
                 </div>
             </div>

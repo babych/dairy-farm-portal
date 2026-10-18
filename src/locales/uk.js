@@ -51,7 +51,18 @@ export const uk = {
     btnPrev: "Попередня",
     btnNext: "Наступна",
 
-    // Herd Status Tiles
+    // Herd Status Tiles & Summary
+    herdStatusTitle: "Статус стада",
+    herdStatusFilterSub: "| Швидка фільтрація тварин",
+    metricModeViewLabel: "Вигляд:",
+    metricModeHeads: "Гол",
+    metricModePct: "%",
+    menuServiceTitle: "Сервіс & Налаштування",
+    menuFarmPassport: "Паспорт господарства",
+    menuEventLogs: "Логи подій & Аудит",
+    menuSiteMetrics: "Метрики сайту",
+    menuDownloadBackup: "Завантажити бекап (JSON)",
+
     tileOpenTitle: "Готові до осіменіння",
     tileOpenSub: "Охота / Сервіс-період",
     tileInsTitle: "Осіменені",
