@@ -138,7 +138,7 @@
                         <span class="text-[11px] text-slate-500 font-medium whitespace-nowrap" data-i18n="activeFarmLabel">Ферма:</span>
                         <div class="relative min-w-0 flex-1 max-w-[150px] sm:max-w-[260px]">
                             <select id="farmSelectDropdown" v-model="store.currentFarmId" @change="farms.switchFarm($event.target.value)" onchange="onFarmDropdownChange(this.value)" class="w-full bg-transparent text-xs font-bold text-slate-800 cursor-pointer focus:outline-none focus:ring-0 truncate pr-4">
-                                <option v-if="!store.farmsList || store.farmsList.length === 0" value="" data-i18n="loadingFarms">Завантаження ферм...</option>
+                                <option value="" disabled data-i18n="loadingFarms">Завантаження ферм...</option>
                                 <option v-for="f in store.farmsList" :key="f.id" :value="f.id" v-text="f.name + (f.role ? ' (' + f.role + ')' : '')"></option>
                             </select>
                         </div>

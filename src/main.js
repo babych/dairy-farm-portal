@@ -20,6 +20,8 @@ window.getCachedAnimal = getCachedAnimal;
 window.cacheFarmAnimals = cacheFarmAnimals;
 window.setLanguage = applyLanguage;
 window.t = t;
+/** @type {any} */ (window).closeTechMenu = () => store.closeTechMenu();
+/** @type {any} */ (window).toggleTechMenu = () => store.toggleTechMenu();
 
 export function initApp() {
     createApp({

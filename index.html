@@ -368,7 +368,7 @@
                     <span class="text-[11px] text-slate-500 font-medium whitespace-nowrap" data-i18n="activeFarmLabel">Ферма:</span>
                     <div class="relative min-w-0 flex-1 max-w-[200px]">
                         <select v-model="store.currentFarmId" @change="farms.switchFarm($event.target.value)" class="w-full bg-transparent text-xs font-bold text-slate-800 cursor-pointer focus:outline-none focus:ring-0 truncate pr-4">
-                            <option v-if="!store.farmsList || store.farmsList.length === 0" value="" data-i18n="loadingFarms">Завантаження ферм...</option>
+                            <option value="" disabled data-i18n="loadingFarms">Завантаження ферм...</option>
                             <option v-for="f in store.farmsList" :key="f.id" :value="f.id" v-text="f.name + (f.role ? ' (' + f.role + ')' : '')"></option>
                         </select>
                     </div>
@@ -640,7 +640,7 @@
                     <span class="text-[11px] text-slate-500 font-medium whitespace-nowrap" data-i18n="activeFarmLabel">Ферма:</span>
                     <div class="relative min-w-0 flex-1 max-w-full sm:max-w-[260px]">
                         <select id="farmSelectDropdown" v-model="store.currentFarmId" @change="farms.switchFarm($event.target.value)" class="w-full bg-transparent text-xs font-bold text-slate-800 cursor-pointer focus:outline-none focus:ring-0 truncate pr-4">
-                            <option v-if="!store.farmsList || store.farmsList.length === 0" value="" data-i18n="loadingFarms">Завантаження ферм...</option>
+                            <option value="" disabled data-i18n="loadingFarms">Завантаження ферм...</option>
                             <option v-for="f in store.farmsList" :key="f.id" :value="f.id" v-text="f.name + (f.role ? ' (' + f.role + ')' : '')"></option>
                         </select>
                     </div>
@@ -998,12 +998,12 @@
                             <i class="fa-solid fa-chevron-left text-[10px]"></i> <span data-i18n="btnPrev">Попередня</span>
                         </button>
                         <div id="paginationPagesList" class="flex items-center gap-1">
-                            <template v-for="p in herd.pagesList" :key="p">
+                            <span v-for="p in herd.pagesList" :key="p" class="inline-flex">
                                 <span v-if="p === '...'" class="px-2 py-1 text-slate-400">...</span>
                                 <button v-else @click="herd.goToPage(p)"
                                         :class="p === herd.currentPage ? 'bg-emerald-600 text-white font-bold shadow-sm' : 'border border-slate-200 hover:bg-slate-100 text-slate-700'"
                                         class="px-2.5 py-1 rounded-lg text-xs transition" v-text="p"></button>
-                            </template>
+                            </span>
                         </div>
                         <button @click="herd.nextPage()" id="nextPageBtn" :disabled="herd.curOffset + herd.pageLimit >= herd.totalCount" class="px-2.5 py-1.5 rounded-lg border border-slate-200 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 font-medium transition flex items-center gap-1">
                             <span data-i18n="btnNext">Наступна</span> <i class="fa-solid fa-chevron-right text-[10px]"></i>
