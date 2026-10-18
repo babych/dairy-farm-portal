@@ -367,7 +367,7 @@
                 <div class="flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-2.5 h-9 rounded-xl max-w-[280px]">
                     <span class="text-[11px] text-slate-500 font-medium whitespace-nowrap" data-i18n="activeFarmLabel">Ферма:</span>
                     <div class="relative min-w-0 flex-1 max-w-[200px]">
-                        <select v-model="store.currentFarmId" @change="farms.switchFarm($event.target.value)" class="w-full bg-transparent text-xs font-bold text-slate-800 cursor-pointer focus:outline-none focus:ring-0 truncate pr-4">
+                        <select id="farmSelectDropdownDesktop" v-model="store.currentFarmId" @change="farms.switchFarm($event.target.value)" onchange="window.switchFarmDirect(this.value)" class="w-full bg-transparent text-xs font-bold text-slate-800 cursor-pointer focus:outline-none focus:ring-0 truncate pr-4">
                             <option value="" disabled data-i18n="loadingFarms">Завантаження ферм...</option>
                             <option v-for="f in store.farmsList" :key="f.id" :value="f.id" v-text="f.name + (f.role ? ' (' + f.role + ')' : '')"></option>
                         </select>
@@ -378,7 +378,7 @@
                 </div>
 
                 <!-- Роль користувача на десктопі -->
-                <span class="userRoleBadgeClass bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-1 rounded-lg text-[11px] font-semibold" v-text="store.currentUser ? store.currentUser.role : 'guest'">superadmin</span>
+                <span class="userRoleBadgeClass bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 h-9 rounded-xl inline-flex items-center text-xs font-semibold" v-text="store.currentUser ? store.currentUser.role : 'guest'">superadmin</span>
 
                 <!-- Кнопка швидкого входу для гостей / демо на десктопі -->
                 <button v-if="!store.currentUser || store.currentUser.role === 'guest'" onclick="openLoginModal()" class="bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white h-9 px-3 rounded-xl text-xs font-semibold shadow-xs transition flex items-center gap-1.5 cursor-pointer touch-manipulation">
@@ -388,12 +388,12 @@
 
                 <!-- ⚙️ Шестерня на десктопі -->
                 <div class="relative techMenuContainerClass" id="techMenuDropdownContainerDesktop">
-                    <button type="button" @click.stop="store.toggleTechMenu()" title="Сервісні налаштування & Інструменти" class="relative bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 border border-slate-200 w-9 h-9 rounded-xl flex items-center justify-center transition shadow-2xs cursor-pointer touch-manipulation before:absolute before:-inset-1.5 before:content-['']">
+                    <button type="button" @click.stop="store.toggleTechMenu()" onclick="window.toggleTechMenu(event)" title="Сервісні налаштування & Інструменти" class="relative bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 border border-slate-200 w-9 h-9 rounded-xl flex items-center justify-center transition shadow-2xs cursor-pointer touch-manipulation before:absolute before:-inset-1.5 before:content-['']">
                         <i class="fa-solid fa-gear text-slate-600 text-sm pointer-events-none"></i>
                     </button>
 
                     <!-- Dropdown Menu Desktop -->
-                    <div :class="{ hidden: !store.techMenuOpen }" class="techMenuDropdownClass absolute right-0 mt-1.5 w-60 bg-white border border-slate-200 rounded-2xl shadow-xl py-1.5 z-50 text-xs divide-y divide-slate-100">
+                    <div id="techMenuDropdownDesktop" :class="{ hidden: !store.techMenuOpen }" class="techMenuDropdownClass absolute right-0 mt-1.5 w-60 bg-white border border-slate-200 rounded-2xl shadow-xl py-1.5 z-50 text-xs divide-y divide-slate-100">
                         <!-- 1. Профіль користувача -->
                         <div class="px-3.5 py-2.5 bg-slate-50/70">
                             <div class="flex items-center gap-2.5">
@@ -471,14 +471,14 @@
                 <span id="offlineOutboxBadge" class="hidden bg-amber-500 text-white text-[10px] px-1.5 py-0.2 rounded-full font-bold ml-0.5">0</span>
             </button>
             <!-- PWA Install / Offline Info Button -->
-            <button id="headerInstallBtn" onclick="openInstallModal()" title="Встановити додаток на смартфон / Офлайн доступ" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 px-2 sm:px-3 py-1.5 sm:py-1 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shadow-sm">
+            <button id="headerInstallBtn" onclick="openInstallModal()" title="Встановити додаток на смартфон / Офлайн доступ" class="h-9 inline-flex items-center gap-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 px-3 rounded-xl text-xs font-semibold transition shadow-sm">
                 <i class="fa-solid fa-mobile-screen-button text-emerald-600"></i> <span class="hidden sm:inline" data-i18n="installAppBtn">Встановити</span>
             </button>
 
             <!-- Language Switcher (UA / EN) with search-engine crawlable URLs -->
-            <div class="flex items-center bg-slate-100 border border-slate-200 rounded-xl p-0.5 text-xs font-bold">
-                <a href="/?lang=uk" onclick="setLanguage('uk'); return false;" id="langUkBtn" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white transition shadow-sm">UA</a>
-                <a href="/?lang=en" onclick="setLanguage('en'); return false;" id="langEnBtn" class="px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition">EN</a>
+            <div class="h-9 inline-flex items-center bg-slate-100 border border-slate-200 rounded-xl p-0.5 text-xs font-bold">
+                <a href="/?lang=uk" onclick="setLanguage('uk'); return false;" id="langUkBtn" class="h-full inline-flex items-center px-2.5 rounded-lg bg-emerald-600 text-white transition shadow-sm">UA</a>
+                <a href="/?lang=en" onclick="setLanguage('en'); return false;" id="langEnBtn" class="h-full inline-flex items-center px-2.5 rounded-lg text-slate-600 hover:text-slate-900 transition">EN</a>
             </div>
         </div>
     </header>
@@ -639,7 +639,7 @@
                 <div class="flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-2.5 h-9 rounded-xl flex-1 sm:flex-initial max-w-full sm:max-w-fit min-w-0">
                     <span class="text-[11px] text-slate-500 font-medium whitespace-nowrap" data-i18n="activeFarmLabel">Ферма:</span>
                     <div class="relative min-w-0 flex-1 max-w-full sm:max-w-[260px]">
-                        <select id="farmSelectDropdown" v-model="store.currentFarmId" @change="farms.switchFarm($event.target.value)" class="w-full bg-transparent text-xs font-bold text-slate-800 cursor-pointer focus:outline-none focus:ring-0 truncate pr-4">
+                        <select id="farmSelectDropdown" v-model="store.currentFarmId" @change="farms.switchFarm($event.target.value)" onchange="window.switchFarmDirect(this.value)" class="w-full bg-transparent text-xs font-bold text-slate-800 cursor-pointer focus:outline-none focus:ring-0 truncate pr-4">
                             <option value="" disabled data-i18n="loadingFarms">Завантаження ферм...</option>
                             <option v-for="f in store.farmsList" :key="f.id" :value="f.id" v-text="f.name + (f.role ? ' (' + f.role + ')' : '')"></option>
                         </select>
@@ -651,7 +651,7 @@
 
                 <!-- Роль користувача & Шестерня сервісних налаштувань (Мобільна версія) -->
                 <div class="flex items-center gap-2 flex-shrink-0">
-                    <span id="userRoleBadge" v-text="store.currentUser ? store.currentUser.role : 'guest'" class="userRoleBadgeClass hidden sm:inline-block bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-1 rounded-lg text-[11px] font-semibold">superadmin</span>
+                    <span id="userRoleBadge" v-text="store.currentUser ? store.currentUser.role : 'guest'" class="userRoleBadgeClass hidden sm:inline-flex items-center bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 h-9 rounded-xl text-xs font-semibold">superadmin</span>
 
                     <!-- Кнопка швидкого входу для гостей / демо (Toolbar) -->
                     <button v-if="!store.currentUser || store.currentUser.role === 'guest'" onclick="openLoginModal()" class="bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white h-9 px-3 rounded-xl text-xs font-semibold shadow-xs transition flex items-center gap-1.5 cursor-pointer touch-manipulation">
@@ -661,7 +661,7 @@
 
                     <!-- ⚙️ Шестерня (Мобільна) -->
                     <div class="relative techMenuContainerClass" id="techMenuDropdownContainer">
-                        <button id="techMenuGearBtn" type="button" @click.stop="store.toggleTechMenu()" title="Сервісні налаштування & Інструменти" class="relative bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 border border-slate-200 w-9 h-9 rounded-xl flex items-center justify-center transition shadow-2xs cursor-pointer touch-manipulation before:absolute before:-inset-1.5 before:content-['']">
+                        <button id="techMenuGearBtn" type="button" @click.stop="store.toggleTechMenu()" onclick="window.toggleTechMenu(event)" title="Сервісні налаштування & Інструменти" class="relative bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 border border-slate-200 w-9 h-9 rounded-xl flex items-center justify-center transition shadow-2xs cursor-pointer touch-manipulation before:absolute before:-inset-1.5 before:content-['']">
                             <i class="fa-solid fa-gear text-slate-600 text-sm pointer-events-none"></i>
                         </button>
 

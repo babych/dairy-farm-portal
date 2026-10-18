@@ -71,7 +71,21 @@ export async function cacheFarmAnimals(animals) {
         const storeObj = tx.objectStore(CACHE_STORE);
         for (const a of animals) {
             if (a && a.id) {
-                storeObj.put(a);
+                // Ensure plain cloneable object without reactive proxies or functions
+                const clean = {
+                    id: String(a.id),
+                    farm_id: a.farm_id ? String(a.farm_id) : null,
+                    farm_number: a.farm_number || "",
+                    official_tag: a.official_tag || "",
+                    name: a.name || "",
+                    current_status: a.current_status || "",
+                    lactation_number: Number(a.lactation_number) || 0,
+                    birth_date: a.birth_date || null,
+                    last_calving_date: a.last_calving_date || null,
+                    expected_calving_date: a.expected_calving_date || null,
+                    group_name: a.group_name || ""
+                };
+                storeObj.put(clean);
             }
         }
     } catch (e) {

@@ -18,8 +18,8 @@ export const farmsModule = reactive({
                 ? store.farmsList.find(f => f.id === savedFarmId)
                 : (store.farmsList.find(f => f.is_current) || store.farmsList[0]);
 
-            // If the currently chosen farm has 0 cows, but there is a farm with cows, prefer the populated farm
-            if (currentFarm && (!currentFarm.cow_count || currentFarm.cow_count === 0)) {
+            // Only auto-fallback to populated farm on initial load when user has not explicitly chosen a farm
+            if (!savedFarmId && currentFarm && (!currentFarm.cow_count || currentFarm.cow_count === 0)) {
                 const populatedFarm = store.farmsList.find(f => (f.cow_count && f.cow_count > 0));
                 if (populatedFarm) {
                     currentFarm = populatedFarm;
@@ -45,14 +45,14 @@ export const farmsModule = reactive({
                 method: 'POST'
             });
 
-            if (res.access_token) {
+            if (res && res.access_token) {
                 store.setToken(res.access_token);
                 const win = /** @type {any} */ (typeof window !== 'undefined' ? window : {});
                 if ('token' in win) {
                     win.token = res.access_token;
                 }
             }
-            if (showToastMsg && res.message) {
+            if (showToastMsg && res && res.message) {
                 store.addToast(res.message);
             }
 
@@ -68,17 +68,21 @@ export const farmsModule = reactive({
                 await win.herdModule.loadAnimals();
             }
             if (typeof win.loadStats === 'function') win.loadStats();
-            if (typeof win.loadAnimals === 'function') {
-                win.curOffset = 0;
-                win.loadAnimals();
-            }
             if (typeof win.loadActionLists === 'function') win.loadActionLists();
             if (typeof win.loadEventGrid === 'function') win.loadEventGrid();
+
+            // Sync all farm select dropdowns in DOM
+            const selects = document.querySelectorAll('select#farmSelectDropdown, select#farmSelectDropdownDesktop, select.farmSelectDropdownClass');
+            selects.forEach(el => {
+                const s = /** @type {HTMLSelectElement} */ (el);
+                if (s && s.value !== farmId) s.value = farmId;
+            });
 
             if (onSwitchedCallback) {
                 await onSwitchedCallback();
             }
         } catch (err) {
+            console.error("switchFarm error:", err);
             store.addToast(err.message, "error");
         } finally {
             isSwitchingFarm = false;

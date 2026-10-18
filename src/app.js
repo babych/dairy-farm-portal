@@ -673,7 +673,7 @@
                     ? farmsList.find(f => f.id === savedFarmId) 
                     : (farmsList.find(f => f.is_current) || farmsList[0]);
 
-                if (currentFarm && (!currentFarm.cow_count || currentFarm.cow_count === 0)) {
+                if (!savedFarmId && currentFarm && (!currentFarm.cow_count || currentFarm.cow_count === 0)) {
                     const populatedFarm = farmsList.find(f => (f.cow_count && f.cow_count > 0));
                     if (populatedFarm) {
                         currentFarm = populatedFarm;
@@ -2236,15 +2236,24 @@
             // Technical Settings Dropdown Helpers
             window.toggleTechMenu = function(e) {
                 if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+                const willOpen = window.store ? !window.store.techMenuOpen : true;
                 if (window.store) {
-                    window.store.toggleTechMenu();
+                    window.store.techMenuOpen = willOpen;
                 }
+                const desktopMenu = document.getElementById('techMenuDropdownDesktop');
+                const mobileMenu = document.getElementById('techMenuDropdown');
+                if (desktopMenu) desktopMenu.classList.toggle('hidden', !willOpen);
+                if (mobileMenu) mobileMenu.classList.toggle('hidden', !willOpen);
             };
 
             window.closeTechMenu = function() {
                 if (window.store) {
-                    window.store.closeTechMenu();
+                    window.store.techMenuOpen = false;
                 }
+                const desktopMenu = document.getElementById('techMenuDropdownDesktop');
+                const mobileMenu = document.getElementById('techMenuDropdown');
+                if (desktopMenu) desktopMenu.classList.add('hidden');
+                if (mobileMenu) mobileMenu.classList.add('hidden');
             };
 
             // Global Click-Outside handler for Technical Settings Dropdown
@@ -2256,8 +2265,8 @@
                         clickedInside = true;
                     }
                 });
-                if (!clickedInside && window.store && window.store.techMenuOpen) {
-                    window.store.closeTechMenu();
+                if (!clickedInside) {
+                    window.closeTechMenu();
                 }
             });
         })();

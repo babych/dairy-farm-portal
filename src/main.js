@@ -20,8 +20,32 @@ window.getCachedAnimal = getCachedAnimal;
 window.cacheFarmAnimals = cacheFarmAnimals;
 window.setLanguage = applyLanguage;
 window.t = t;
-/** @type {any} */ (window).closeTechMenu = () => store.closeTechMenu();
-/** @type {any} */ (window).toggleTechMenu = () => store.toggleTechMenu();
+export function toggleTechMenu(e) {
+    if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+    const willOpen = !store.techMenuOpen;
+    store.techMenuOpen = willOpen;
+    const desktopMenu = document.getElementById('techMenuDropdownDesktop');
+    const mobileMenu = document.getElementById('techMenuDropdown');
+    if (desktopMenu) desktopMenu.classList.toggle('hidden', !willOpen);
+    if (mobileMenu) mobileMenu.classList.toggle('hidden', !willOpen);
+}
+
+export function closeTechMenu() {
+    store.techMenuOpen = false;
+    const desktopMenu = document.getElementById('techMenuDropdownDesktop');
+    const mobileMenu = document.getElementById('techMenuDropdown');
+    if (desktopMenu) desktopMenu.classList.add('hidden');
+    if (mobileMenu) mobileMenu.classList.add('hidden');
+}
+
+/** @type {any} */ (window).closeTechMenu = closeTechMenu;
+/** @type {any} */ (window).toggleTechMenu = toggleTechMenu;
+/** @type {any} */ (window).switchFarmDirect = async (farmId) => {
+    if (!farmId) return;
+    if (farmsModule && typeof farmsModule.switchFarm === 'function') {
+        await farmsModule.switchFarm(farmId);
+    }
+};
 
 export function initApp() {
     createApp({
