@@ -6,7 +6,7 @@ import { getCallerUser, requireAuth } from './authGuard.js';
 export async function handleFarms({ path, method, request, url, env, db, jsonResponse }) {
     // 1. GET /api/farms
     if (path === "/api/farms" && method === "GET") {
-        const caller = getCallerUser(request);
+        const caller = await getCallerUser(request, env?.JWT_SECRET_KEY);
         const userEmail = caller?.email || null;
         let userRole = caller?.role || null;
         let activeFarmId = url.searchParams.get("active_farm_id") || caller?.farm_id || null;
@@ -106,6 +106,13 @@ export async function handleFarms({ path, method, request, url, env, db, jsonRes
     // 4. PUT /api/farms/:id (Update Farm Passport Info)
     if (path.startsWith("/api/farms/") && method === "PUT") {
         const farmId = path.split("/")[3];
+        let caller = null;
+        try {
+            caller = await requireAuth(request, [], env?.JWT_SECRET_KEY);
+        } catch (authErr) {
+            return jsonResponse({ detail: authErr.message }, authErr.status || 401);
+        }
+
         const body = await request.json();
         const validation = validateFarmInput(body);
         if (!validation.isValid) {
@@ -115,6 +122,12 @@ export async function handleFarms({ path, method, request, url, env, db, jsonRes
         const targetFarm = await FarmRepository.getById(db, farmId);
         if (!targetFarm) {
             return jsonResponse({ detail: "Ферму не знайдено для оновлення" }, 404);
+        }
+
+        // Access check: Only superadmin or farm owner can update farm passport
+        const isOwner = targetFarm.owner_email && caller.email && targetFarm.owner_email.toLowerCase() === caller.email.toLowerCase();
+        if (caller.role !== "superadmin" && !isOwner) {
+            return jsonResponse({ detail: "Forbidden: insufficient permissions to update this farm" }, 403);
         }
 
         const { sanitized } = validation;
@@ -142,10 +155,22 @@ export async function handleFarms({ path, method, request, url, env, db, jsonRes
     // 5. DELETE /api/farms/:id
     if (path.startsWith("/api/farms/") && method === "DELETE") {
         const farmId = path.split("/")[3];
+        let caller = null;
+        try {
+            caller = await requireAuth(request, [], env?.JWT_SECRET_KEY);
+        } catch (authErr) {
+            return jsonResponse({ detail: authErr.message }, authErr.status || 401);
+        }
 
         const targetFarm = await FarmRepository.getById(db, farmId);
         if (!targetFarm) {
             return jsonResponse({ detail: "Ферму не знайдено" }, 404);
+        }
+
+        // Access check: Only superadmin or farm owner can delete farm
+        const isOwner = targetFarm.owner_email && caller.email && targetFarm.owner_email.toLowerCase() === caller.email.toLowerCase();
+        if (caller.role !== "superadmin" && !isOwner) {
+            return jsonResponse({ detail: "Forbidden: insufficient permissions to delete this farm" }, 403);
         }
 
         try {
@@ -204,7 +229,7 @@ export async function handleFarms({ path, method, request, url, env, db, jsonRes
 
     // 6. POST /api/farms/clone-demo
     if (path === "/api/farms/clone-demo" && method === "POST") {
-        const caller = getCallerUser(request);
+        const caller = await getCallerUser(request, env?.JWT_SECRET_KEY);
         if (!caller || !caller.email) {
             return jsonResponse({ detail: "Необхідна авторизація" }, 401);
         }

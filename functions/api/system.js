@@ -97,6 +97,11 @@ export async function handleSystem({ path, method, request, url, env, db, jsonRe
 
     if (path === "/api/system/logs" && method === "DELETE") {
         try {
+            await requireAuth(request, ['superadmin'], env?.JWT_SECRET_KEY);
+        } catch (authErr) {
+            return jsonResponse({ detail: authErr.message }, authErr.status || 403);
+        }
+        try {
             await db.prepare("DELETE FROM system_logs").run();
         } catch (e) {}
         return jsonResponse({ status: "success", message: "Логи успішно очищено" });
@@ -142,25 +147,39 @@ export async function handleSystem({ path, method, request, url, env, db, jsonRe
 
     // 4.1 GET /api/system/backup (Export complete JSON snapshot of farm & animals)
     if (path === "/api/system/backup" && method === "GET") {
-        const auth = request.headers.get("authorization") || "";
-        let userEmail = "admin@dairy-erp.farm";
-        let activeFarmId = url.searchParams.get("farm_id") || null;
-        if (auth.startsWith("Bearer ")) {
-            try {
-                const tokenPart = auth.split(" ")[1];
-                const decoded = JSON.parse(atob(tokenPart.split(".")[1]));
-                if (decoded.sub) userEmail = decoded.sub;
-                if (!activeFarmId && decoded.farm_id) activeFarmId = decoded.farm_id;
-            } catch (e) {}
+        let caller = null;
+        try {
+            caller = await requireAuth(request, ['superadmin', 'farmer', 'operator'], env?.JWT_SECRET_KEY);
+        } catch (authErr) {
+            return jsonResponse({ detail: authErr.message }, authErr.status || 401);
         }
+
+        let userEmail = caller.email;
+        let activeFarmId = url.searchParams.get("farm_id") || caller.farm_id || null;
 
         let farm = null;
         if (activeFarmId) {
             farm = await db.prepare("SELECT * FROM farms WHERE id = ?").bind(activeFarmId).first();
         }
-        if (!farm) {
+        if (!farm && caller.farm_id) {
+            farm = await db.prepare("SELECT * FROM farms WHERE id = ?").bind(caller.farm_id).first();
+            if (farm) activeFarmId = farm.id;
+        }
+        if (!farm && caller.role === 'superadmin') {
             farm = await db.prepare("SELECT * FROM farms ORDER BY created_at DESC LIMIT 1").first();
             if (farm) activeFarmId = farm.id;
+        }
+
+        if (!farm) {
+            return jsonResponse({ detail: "Ферму не знайдено або доступ заборонено" }, 404);
+        }
+
+        // Verify access: owner, farm_id context, or superadmin
+        const isOwner = farm.owner_email && farm.owner_email.toLowerCase() === userEmail.toLowerCase();
+        const isAssignedFarm = caller.farm_id && caller.farm_id === farm.id;
+        const isUnownedOrDemo = !farm.owner_email;
+        if (caller.role !== 'superadmin' && !isOwner && !isAssignedFarm && !isUnownedOrDemo) {
+            return jsonResponse({ detail: "Forbidden: insufficient permissions to export this farm" }, 403);
         }
 
         let animals = [];
